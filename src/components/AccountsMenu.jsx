@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import buttonClicked from '../utils/buttonClicked'
 
 export default function AccountMenu ({ image, username, setMenuIsVisible }) {
   const menuRef = useRef(null)
@@ -27,10 +26,10 @@ export default function AccountMenu ({ image, username, setMenuIsVisible }) {
           <img className="h-12 w-12 mr-3 rounded-full" src={image} />
           <span className="text-lg font-bold">{username}</span>
         </div>
-        <button onClick={() => buttonClicked()} className="w-full h-14 p-4">
+        <button onClick={() => setMenuIsVisible(false)} className="w-full h-14 p-4">
           <span className="text-lg">Settings</span>
         </button>
-        <button onClick={() => buttonClicked()} className="w-full h-14 p-4">
+        <button onClick={() => setMenuIsVisible(false)} className="w-full h-14 p-4">
           <span className="text-lg">Log out</span>
         </button>
       </div>
