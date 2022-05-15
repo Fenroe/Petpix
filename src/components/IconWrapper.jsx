@@ -1,5 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
+import PropTypes from 'prop-types'
 
 export default function IconWrapper ({ icon, url }) {
   return (
@@ -10,6 +10,6 @@ export default function IconWrapper ({ icon, url }) {
 }
 
 IconWrapper.propTypes = {
-  icon: PropTypes.object,
+  icon: PropTypes.element,
   url: PropTypes.string
 }
