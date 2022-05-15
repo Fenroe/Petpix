@@ -1,15 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-export default function IconWrapper ({ icon, url }) {
+export default function IconWrapper ({ icon }) {
   return (
-    <a href={url} className="flex justify-center items-center h-14 w-14 hover:cursor-pointer text-3xl">
+    <div className="icon-wrapper">
       {icon}
-    </a>
+    </div>
   )
 }
 
 IconWrapper.propTypes = {
   icon: PropTypes.element,
-  url: PropTypes.string
+  url: PropTypes.string,
+  text: PropTypes.string
 }

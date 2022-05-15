@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+
+  .icon-wrapper {
+    @apply flex justify-center items-center h-14 w-14 p-3 hover:cursor-pointer text-3xl;
+  }
+
+  .icon-wrapper-desktop {
+    @apply w-auto
+  }
+}
