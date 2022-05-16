@@ -17,7 +17,7 @@ export default function Sidebar () {
 
   return (
     <header className="flex flex-col items-end justify-between h-screen max-h-full max-w-[595px] p-3">
-      {accountMenuVisible ? <AccountMenu image={profilePicture} username="The Rock" setMenuIsVisible={setAccountMenuVisible}/> : null}
+      {accountMenuVisible ? <div className="absolute inset-0 z-[99]" /> : null}
       <div className="flex flex-col gap-3">
         <IconWrapper icon={<GiRabbit />} />
         <nav>
@@ -30,14 +30,15 @@ export default function Sidebar () {
         </nav>
         <HeaderPostButton icon={<AiOutlinePlus />} />
       </div>
-      <div>
-        <button className="flex justify-between items-center w-12 h-12 rounded-full lg:w-64" onClick={() => setAccountMenuVisible(true)}>
+      <div className="relative">
+        {accountMenuVisible ? <AccountMenu image={profilePicture} username="The Rock" setMenuIsVisible={setAccountMenuVisible}/> : null}
+        <button className="flex justify-between items-center w-12 h-12 rounded-full lg:w-64 bg-white hover:brightness-95" onClick={() => setAccountMenuVisible(true)}>
           <div className="flex items-center">
             <img className="w-12 h-12 rounded-full"src={profilePicture} />
             <span className="hidden text-lg mx-3 lg:flex">The Rock</span>
           </div>
-          <div className="">
-            <BsThreeDots />
+          <div className="hidden justify-center items-center lg:flex">
+            <BsThreeDots className="mr-5"/>
           </div>
         </button>
       </div>
