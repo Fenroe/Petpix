@@ -1,9 +1,14 @@
 import React from 'react'
+import Post from './Post'
 
 export default function Home () {
   return (
-    <div>
-      <h1>Hello from Home</h1>
+    <div className="w-full flex flex-col items-center">
+      <Post />
+      <section className="w-full flex flex-col items-center gap-3">
+        <div className="">
+        </div>
+      </section>
     </div>
   )
 }

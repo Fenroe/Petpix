@@ -17,7 +17,7 @@ export default function Sidebar () {
 
   return (
     <header className="flex flex-col items-end justify-between h-screen max-h-full max-w-[595px] p-3">
-      {accountMenuVisible ? <div className="absolute inset-0 z-[99]" /> : null}
+      {accountMenuVisible ? <div className="absolute inset-0 z-[98]" /> : null}
       <div className="flex flex-col gap-3">
         <IconWrapper icon={<GiRabbit />} />
         <nav>
