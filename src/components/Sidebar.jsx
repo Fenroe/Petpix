@@ -16,7 +16,7 @@ export default function Sidebar () {
   const [accountMenuVisible, setAccountMenuVisible] = useState(false)
 
   return (
-    <header className="flex flex-col items-end justify-between h-screen max-h-full max-w-[595px] p-3">
+    <header className="flex flex-col items-end justify-between h-screen max-h-full max-w-[595px] p-3 bg-white">
       {accountMenuVisible ? <div className="absolute inset-0 z-[98]" /> : null}
       <div className="flex flex-col gap-3">
         <IconWrapper icon={<GiRabbit />} />

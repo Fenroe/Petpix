@@ -4,7 +4,7 @@ import Home from './Home'
 
 export default function Main () {
   return (
-    <main className="w-[417px] xl:w-1/2">
+    <main className="w-[417px] bg-white xl:w-1/2">
       <section className="flex justify-center items-center gap-3 h-14 w-full">
         <SearchBar />
       </section>

@@ -8,7 +8,7 @@
     @apply flex justify-center items-center h-14 w-14 p-3 hover:cursor-pointer text-3xl;
   }
 
-  .icon-wrapper-desktop {
-    @apply w-auto
+  .story-box {
+  @apply flex p-3 w-[400px] border-2 bg-white rounded-lg xl:w-[566px];
   }
 }

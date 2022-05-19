@@ -5,7 +5,7 @@ import Main from './components/Main'
 
 function App () {
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center bg-red-400">
       <Sidebar />
       <Main />
     </div>
