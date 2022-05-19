@@ -1,8 +1,8 @@
 function * generateKey () {
   let key = 0
   while (true) {
-    key += 1
     yield key
+    key += 1
   }
 }
 

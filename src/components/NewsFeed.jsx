@@ -4,6 +4,8 @@ import NewsFeedItem from './NewsFeedItem'
 import generateKey from '../utils/keyGenerator'
 
 export default function NewsFeed ({ newsFeedData }) {
+  const getKey = generateKey()
+
   if (!newsFeedData || newsFeedData.length === 0) {
     return (
       <section>
@@ -15,7 +17,7 @@ export default function NewsFeed ({ newsFeedData }) {
     <section>
       {newsFeedData.map((item) => {
         return <NewsFeedItem
-        key={generateKey().next().value}
+        key={getKey.next().value}
         userProfilePicture={item.userProfilePicture}
         username={item.username}
         timestamp={item.timestamp}
