@@ -14,7 +14,7 @@ export default function NewsFeed ({ newsFeedData }) {
     )
   }
   return (
-    <section>
+    <section className="flex flex-col gap-3">
       {newsFeedData.map((item) => {
         return <NewsFeedItem
         key={getKey.next().value}

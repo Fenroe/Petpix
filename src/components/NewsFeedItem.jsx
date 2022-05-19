@@ -11,16 +11,18 @@ export default function NewsFeedItem ({ userProfilePicture, username, timestamp,
           <ProfilePicture url={userProfilePicture} />
         </a>
       </div>
-      <div className="sb-content-wrapper">
-        <div className="flex items-center">
-          <span>{username}</span>
-          <span>- {timestamp}</span>
+      <div className="w-full">
+        <div className="sb-content-wrapper">
+          <div className="flex items-center">
+            <span>{username}</span>
+            <span>- {timestamp}</span>
+          </div>
+          {text ? <TextareaAutosize readOnly className="sb-text-area" value={text}/> : null}
+          <div className="sb-image-wrapper">
+            <img src={image} className="sb-image" />
+          </div>
+          <div className="flex items-center">{likes}</div>
         </div>
-        {text ? <TextareaAutosize readOnly className="sb-text-area" value={text}/> : null}
-        <div className="sb-image-wrapper">
-          <img src={image} className="sb-image" />
-        </div>
-        <div className="flex items-center">{likes}</div>
       </div>
     </div>
   )
