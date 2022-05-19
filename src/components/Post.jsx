@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { AiOutlinePicture, AiFillCloseCircle } from 'react-icons/ai'
-import profilePicture from '../assets/profile-picture.jpg'
+import exampleProfilePicture from '../assets/profilePictures/the-rock.jpg'
 import TextareaAutosize from 'react-textarea-autosize'
+import ProfilePicture from './ProfilePicture'
 
 export default function Post () {
   const [uploadedImage, setUploadedImage] = useState('')
@@ -23,12 +24,12 @@ export default function Post () {
 
   return (
     <div className="story-box">
-      <div className="mr-3 w-auto">
+      <div className="sb-profile-picture-wrapper">
         <a href="" className="">
-          <img src={profilePicture} className="h-12 w-12 rounded-full" />
+          <ProfilePicture url={exampleProfilePicture} />
         </a>
       </div>
-      <div className="w-full rounded-xl">
+      <div className="w-full">
         {uploadedImage === ''
           ? (
           <div className="w-full h-28 flex items-center justify-center">
@@ -37,8 +38,8 @@ export default function Post () {
           </div>
             )
           : (
-            <div className="flex flex-col gap-3>">
-              <TextareaAutosize className="outline-none text-xl" placeholder="Text goes here" />
+            <div className="sb-content-wrapper>">
+              <TextareaAutosize className="sb-text-area" placeholder="Text goes here" />
               <div className="relative text-3xl rounded">
                 <AiFillCloseCircle className="absolute top-3 left-3 hover:cursor-pointer" onClick={() => setUploadedImage('')}/>
                 <img src={uploadedImage} className="rounded-xl" />

@@ -6,11 +6,12 @@ import { AiOutlineMessage, AiOutlinePlus } from 'react-icons/ai'
 import { GrLike } from 'react-icons/gr'
 import { BiPhotoAlbum } from 'react-icons/bi'
 import IconWrapper from './IconWrapper'
-import profilePicture from '../assets/profile-picture.jpg'
+import exampleProfilePicture from '../assets/profilePictures/the-rock.jpg'
 import AccountMenu from './AccountsMenu'
 import HeaderLink from './HeaderLink'
 import HeaderPostButton from './HeaderPostButton'
 import { BsThreeDots } from 'react-icons/bs'
+import ProfilePicture from './ProfilePicture'
 
 export default function Sidebar () {
   const [accountMenuVisible, setAccountMenuVisible] = useState(false)
@@ -31,10 +32,10 @@ export default function Sidebar () {
         <HeaderPostButton icon={<AiOutlinePlus />} />
       </div>
       <div className="relative">
-        {accountMenuVisible ? <AccountMenu image={profilePicture} username="The Rock" setMenuIsVisible={setAccountMenuVisible}/> : null}
+        {accountMenuVisible ? <AccountMenu image={exampleProfilePicture} username="The Rock" setMenuIsVisible={setAccountMenuVisible}/> : null}
         <button className="flex justify-between items-center w-12 h-12 rounded-full lg:w-64 bg-white hover:brightness-95" onClick={() => setAccountMenuVisible(true)}>
           <div className="flex items-center">
-            <img className="w-12 h-12 rounded-full"src={profilePicture} />
+            <ProfilePicture url={exampleProfilePicture} />
             <span className="hidden text-lg mx-3 lg:flex">The Rock</span>
           </div>
           <div className="hidden justify-center items-center lg:flex">

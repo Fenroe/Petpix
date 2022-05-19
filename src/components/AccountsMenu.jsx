@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
+import ProfilePicture from './ProfilePicture'
 
 export default function AccountMenu ({ image, username, setMenuIsVisible }) {
   const menuRef = useRef(null)
@@ -21,8 +22,8 @@ export default function AccountMenu ({ image, username, setMenuIsVisible }) {
   return (
     <div className="absolute w-80 bottom-20 left-4 bg-white rounded-md drop-shadow-lg z-[99]" ref={menuRef}>
       <div className="flex items-center w-full h-20">
-        <img className="h-12 w-12 mr-3 rounded-full" src={image} />
-        <span className="text-lg text-left font-bold">{username}</span>
+        <ProfilePicture url={image} />
+        <span className="ml-3 text-lg text-left font-bold">{username}</span>
       </div>
       <button onClick={() => setMenuIsVisible(false)} className="w-full h-14 p-4">
         <span className="text-lg">Settings</span>
