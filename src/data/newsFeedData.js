@@ -13,7 +13,7 @@ const newsFeedData = [
   {
     userProfilePicture: banana,
     username: 'Banana13',
-    timestamp: null,
+    timestamp: new Date(2022, 4, 20),
     image: kitten,
     text: '',
     likes: 37
@@ -21,7 +21,7 @@ const newsFeedData = [
   {
     userProfilePicture: giles,
     username: 'Giles',
-    timestamp: null,
+    timestamp: new Date(2022, 4, 13),
     image: bird,
     text: 'This website sucks',
     likes: 52
@@ -29,7 +29,7 @@ const newsFeedData = [
   {
     userProfilePicture: defaultPicture,
     username: 'Proud Mom',
-    timestamp: null,
+    timestamp: new Date(2022, 4, 13),
     image: hamster,
     text: '',
     likes: 5
@@ -37,7 +37,7 @@ const newsFeedData = [
   {
     userProfilePicture: defaultPicture,
     username: 'Testers',
-    timestamp: null,
+    timestamp: new Date(2022, 4, 12),
     image: bunny,
     text: 'This is a test',
     likes: 0
@@ -45,7 +45,7 @@ const newsFeedData = [
   {
     userProfilePicture: defaultPicture,
     username: 'Yesters',
-    timestamp: null,
+    timestamp: new Date(2022, 4, 17),
     image: dog,
     text: 'This is a yest',
     likes: 3
@@ -53,7 +53,7 @@ const newsFeedData = [
   {
     userProfilePicture: defaultPicture,
     username: 'Besters',
-    timestamp: null,
+    timestamp: new Date(2022, 4, 15),
     image: cat,
     text: 'im best boy',
     likes: 1
@@ -61,7 +61,7 @@ const newsFeedData = [
   {
     userProfilePicture: defaultPicture,
     username: 'BobbyB',
-    timestamp: null,
+    timestamp: new Date(2022, 4, 18),
     image: fox,
     text: 'Where you at',
     likes: 13
