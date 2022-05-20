@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { AiOutlinePicture, AiFillCloseCircle } from 'react-icons/ai'
+import { AiOutlinePicture } from 'react-icons/ai'
+import { MdOutlineClose } from 'react-icons/md'
 import exampleProfilePicture from '../assets/profilePictures/the-rock.jpg'
 import TextareaAutosize from 'react-textarea-autosize'
 import ProfilePicture from './ProfilePicture'
@@ -41,7 +42,9 @@ export default function Post () {
             <div className="sb-content-wrapper>">
               <TextareaAutosize className="sb-text-area" placeholder="Text goes here" />
               <div className="relative text-3xl rounded">
-                <AiFillCloseCircle className="absolute top-3 left-3 hover:cursor-pointer" onClick={() => setUploadedImage('')}/>
+                <button className="absolute top-3 left-3 rounded-full hover:cursor-pointer text-white bg-black" onClick={() => setUploadedImage('')}>
+                  <MdOutlineClose />
+                </button>
                 <img src={uploadedImage} className="rounded-xl" />
               </div>
             </div>
