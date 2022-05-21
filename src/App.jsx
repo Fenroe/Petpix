@@ -1,7 +1,7 @@
 import './style/index.css'
 import React from 'react'
-import Sidebar from './components/Sidebar'
-import Main from './components/Main'
+import Sidebar from './sections/Sidebar'
+import Main from './sections/Main'
 
 function App () {
   return (

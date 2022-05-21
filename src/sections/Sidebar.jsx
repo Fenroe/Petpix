@@ -1,17 +1,17 @@
 import React, { useState } from 'react'
-import { GiRabbit } from 'react-icons/gi'
+import { GiTurtleShell } from 'react-icons/gi'
 import { RiHome7Fill } from 'react-icons/ri'
 import { FiBell, FiUser } from 'react-icons/fi'
 import { AiOutlineMessage, AiOutlinePlus } from 'react-icons/ai'
 import { GrLike } from 'react-icons/gr'
 import { BiPhotoAlbum } from 'react-icons/bi'
-import IconWrapper from './IconWrapper'
+import IconWrapper from '../components/IconWrapper'
 import exampleProfilePicture from '../assets/profilePictures/the-rock.jpg'
-import AccountMenu from './AccountsMenu'
-import HeaderLink from './HeaderLink'
-import HeaderPostButton from './HeaderPostButton'
+import AccountMenu from '../components/AccountsMenu'
+import HeaderLink from '../components/HeaderLink'
+import HeaderSnapButton from '../components/HeaderSnapButton'
 import { BsThreeDots } from 'react-icons/bs'
-import ProfilePicture from './ProfilePicture'
+import ProfilePicture from '../components/ProfilePicture'
 
 export default function Sidebar () {
   const [accountMenuVisible, setAccountMenuVisible] = useState(false)
@@ -20,16 +20,16 @@ export default function Sidebar () {
     <header className="sticky top-0 flex flex-col items-end justify-between h-screen max-h-full max-w-[595px] p-3 bg-white">
       {accountMenuVisible ? <div className="absolute inset-0 z-[98]" /> : null}
       <div className="flex flex-col gap-3">
-        <IconWrapper icon={<GiRabbit />} />
+        <IconWrapper icon={<GiTurtleShell />} />
         <nav>
-          <HeaderLink icon={<RiHome7Fill />} text="Home" />
-          <HeaderLink icon={<FiBell />} text="Notifications" />
-          <HeaderLink icon={<AiOutlineMessage />} text="Messages" />
-          <HeaderLink icon={<GrLike />} text="Likes" />
-          <HeaderLink icon={<BiPhotoAlbum />} text="Albums" />
-          <HeaderLink icon={<FiUser />} text="Profile" />
+          <HeaderLink icon={<RiHome7Fill />} url ="/#/" text="Home" />
+          <HeaderLink icon={<FiBell />} url="/#/notifications"text="Notifications" />
+          <HeaderLink icon={<AiOutlineMessage />} url="/#/messages" text="Messages" />
+          <HeaderLink icon={<GrLike />} url="/#/likes" text="Likes" />
+          <HeaderLink icon={<BiPhotoAlbum />} url="/#/albums" text="Albums" />
+          <HeaderLink icon={<FiUser />} url="/#/profile" text="Profile" />
         </nav>
-        <HeaderPostButton icon={<AiOutlinePlus />} />
+        <HeaderSnapButton icon={<AiOutlinePlus />} />
       </div>
       <div className="relative">
         {accountMenuVisible ? <AccountMenu image={exampleProfilePicture} username="The Rock" setMenuIsVisible={setAccountMenuVisible}/> : null}

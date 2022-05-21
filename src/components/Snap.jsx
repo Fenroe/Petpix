@@ -5,7 +5,7 @@ import exampleProfilePicture from '../assets/profilePictures/the-rock.jpg'
 import TextareaAutosize from 'react-textarea-autosize'
 import ProfilePicture from './ProfilePicture'
 
-export default function Post () {
+export default function Snap () {
   const [uploadedImage, setUploadedImage] = useState('')
 
   function handleImageUpload (evt) {
