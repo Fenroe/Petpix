@@ -27,7 +27,7 @@ export default function Snap () {
     <div className="story-box">
       <div className="sb-profile-picture-wrapper">
         <a href="" className="">
-          <ProfilePicture url={exampleProfilePicture} />
+          <ProfilePicture url={exampleProfilePicture} size="small" />
         </a>
       </div>
       <div className="w-full">

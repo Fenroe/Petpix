@@ -1,9 +1,10 @@
 import React from 'react'
+import NewsFeed from '../components/NewsFeed'
 
-export default function Messages () {
+export default function Likes () {
   return (
-    <section>
-      <h1>Hello from messages</h1>
+    <section className="page">
+      <NewsFeed />
     </section>
   )
 }

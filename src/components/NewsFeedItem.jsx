@@ -34,7 +34,7 @@ export default function NewsFeedItem ({ userProfilePicture, username, timestamp,
     <div className="story-box">
       <div className="sb-profile-picture-wrapper">
         <a href="/">
-          <ProfilePicture url={userProfilePicture} />
+          <ProfilePicture url={userProfilePicture} size="small" />
         </a>
       </div>
       <div className="w-full">

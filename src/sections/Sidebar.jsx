@@ -35,7 +35,7 @@ export default function Sidebar () {
         {accountMenuVisible ? <AccountMenu image={exampleProfilePicture} username="The Rock" setMenuIsVisible={setAccountMenuVisible}/> : null}
         <button className="flex justify-between items-center w-12 h-12 rounded-full lg:w-64 bg-white hover:brightness-95" onClick={() => setAccountMenuVisible(true)}>
           <div className="flex items-center">
-            <ProfilePicture url={exampleProfilePicture} />
+            <ProfilePicture url={exampleProfilePicture} size="small" />
             <span className="hidden text-lg mx-3 lg:flex">The Rock</span>
           </div>
           <div className="hidden justify-center items-center lg:flex">

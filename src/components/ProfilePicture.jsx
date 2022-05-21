@@ -1,12 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import assignSize from '../utils/assignSize'
 
-export default function ProfilePicture ({ url }) {
+export default function ProfilePicture ({ url, size }) {
   return (
-    <img src={url} className="h-12 w-12 rounded-full" />
+    <img src={url} className={assignSize(size)} />
   )
 }
 
 ProfilePicture.propTypes = {
-  url: PropTypes.string
+  url: PropTypes.string,
+  size: PropTypes.oneOf(['x-small', 'small', 'large'])
 }

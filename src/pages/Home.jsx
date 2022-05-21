@@ -5,7 +5,7 @@ import newsFeedData from '../data/newsFeedData'
 
 export default function Home () {
   return (
-    <section className="w-full flex flex-col items-center">
+    <section className="page">
       <Snap />
       <NewsFeed newsFeedData={newsFeedData.sort((a, b) => b.timestamp - a.timestamp)}/>
     </section>
