@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { GiTurtleShell } from 'react-icons/gi'
 import { RiHome7Fill } from 'react-icons/ri'
 import { FiBell, FiUser } from 'react-icons/fi'
@@ -6,15 +6,18 @@ import { AiOutlineMessage, AiOutlinePlus } from 'react-icons/ai'
 import { GrLike } from 'react-icons/gr'
 import { BiPhotoAlbum } from 'react-icons/bi'
 import IconWrapper from '../components/IconWrapper'
-import exampleProfilePicture from '../assets/profilePictures/the-rock.jpg'
 import AccountMenu from '../components/AccountsMenu'
 import HeaderLink from '../components/HeaderLink'
 import HeaderSnapButton from '../components/HeaderSnapButton'
 import { BsThreeDots } from 'react-icons/bs'
 import ProfilePicture from '../components/ProfilePicture'
+import { UserContext } from '../data/UserContext'
 
 export default function Sidebar () {
   const [accountMenuVisible, setAccountMenuVisible] = useState(false)
+
+  // eslint-disable-next-line no-unused-vars
+  const { user, setUser } = useContext(UserContext)
 
   return (
     <header className="sticky top-0 flex flex-col items-end justify-between h-screen max-h-full max-w-[595px] p-3 bg-white">
@@ -32,11 +35,11 @@ export default function Sidebar () {
         <HeaderSnapButton icon={<AiOutlinePlus />} />
       </div>
       <div className="relative">
-        {accountMenuVisible ? <AccountMenu image={exampleProfilePicture} username="The Rock" setMenuIsVisible={setAccountMenuVisible}/> : null}
+        {accountMenuVisible ? <AccountMenu image={user.profilePicture} username={user.username} setMenuIsVisible={setAccountMenuVisible}/> : null}
         <button className="flex justify-between items-center w-12 h-12 rounded-full lg:w-64 bg-white hover:brightness-95" onClick={() => setAccountMenuVisible(true)}>
           <div className="flex items-center">
-            <ProfilePicture url={exampleProfilePicture} size="small" />
-            <span className="hidden text-lg mx-3 lg:flex">The Rock</span>
+            <ProfilePicture url={user.profilePicture} size="small" />
+            <span className="hidden text-lg mx-3 lg:flex">{user.username}</span>
           </div>
           <div className="hidden justify-center items-center lg:flex">
             <BsThreeDots className="mr-5"/>

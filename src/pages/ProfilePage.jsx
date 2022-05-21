@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { ImLocation2 } from 'react-icons/im'
 import { BsCalendar3 } from 'react-icons/bs'
 import ProfilePicture from '../components/ProfilePicture'
 import defaultProfilePicture from '../assets/profilePictures/the-rock.jpg'
 import NewsFeed from '../components/NewsFeed'
+import { UserContext } from '../data/UserContext'
+import returnMonthAndYear from '../utils/returnMonthandYear'
 
 export default function ProfilePage () {
+  // eslint-disable-next-line no-unused-vars
+  const { user } = useContext(UserContext)
+
   return (
     <section className="page">
       <div className="w-full h-52 bg-slate-500"></div>
@@ -18,22 +23,22 @@ export default function ProfilePage () {
         <button>Edit Profile</button>
       </div>
       <div className="w-full my-3">
-        <h1 className="font-bold">The Rock</h1>
+        <h1 className="font-bold">{user.username}</h1>
       </div>
       <div className="w-full my-3">
-        <p>smell what im cooking</p>
+        <p>{user.bio}</p>
       </div>
       <div className="w-full flex gap-3">
         <div className="flex items-center gap-1">
           <ImLocation2 />
-          <span>the rocks house</span>
+          <span>{user.location}</span>
         </div>
         <div className="flex items-center gap-1">
           <BsCalendar3 />
-          <span>joined May 2022</span>
+          <span>joined on {returnMonthAndYear(user.joinedOn)}</span>
         </div>
       </div>
-      <NewsFeed />
+      <NewsFeed newsFeedData={user.snaps}/>
     </section>
   )
 }

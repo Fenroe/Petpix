@@ -15,14 +15,14 @@ export default function Main () {
         <SearchBar />
       </section>
       <HashRouter>
-        <Routes>
-          <Route exact path="/" element={<Home />} />
-          <Route exact path ="/notifications" element={<Notifications />} />
-          <Route exact path ="/messages" element={<Messages />} />
-          <Route exact path="/likes" element={<Likes />} />
-          <Route exact path="/albums" element={<Albums />} />
-          <Route exact path="/profile" element={<ProfilePage />} />
-        </Routes>
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route exact path ="/notifications" element={<Notifications />} />
+            <Route exact path ="/messages" element={<Messages />} />
+            <Route exact path="/likes" element={<Likes />} />
+            <Route exact path="/albums" element={<Albums />} />
+            <Route exact path="/profile" element={<ProfilePage />} />
+          </Routes>
       </HashRouter>
     </main>
   )

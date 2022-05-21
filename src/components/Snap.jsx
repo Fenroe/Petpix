@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { AiOutlinePicture } from 'react-icons/ai'
 import { MdOutlineClose } from 'react-icons/md'
 import exampleProfilePicture from '../assets/profilePictures/the-rock.jpg'
 import TextareaAutosize from 'react-textarea-autosize'
 import ProfilePicture from './ProfilePicture'
+import { UserContext } from '../data/UserContext'
 
 export default function Snap () {
   const [uploadedImage, setUploadedImage] = useState('')
+
+  const { user, setUser } = useContext(UserContext)
 
   function handleImageUpload (evt) {
     const reader = new FileReader()
@@ -19,7 +22,20 @@ export default function Snap () {
 
   function handleSubmit (evt) {
     evt.preventDefault()
-    if (uploadedImage === '') return
+    const newSnap = {
+      userProfilePicture: user.profilePicture,
+      username: user.username,
+      timestamp: new Date(),
+      image: uploadedImage,
+      text: '',
+      likes: 0
+    }
+    const userSnaps = user.snaps
+    userSnaps.push(newSnap)
+    setUser((prevState) => ({
+      ...prevState,
+      snaps: userSnaps
+    }))
     setUploadedImage('')
   }
 

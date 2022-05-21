@@ -1,13 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import ProfilePicture from './ProfilePicture'
 import TextareaAutosize from 'react-textarea-autosize'
 import { calcMinutes, calcHours, calcDays } from '../utils/calcTimeDiff'
 import { GrLike } from 'react-icons/gr'
 import { BiPhotoAlbum } from 'react-icons/bi'
+import { UserContext } from '../data/UserContext'
 
 export default function NewsFeedItem ({ userProfilePicture, username, timestamp, image, text, likes }) {
   const [isLiked, setIsLiked] = useState(false)
+
+  const { user, setUser } = useContext(UserContext)
 
   function renderTimeDifference () {
     const currentTime = new Date()
@@ -26,8 +29,23 @@ export default function NewsFeedItem ({ userProfilePicture, username, timestamp,
     return 'just now'
   }
 
-  function handleLikeClick () {
+  function handleLikeClick (evt) {
+    evt.preventDefault()
     setIsLiked(!isLiked)
+    const userLikes = user.likes
+    const likedSnap = {
+      userProfilePicture,
+      username,
+      timestamp,
+      image,
+      text,
+      likes
+    }
+    userLikes.push(likedSnap)
+    setUser((prevState) => ({
+      ...prevState,
+      likes: userLikes
+    }))
   }
 
   return (
