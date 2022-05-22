@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import ProfilePicture from './ProfilePicture'
 import TextareaAutosize from 'react-textarea-autosize'
-import { calcMinutes, calcHours, calcDays } from '../utils/calcTimeDiff'
+import renderTimeDifference from '../utils/renderTimeDifference'
 import { GrLike } from 'react-icons/gr'
 import { BiPhotoAlbum } from 'react-icons/bi'
 import { UserContext } from '../data/UserContext'
@@ -11,23 +11,6 @@ export default function SnapFeedItem ({ userProfilePicture, username, timestamp,
   const [isLiked, setIsLiked] = useState(false)
 
   const { user, setUser } = useContext(UserContext)
-
-  function renderTimeDifference () {
-    const currentTime = new Date()
-    const timeInDays = calcDays(timestamp, currentTime)
-    if (timeInDays > 0) {
-      if (timeInDays > 1) return `${timeInDays} days ago`
-      return 'a day ago'
-    }
-    const timeInHours = calcHours(timestamp, currentTime)
-    if (timeInHours > 0) {
-      if (timeInHours > 1) return `${timeInHours} hours ago`
-      return 'an hour ago'
-    }
-    const timeInMinutes = calcMinutes(timestamp, currentTime)
-    if (timeInMinutes > 1) return `${timeInMinutes} minutes ago`
-    return 'just now'
-  }
 
   function handleLikeClick (evt) {
     evt.preventDefault()
@@ -59,7 +42,7 @@ export default function SnapFeedItem ({ userProfilePicture, username, timestamp,
         <div className="sb-content-wrapper">
           <div className="flex items-center gap-3">
             <span className="font-bold">{username}</span>
-            <span> {renderTimeDifference()}</span>
+            <span> {renderTimeDifference(timestamp)}</span>
           </div>
           {text ? <TextareaAutosize readOnly className="sb-text-area" value={text}/> : null}
           <div className="sb-image-wrapper">

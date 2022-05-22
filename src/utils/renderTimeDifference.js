@@ -23,8 +23,20 @@ function calcDays (earlierDate, laterDate) {
   return Math.abs(Math.floor(days))
 }
 
-export {
-  calcMinutes,
-  calcHours,
-  calcDays
+export default function renderTimeDifference (earlierDate, laterDate) {
+  const currentTime = laterDate || new Date()
+  if (!checkDateObject(earlierDate) || !checkDateObject(currentTime)) throw new Error('Parameters include invalid Date objects')
+  const timeInDays = calcDays(earlierDate, currentTime)
+  if (timeInDays > 0) {
+    if (timeInDays > 1) return `${timeInDays} days ago`
+    return 'a day ago'
+  }
+  const timeInHours = calcHours(earlierDate, currentTime)
+  if (timeInHours > 0) {
+    if (timeInHours > 1) return `${timeInHours} hours ago`
+    return 'an hour ago'
+  }
+  const timeInMinutes = calcMinutes(earlierDate, currentTime)
+  if (timeInMinutes > 1) return `${timeInMinutes} minutes ago`
+  return 'just now'
 }

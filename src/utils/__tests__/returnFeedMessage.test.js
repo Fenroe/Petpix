@@ -17,7 +17,7 @@ test('returns message for Albums', () => {
 })
 
 test('returns message for Notifications', () => {
-  expect(returnFeedMessage('notifications')).toBe('You\'re up to date on your notifications')
+  expect(returnFeedMessage('notifications')).toBe('You have no new notifications')
 })
 
 test('returns message for Messages', () => {

@@ -1,12 +1,16 @@
 export const notifications = [
   {
     fromUser: 'banana13',
-    action: 'became fan',
-    url: ''
+    profilePicture: '',
+    action: 'follow',
+    url: '',
+    timestamp: new Date(2022, 4, 20)
   },
   {
     fromUser: 'BobbyB',
-    action: 'liked',
-    url: ''
+    profilePicture: '',
+    action: 'like',
+    url: '',
+    timestamp: new Date(2022, 4, 21)
   }
 ]

@@ -18,7 +18,7 @@ export default function returnFeedMessage (feed) {
       break
     }
     case 'notifications': {
-      message = 'You\'re up to date on your notifications'
+      message = 'You have no new notifications'
       break
     }
     case 'messages': {
