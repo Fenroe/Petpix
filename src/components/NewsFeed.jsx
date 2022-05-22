@@ -12,7 +12,7 @@ export default function NewsFeed ({ newsFeedData }) {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setTimer(timer + 1)
-    }, 60000)
+    }, 5000)
 
     return () => {
       clearInterval(intervalId)
