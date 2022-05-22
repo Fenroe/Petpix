@@ -34,7 +34,7 @@ export default function Sidebar () {
           </nav>
           <HeaderSnapButton icon={<AiOutlinePlus />} />
         </div>
-        <div className="w-full">
+        <div className="relative w-full">
           {accountMenuVisible ? <AccountMenu image={user.profilePicture} username={user.username} setMenuIsVisible={setAccountMenuVisible}/> : null}
           <button className="flex justify-between items-center w-12 h-12 rounded-full lg:w-64 hover:brightness-95" onClick={() => setAccountMenuVisible(true)}>
             <div className="flex items-center">
