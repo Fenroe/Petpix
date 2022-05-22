@@ -66,7 +66,7 @@ export default function Snap () {
             </div>
             )}
             <div className="w-full flex justify-end">
-              <button className="w-24 border-2 bg-red-500 rounded-full p-1 text-white font-bold" onClick={(e) => handleSubmit(e)}>Send</button>
+              <button className="w-24 border-2 bg-red-500 rounded-full p-1 text-white font-bold" onClick={(e) => handleSubmit(e)}>Snap</button>
             </div>
       </div>
     </div>
