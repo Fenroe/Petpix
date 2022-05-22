@@ -6,11 +6,11 @@ import Notifications from '../pages/Notifications'
 import Messages from '../pages/Messages'
 import Likes from '../pages/Likes'
 import Albums from '../pages/Albums'
-import ProfilePage from '../pages/ProfilePage'
+import Profile from '../pages/Profile'
 
 export default function Main () {
   return (
-    <main className="w-[417px] bg-white xl:w-1/2">
+    <main className="w-[417px] bg-white xl:w-[600px]">
       <section className="flex justify-center items-center gap-3 h-14 w-full">
         <SearchBar />
       </section>
@@ -21,7 +21,7 @@ export default function Main () {
             <Route exact path ="/messages" element={<Messages />} />
             <Route exact path="/likes" element={<Likes />} />
             <Route exact path="/albums" element={<Albums />} />
-            <Route exact path="/profile" element={<ProfilePage />} />
+            <Route exact path="/profile" element={<Profile />} />
           </Routes>
       </HashRouter>
     </main>

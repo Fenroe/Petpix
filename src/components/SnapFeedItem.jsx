@@ -7,7 +7,7 @@ import { GrLike } from 'react-icons/gr'
 import { BiPhotoAlbum } from 'react-icons/bi'
 import { UserContext } from '../data/UserContext'
 
-export default function NewsFeedItem ({ userProfilePicture, username, timestamp, image, text, likes }) {
+export default function SnapFeedItem ({ userProfilePicture, username, timestamp, image, text, likes }) {
   const [isLiked, setIsLiked] = useState(false)
 
   const { user, setUser } = useContext(UserContext)
@@ -90,7 +90,7 @@ export default function NewsFeedItem ({ userProfilePicture, username, timestamp,
   )
 }
 
-NewsFeedItem.propTypes = {
+SnapFeedItem.propTypes = {
   userProfilePicture: PropTypes.string,
   username: PropTypes.string,
   timestamp: PropTypes.object,

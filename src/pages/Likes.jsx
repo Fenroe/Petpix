@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import NewsFeed from '../components/NewsFeed'
+import SnapFeed from '../components/SnapFeed'
 import { UserContext } from '../data/UserContext'
 
 export default function Likes () {
@@ -7,8 +7,10 @@ export default function Likes () {
 
   return (
     <section className="page">
-      <h1>Liked Snaps</h1>
-      <NewsFeed newsFeedData={user.likes}/>
+      <div className="page-heading-wrapper">
+        <h1 className="page-heading">Your likes</h1>
+      </div>
+      <SnapFeed feedName="likes" feedData={user.likes}/>
     </section>
   )
 }

@@ -20,7 +20,7 @@ export default function Sidebar () {
   const { user, setUser } = useContext(UserContext)
 
   return (
-    <header className="sticky top-0 h-screen max-h-full w-fit overflow-scroll bg-white">
+    <header className="sticky top-0 h-screen max-h-full w-fit overflow-y-scroll bg-white">
       <div className="flex flex-col items-end justify-between gap-3 h-full w-full p-3">
         <div className="flex flex-col gap-3">
           <IconWrapper icon={<GiTurtleShell />} />
@@ -34,7 +34,7 @@ export default function Sidebar () {
           </nav>
           <HeaderSnapButton icon={<AiOutlinePlus />} />
         </div>
-        <div className="relative w-full">
+        <div className="w-full">
           {accountMenuVisible ? <AccountMenu image={user.profilePicture} username={user.username} setMenuIsVisible={setAccountMenuVisible}/> : null}
           <button className="flex justify-between items-center w-12 h-12 rounded-full lg:w-64 hover:brightness-95" onClick={() => setAccountMenuVisible(true)}>
             <div className="flex items-center">

@@ -3,11 +3,11 @@ import { ImLocation2 } from 'react-icons/im'
 import { BsCalendar3 } from 'react-icons/bs'
 import ProfilePicture from '../components/ProfilePicture'
 import defaultProfilePicture from '../assets/profilePictures/the-rock.jpg'
-import NewsFeed from '../components/NewsFeed'
+import SnapFeed from '../components/SnapFeed'
 import { UserContext } from '../data/UserContext'
 import returnMonthAndYear from '../utils/returnMonthandYear'
 
-export default function ProfilePage () {
+export default function Profile () {
   // eslint-disable-next-line no-unused-vars
   const { user } = useContext(UserContext)
 
@@ -38,7 +38,10 @@ export default function ProfilePage () {
           <span>joined on {returnMonthAndYear(user.joinedOn)}</span>
         </div>
       </div>
-      <NewsFeed newsFeedData={user.snaps}/>
+      <div className="page-heading-wrapper">
+        <h1 className="page-heading">Your Snaps</h1>
+      </div>
+      <SnapFeed feedName="profile" feedData={user.snaps}/>
     </section>
   )
 }

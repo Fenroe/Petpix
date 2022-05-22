@@ -9,11 +9,11 @@
   }
 
   .story-box {
-    @apply flex p-3 w-[400px] h-auto border-2 bg-white rounded-lg xl:w-[600px];
+    @apply flex p-3 w-full h-auto border-2 bg-white rounded-lg;
   }
 
   .sb-profile-picture-wrapper {
-    @apply mr-3 h-full w-12;
+    @apply mr-3 h-full w-fit;
   }
 
   .sb-content-wrapper {
@@ -33,7 +33,7 @@
   }
 
   .page {
-    @apply w-full flex flex-col items-center px-3;
+    @apply w-full flex flex-col items-center p-3;
   }
 
   .profile-picture-small {
@@ -42,5 +42,13 @@
 
   .profile-picture-large {
     @apply h-36 w-36 rounded-full;
+  }
+
+  .page-heading-wrapper {
+    @apply w-full py-3
+  }
+
+  .page-heading {
+    @apply font-bold text-3xl
   }
 }
