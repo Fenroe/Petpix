@@ -7,7 +7,7 @@ export default function Albums () {
       <div className="page-heading-wrapper">
         <h1 className="page-heading">Your albums</h1>
       </div>
-      <AlbumFeed />
+      <AlbumFeed feedName='albums' />
     </section>
   )
 }
