@@ -20,32 +20,34 @@ export default function Sidebar () {
   const { user, setUser } = useContext(UserContext)
 
   return (
-    <header className="sticky top-0 flex flex-col items-end justify-between h-screen max-h-full max-w-[595px] p-3 bg-white">
-      {accountMenuVisible ? <div className="absolute inset-0 z-[98]" /> : null}
-      <div className="flex flex-col gap-3">
-        <IconWrapper icon={<GiTurtleShell />} />
-        <nav>
-          <HeaderLink icon={<RiHome7Fill />} url ="/#/" text="Home" />
-          <HeaderLink icon={<FiBell />} url="/#/notifications"text="Notifications" />
-          <HeaderLink icon={<AiOutlineMessage />} url="/#/messages" text="Messages" />
-          <HeaderLink icon={<GrLike />} url="/#/likes" text="Likes" />
-          <HeaderLink icon={<BiPhotoAlbum />} url="/#/albums" text="Albums" />
-          <HeaderLink icon={<FiUser />} url="/#/profile" text="Profile" />
-        </nav>
-        <HeaderSnapButton icon={<AiOutlinePlus />} />
+    <header className="sticky top-0 h-screen max-h-full w-fit overflow-scroll bg-white">
+      <div className="flex flex-col items-end justify-between gap-3 h-full w-full p-3">
+        <div className="flex flex-col gap-3">
+          <IconWrapper icon={<GiTurtleShell />} />
+          <nav>
+            <HeaderLink icon={<RiHome7Fill />} url ="/#/" text="Home" />
+            <HeaderLink icon={<FiBell />} url="/#/notifications"text="Notifications" />
+            <HeaderLink icon={<AiOutlineMessage />} url="/#/messages" text="Messages" />
+            <HeaderLink icon={<GrLike />} url="/#/likes" text="Likes" />
+            <HeaderLink icon={<BiPhotoAlbum />} url="/#/albums" text="Albums" />
+            <HeaderLink icon={<FiUser />} url="/#/profile" text="Profile" />
+          </nav>
+          <HeaderSnapButton icon={<AiOutlinePlus />} />
+        </div>
+        <div className="relative w-full">
+          {accountMenuVisible ? <AccountMenu image={user.profilePicture} username={user.username} setMenuIsVisible={setAccountMenuVisible}/> : null}
+          <button className="flex justify-between items-center w-12 h-12 rounded-full lg:w-64 hover:brightness-95" onClick={() => setAccountMenuVisible(true)}>
+            <div className="flex items-center">
+              <ProfilePicture url={user.profilePicture} size="small" />
+              <span className="hidden text-lg mx-3 lg:flex">{user.username}</span>
+            </div>
+            <div className="hidden justify-center items-center lg:flex">
+              <BsThreeDots className="mr-5"/>
+            </div>
+          </button>
+        </div>
       </div>
-      <div className="relative">
-        {accountMenuVisible ? <AccountMenu image={user.profilePicture} username={user.username} setMenuIsVisible={setAccountMenuVisible}/> : null}
-        <button className="flex justify-between items-center w-12 h-12 rounded-full lg:w-64 bg-white hover:brightness-95" onClick={() => setAccountMenuVisible(true)}>
-          <div className="flex items-center">
-            <ProfilePicture url={user.profilePicture} size="small" />
-            <span className="hidden text-lg mx-3 lg:flex">{user.username}</span>
-          </div>
-          <div className="hidden justify-center items-center lg:flex">
-            <BsThreeDots className="mr-5"/>
-          </div>
-        </button>
-      </div>
+
     </header>
   )
 }

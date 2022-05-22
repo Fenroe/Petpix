@@ -20,7 +20,7 @@ export default function AccountMenu ({ image, username, setMenuIsVisible }) {
   }, [])
 
   return (
-    <div className="absolute w-80 bottom-20 left-4 bg-white rounded-md drop-shadow-lg z-[99]" ref={menuRef}>
+    <div className="absolute w-80 bottom-20 left-4 bg-white rounded-md drop-shadow-lg z-50" ref={menuRef}>
       <div className="flex items-center w-full h-20">
         <ProfilePicture url={image} size="small" />
         <span className="ml-3 text-lg text-left font-bold">{username}</span>
