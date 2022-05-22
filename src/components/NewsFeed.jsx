@@ -1,12 +1,23 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import NewsFeedItem from './NewsFeedItem'
 import generateKey from '../utils/generateKey'
 
 export default function NewsFeed ({ newsFeedData }) {
+  const [timer, setTimer] = useState(0)
   const caughtNewsFeedData = newsFeedData || []
 
   const getKey = generateKey()
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setTimer(timer + 1)
+    }, 60000)
+
+    return () => {
+      clearInterval(intervalId)
+    }
+  })
 
   return (
     <section className="flex flex-col gap-3">
