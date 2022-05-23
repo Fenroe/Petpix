@@ -1,12 +1,12 @@
 import React from 'react'
-import Snap from '../components/Snap'
+import CreateSnap from '../components/CreateSnap'
 import SnapFeed from '../components/SnapFeed'
 import newsFeedData from '../data/newsFeedData'
 
 export default function Home () {
   return (
     <section className="page">
-      <Snap />
+      <CreateSnap />
       <div className="page-heading-wrapper">
         <h1 className="page-heading">See what&apos;s new</h1>
       </div>

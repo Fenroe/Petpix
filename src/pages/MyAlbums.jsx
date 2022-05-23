@@ -2,7 +2,7 @@ import React from 'react'
 import AlbumFeed from '../components/AlbumFeed'
 import { albums } from '../data/albums'
 
-export default function Albums () {
+export default function MyAlbums () {
   return (
     <section className="page">
       <div className="page-heading-wrapper">

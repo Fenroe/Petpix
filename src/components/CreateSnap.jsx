@@ -6,7 +6,7 @@ import TextareaAutosize from 'react-textarea-autosize'
 import ProfilePicture from './ProfilePicture'
 import { UserContext } from '../data/UserContext'
 
-export default function Snap () {
+export default function CreateSnap () {
   const [uploadedImage, setUploadedImage] = useState('')
 
   const { user, setUser } = useContext(UserContext)

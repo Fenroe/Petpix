@@ -5,8 +5,10 @@ import Home from '../pages/Home'
 import Notifications from '../pages/Notifications'
 import Messages from '../pages/Messages'
 import Likes from '../pages/Likes'
-import Albums from '../pages/Albums'
+import MyAlbums from '../pages/MyAlbums'
 import Profile from '../pages/Profile'
+import Album from '../pages/Album'
+import Snap from '../pages/Snap'
 
 export default function Main () {
   return (
@@ -20,8 +22,10 @@ export default function Main () {
             <Route exact path ="/notifications" element={<Notifications />} />
             <Route exact path ="/messages" element={<Messages />} />
             <Route exact path="/likes" element={<Likes />} />
-            <Route exact path="/albums" element={<Albums />} />
+            <Route exact path="/albums" element={<MyAlbums />} />
             <Route exact path="/profile" element={<Profile />} />
+            <Route exact path="/album" element={<Album />} />
+            <Route exact path="/snap" element={<Snap />} />
           </Routes>
       </HashRouter>
     </main>
