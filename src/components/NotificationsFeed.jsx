@@ -5,15 +5,16 @@ import returnFeedData from '../utils/returnFeedData'
 import returnFeedMessage from '../utils/returnFeedMessage'
 import EmptyFeed from './EmptyFeed'
 import NotificationsFeedItem from './NotificationsFeedItem'
+import { getNewKey } from '../utils/generateKey'
 
 export default function NotificationsFeed ({ feedName, feedData }) {
   useFeedInterval()
 
   return (
-    <section className="flex flex-col gap-3 p-3">
+    <section className="w-full flex flex-col gap-3 p-3">
       {returnFeedData(feedData).length === 0 ? <EmptyFeed message={returnFeedMessage(feedName)} /> : null }
       {returnFeedData(feedData).map((item) => {
-        return <NotificationsFeedItem key={item.fromUser} profilePicture={item.profilePicture} link={item.url} action={item.action} fromUser={item.fromUser} timestamp={item.timestamp} />
+        return <NotificationsFeedItem key={getNewKey.next().value} profilePicture={item.profilePicture} link={item.url} action={item.action} fromUser={item.fromUser} timestamp={item.timestamp} />
       })}
     </section>
   )

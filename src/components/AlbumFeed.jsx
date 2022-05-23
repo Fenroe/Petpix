@@ -4,11 +4,16 @@ import PropTypes from 'prop-types'
 import returnFeedMessage from '../utils/returnFeedMessage'
 import returnFeedData from '../utils/returnFeedData'
 import EmptyFeed from './EmptyFeed'
+import AlbumFeedItem from './AlbumFeedItem'
+import { getNewKey } from '../utils/generateKey'
 
 export default function AlbumFeed ({ feedName, feedData }) {
   return (
-    <section>
+    <section className="w-full flex flex-col gap-3 p-3">
       {returnFeedData(feedData).length === 0 ? <EmptyFeed message={returnFeedMessage(feedName)} /> : null}
+      {returnFeedData(feedData).map((item) => {
+        return <AlbumFeedItem key={getNewKey.next().value} coverImage={item.coverImage} title={item.title} albumOwner={item.albumOwner} lastUpdated={item.lastUpdated} />
+      })}
     </section>
   )
 }

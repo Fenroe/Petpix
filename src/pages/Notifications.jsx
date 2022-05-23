@@ -7,8 +7,8 @@ export default function Notifications () {
     <section className="page">
       <div className="page-heading-wrapper">
         <h1 className="page-heading">Your notifications</h1>
-        <NotificationsFeed feedName="notifications" feedData={notifications} />
       </div>
+      <NotificationsFeed feedName="notifications" feedData={notifications} />
     </section>
   )
 }

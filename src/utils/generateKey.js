@@ -1,4 +1,4 @@
-function * generateKey () {
+export default function * generateKey () {
   let key = 0
   while (true) {
     yield key
@@ -6,4 +6,4 @@ function * generateKey () {
   }
 }
 
-export default generateKey
+export const getNewKey = generateKey()
