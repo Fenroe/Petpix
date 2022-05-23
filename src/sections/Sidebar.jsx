@@ -36,7 +36,7 @@ export default function Sidebar () {
         </div>
         <div className="relative w-full">
           {accountMenuVisible ? <AccountMenu image={user.profilePicture} username={user.username} setMenuIsVisible={setAccountMenuVisible}/> : null}
-          <button className="flex justify-between items-center w-12 h-12 rounded-full lg:w-64 hover:brightness-95" onClick={() => setAccountMenuVisible(true)}>
+          <button className="p-3 flex justify-between items-center w-12 h-12 rounded-full lg:w-64 hover:brightness-95" onClick={() => setAccountMenuVisible(true)}>
             <div className="flex items-center">
               <ProfilePicture url={user.profilePicture} size="small" />
               <span className="hidden text-lg mx-3 lg:flex">{user.username}</span>

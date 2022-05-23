@@ -10,7 +10,7 @@ export default function NotificationsFeed ({ feedName, feedData }) {
   useFeedInterval()
 
   return (
-    <section>
+    <section className="flex flex-col gap-3 p-3">
       {returnFeedData(feedData).length === 0 ? <EmptyFeed message={returnFeedMessage(feedName)} /> : null }
       {returnFeedData(feedData).map((item) => {
         return <NotificationsFeedItem key={item.fromUser} profilePicture={item.profilePicture} link={item.url} action={item.action} fromUser={item.fromUser} timestamp={item.timestamp} />
