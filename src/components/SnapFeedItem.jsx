@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import ProfilePicture from './ProfilePicture'
 import TextareaAutosize from 'react-textarea-autosize'
@@ -6,28 +6,23 @@ import renderTimeDifference from '../utils/renderTimeDifference'
 import { GrLike } from 'react-icons/gr'
 import { BiPhotoAlbum } from 'react-icons/bi'
 import { UserContext } from '../data/UserContext'
+import { snapCollection } from '../data/snapCollection'
 
-export default function SnapFeedItem ({ userProfilePicture, username, timestamp, image, text, likes }) {
-  const [isLiked, setIsLiked] = useState(false)
-
+export default function SnapFeedItem ({ id, userProfilePicture, username, timestamp, image, text, likes }) {
   const { user, setUser } = useContext(UserContext)
 
   function handleLikeClick (evt) {
-    evt.preventDefault()
-    setIsLiked(!isLiked)
-    const userLikes = user.likes
-    const likedSnap = {
-      userProfilePicture,
-      username,
-      timestamp,
-      image,
-      text,
-      likes
+    const snapIndex = snapCollection.findIndex((snap) => snap.id === id)
+    const filteredLikes = user.likes.filter((snap) => snap.id !== id ? snap : null)
+    if (!filteredLikes || filteredLikes.length === user.likes.length) {
+      snapCollection[snapIndex].likes += 1
+      filteredLikes.push(snapCollection[snapIndex])
+    } else {
+      snapCollection[snapIndex].likes -= 1
     }
-    userLikes.push(likedSnap)
     setUser((prevState) => ({
       ...prevState,
-      likes: userLikes
+      likes: filteredLikes
     }))
   }
 
@@ -49,20 +44,10 @@ export default function SnapFeedItem ({ userProfilePicture, username, timestamp,
             <img src={image} className="sb-image" />
           </div>
           <div className="flex items-center justify-around">
-            {isLiked
-              ? (
-              <button className="flex gap-3 items-center text-blue-400 font-bold" onClick={handleLikeClick}>
-                <GrLike />
-                <span>{likes + 1}</span>
-              </button>
-                )
-              : (
-              <button className="flex gap-3 items-center" onClick={handleLikeClick}>
+              <button className="flex gap-3 items-center" onClick={(e) => handleLikeClick(e)}>
                 <GrLike />
                 <span>{likes}</span>
               </button>
-                )
-          }
             <button>
               <BiPhotoAlbum />
             </button>
@@ -74,6 +59,7 @@ export default function SnapFeedItem ({ userProfilePicture, username, timestamp,
 }
 
 SnapFeedItem.propTypes = {
+  id: PropTypes.number,
   userProfilePicture: PropTypes.string,
   username: PropTypes.string,
   timestamp: PropTypes.object,

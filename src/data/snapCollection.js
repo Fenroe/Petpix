@@ -8,9 +8,12 @@ import kitten from '../assets/pets/kitten.png'
 import banana from '../assets/profilePictures/banana.jpg'
 import giles from '../assets/profilePictures/giles.jpg'
 import defaultPicture from '../assets/profilePictures/default.jpg'
+import theRock from '../assets/profilePictures/the-rock.jpg'
+import manyCats from '../assets/pets/many-cats.jpg'
 
-const newsFeedData = [
+export const snapCollection = [
   {
+    id: 0,
     userProfilePicture: banana,
     username: 'Banana13',
     timestamp: new Date(2022, 4, 20),
@@ -19,6 +22,7 @@ const newsFeedData = [
     likes: 37
   },
   {
+    id: 1,
     userProfilePicture: giles,
     username: 'Giles',
     timestamp: new Date(2022, 4, 13),
@@ -27,6 +31,7 @@ const newsFeedData = [
     likes: 52
   },
   {
+    id: 2,
     userProfilePicture: defaultPicture,
     username: 'Proud Mom',
     timestamp: new Date(2022, 4, 13),
@@ -35,6 +40,7 @@ const newsFeedData = [
     likes: 5
   },
   {
+    id: 3,
     userProfilePicture: defaultPicture,
     username: 'Testers',
     timestamp: new Date(2022, 4, 12),
@@ -43,6 +49,7 @@ const newsFeedData = [
     likes: 0
   },
   {
+    id: 4,
     userProfilePicture: defaultPicture,
     username: 'Yesters',
     timestamp: new Date(2022, 4, 17),
@@ -51,6 +58,7 @@ const newsFeedData = [
     likes: 3
   },
   {
+    id: 5,
     userProfilePicture: defaultPicture,
     username: 'Besters',
     timestamp: new Date(2022, 4, 15),
@@ -59,13 +67,21 @@ const newsFeedData = [
     likes: 1
   },
   {
+    id: 6,
     userProfilePicture: defaultPicture,
     username: 'BobbyB',
     timestamp: new Date(2022, 4, 18),
     image: fox,
     text: 'Where you at',
     likes: 13
+  },
+  {
+    id: 7,
+    userProfilePicture: theRock,
+    username: 'The Rock',
+    timestamp: new Date(2022, 4, 22),
+    image: manyCats,
+    text: 'Jabroni',
+    likes: 2
   }
 ]
-
-export default newsFeedData

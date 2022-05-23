@@ -16,8 +16,7 @@ import { UserContext } from '../data/UserContext'
 export default function Sidebar () {
   const [accountMenuVisible, setAccountMenuVisible] = useState(false)
 
-  // eslint-disable-next-line no-unused-vars
-  const { user, setUser } = useContext(UserContext)
+  const { user } = useContext(UserContext)
 
   return (
     <header className="sticky top-0 h-screen max-h-full w-fit overflow-y-scroll bg-white">

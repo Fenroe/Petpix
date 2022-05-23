@@ -1,13 +1,16 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useRef } from 'react'
 import { AiOutlinePicture } from 'react-icons/ai'
 import { MdOutlineClose } from 'react-icons/md'
 import exampleProfilePicture from '../assets/profilePictures/the-rock.jpg'
 import TextareaAutosize from 'react-textarea-autosize'
 import ProfilePicture from './ProfilePicture'
 import { UserContext } from '../data/UserContext'
+import { snapCollection } from '../data/snapCollection'
 
 export default function CreateSnap () {
   const [uploadedImage, setUploadedImage] = useState('')
+
+  const textareaRef = useRef(null)
 
   const { user, setUser } = useContext(UserContext)
 
@@ -27,14 +30,13 @@ export default function CreateSnap () {
       username: user.username,
       timestamp: new Date(),
       image: uploadedImage,
-      text: '',
+      text: textareaRef.current.value,
       likes: 0
     }
-    const userSnaps = user.snaps
-    userSnaps.push(newSnap)
+    snapCollection.push(newSnap)
     setUser((prevState) => ({
       ...prevState,
-      snaps: userSnaps
+      snaps: snapCollection.filter((snap) => snap.username === user.username ? snap : null)
     }))
     setUploadedImage('')
   }
@@ -56,7 +58,7 @@ export default function CreateSnap () {
             )
           : (
             <div className="sb-content-wrapper>">
-              <TextareaAutosize className="sb-text-area" placeholder="Text goes here" />
+              <TextareaAutosize ref={textareaRef} className="sb-text-area" placeholder="Text goes here" />
               <div className="relative text-3xl rounded">
                 <button className="absolute top-3 left-3 rounded-full hover:cursor-pointer text-white bg-black" onClick={() => setUploadedImage('')}>
                   <MdOutlineClose />

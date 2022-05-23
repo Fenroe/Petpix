@@ -1,7 +1,7 @@
 import React from 'react'
 import CreateSnap from '../components/CreateSnap'
 import SnapFeed from '../components/SnapFeed'
-import newsFeedData from '../data/newsFeedData'
+import { snapCollection } from '../data/snapCollection'
 
 export default function Home () {
   return (
@@ -10,7 +10,7 @@ export default function Home () {
       <div className="page-heading-wrapper">
         <h1 className="page-heading">See what&apos;s new</h1>
       </div>
-      <SnapFeed feedName="home" feedData={newsFeedData.sort((a, b) => b.timestamp - a.timestamp)}/>
+      <SnapFeed feedName="home" feedData={snapCollection.sort((a, b) => b.timestamp - a.timestamp)}/>
     </section>
   )
 }

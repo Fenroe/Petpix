@@ -17,6 +17,7 @@ export default function SnapFeed ({ feedName, feedData }) {
       {caughtNewsFeedData.map((item) => {
         return <SnapFeedItem
         key={getNewKey.next().value}
+        id={item.id}
         userProfilePicture={item.userProfilePicture}
         username={item.username}
         timestamp={item.timestamp}

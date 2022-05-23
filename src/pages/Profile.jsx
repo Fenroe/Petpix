@@ -8,7 +8,6 @@ import { UserContext } from '../data/UserContext'
 import returnMonthAndYear from '../utils/returnMonthandYear'
 
 export default function Profile () {
-  // eslint-disable-next-line no-unused-vars
   const { user } = useContext(UserContext)
 
   return (
@@ -41,7 +40,7 @@ export default function Profile () {
       <div className="page-heading-wrapper">
         <h1 className="page-heading">Your Snaps</h1>
       </div>
-      <SnapFeed feedName="profile" feedData={user.snaps}/>
+      <SnapFeed feedName="profile" feedData={user.snaps.sort((a, b) => b.timestamp - a.timestamp)}/>
     </section>
   )
 }

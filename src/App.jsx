@@ -4,6 +4,9 @@ import Sidebar from './sections/Sidebar'
 import Main from './sections/Main'
 import { UserContext } from './data/UserContext'
 import defaultProfilePicture from './assets/profilePictures/the-rock.jpg'
+import { notificationsData } from './data/notificationsData'
+import { albumsData } from './data/albumsData'
+import { snapCollection } from './data/snapCollection'
 
 function App () {
   const [user, setUser] = useState({
@@ -12,10 +15,10 @@ function App () {
     bio: 'smell what im cooking',
     location: 'the rock\'s house',
     joinedOn: new Date(2022, 4, 13),
-    snaps: [],
+    snaps: snapCollection.filter((snap) => snap.username === 'The Rock' ? snap : null),
     likes: [],
-    albums: [],
-    notifications: []
+    albums: albumsData,
+    notifications: notificationsData
   })
 
   return (
