@@ -1,8 +1,20 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import returnMonthAndYear from '../utils/returnMonthandYear'
+import { UserContext } from '../data/UserContext'
 
-export default function AlbumFeedItem ({ coverImage, title, albumOwner, lastUpdated }) {
+export default function AlbumFeedItem ({ id, coverImage, title, albumOwner, lastUpdated }) {
+  const { user, setUser } = useContext(UserContext)
+
+  function removeFromAlbums (evt) {
+    evt.preventDefault()
+    const filteredAlbums = user.albums.filter((album) => album.id !== id ? album : null)
+    setUser((prevState) => ({
+      ...prevState,
+      albums: filteredAlbums
+    }))
+  }
+
   return (
     <a className="justify-between flex items-center gap-3">
       <div className="flex items-center gap-3">
@@ -17,12 +29,19 @@ export default function AlbumFeedItem ({ coverImage, title, albumOwner, lastUpda
           </div>
         </div>
       </div>
-      <button>Add</button>
+      {albumOwner === user.username
+        ? (
+        <button className="follow-button" onClick={(e) => removeFromAlbums(e)}>Delete</button>
+          )
+        : (
+        <button className="follow-button" onClick={(e) => removeFromAlbums(e)}>Remove</button>
+          )}
     </a>
   )
 }
 
 AlbumFeedItem.propTypes = {
+  id: PropTypes.number,
   coverImage: PropTypes.string,
   title: PropTypes.string,
   albumOwner: PropTypes.string,

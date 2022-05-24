@@ -13,7 +13,11 @@ test('returns message for Likes', () => {
 })
 
 test('returns message for Albums', () => {
-  expect(returnFeedMessage('albums')).toBe('You haven\'t created any albums yet.')
+  expect(returnFeedMessage('my albums')).toBe('You haven\'t created any albums yet.')
+})
+
+test('returns message for Pinned Albums', () => {
+  expect(returnFeedMessage('pinned albums')).toBe('You haven\'t pinned any albums yet')
 })
 
 test('returns message for Notifications', () => {
@@ -24,10 +28,10 @@ test('returns message for Messages', () => {
   expect(returnFeedMessage('messages')).toBe('Your message history is empty')
 })
 
-test('throws error with invalid parameters', () => {
-  expect(() => returnFeedMessage()).toThrow('Missing or invalid feed parameter')
+test('throws error with undefined feedName', () => {
+  expect(() => returnFeedMessage()).toThrow('feedName is undefined')
 })
 
-test('throws error with invalid parameters #2', () => {
-  expect(() => returnFeedMessage('login')).toThrow('Missing or invalid feed parameter')
+test('throws error with invalid feedName', () => {
+  expect(() => returnFeedMessage('login')).toThrow('\'login\' isn\'t a valid feed name')
 })

@@ -18,7 +18,8 @@ function App () {
     snaps: snapCollection.filter((snap) => snap.username === 'The Rock' ? snap : null),
     likes: [],
     albums: albumsData,
-    notifications: notificationsData
+    notifications: notificationsData,
+    followers: 1
   })
 
   return (

@@ -28,7 +28,7 @@ export default function Sidebar () {
             <HeaderLink icon={<FiBell />} url="/#/notifications"text="Notifications" />
             <HeaderLink icon={<AiOutlineMessage />} url="/#/messages" text="Messages" />
             <HeaderLink icon={<GrLike />} url="/#/likes" text="Likes" />
-            <HeaderLink icon={<BiPhotoAlbum />} url="/#/albums" text="Albums" />
+            <HeaderLink icon={<BiPhotoAlbum />} url="/#/myalbums" text="Albums" />
             <HeaderLink icon={<FiUser />} url="/#/profile" text="Profile" />
           </nav>
           <HeaderSnapButton icon={<AiOutlinePlus />} />

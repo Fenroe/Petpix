@@ -1,6 +1,7 @@
-export default function returnFeedMessage (feed) {
+export default function returnFeedMessage (feedName) {
+  if (feedName === undefined) throw new Error('feedName is undefined')
   let message = ''
-  switch (feed) {
+  switch (feedName) {
     case 'profile': {
       message = 'You haven\'t posted any Snaps yet.'
       break
@@ -13,8 +14,12 @@ export default function returnFeedMessage (feed) {
       message = 'You haven\'t liked any Snaps yet.'
       break
     }
-    case 'albums': {
+    case 'my albums': {
       message = 'You haven\'t created any albums yet.'
+      break
+    }
+    case 'pinned albums': {
+      message = 'You haven\'t pinned any albums yet'
       break
     }
     case 'notifications': {
@@ -27,5 +32,5 @@ export default function returnFeedMessage (feed) {
     }
   }
   if (message !== '') return message
-  throw new Error('Missing or invalid feed parameter')
+  throw new Error(`'${feedName}' isn't a valid feed name`)
 }
