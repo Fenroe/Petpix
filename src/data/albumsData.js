@@ -4,42 +4,42 @@ export const albumsData = [
   {
     id: 0,
     albumOwner: 'Giles',
-    title: 'Album 1',
+    title: 'Birds are cool',
     coverImage: placeholder,
     lastUpdated: new Date(2022, 4, 18)
   },
   {
     id: 1,
     albumOwner: 'BobbyB',
-    title: 'Album 2',
+    title: 'Where',
     coverImage: placeholder,
     lastUpdated: new Date(2022, 4, 18)
   },
   {
     id: 2,
     albumOwner: 'The Rock',
-    title: 'My Album',
+    title: 'Rock Album',
     coverImage: placeholder,
     lastUpdated: new Date(2022, 4, 23)
   },
   {
     id: 3,
     albumOwner: 'Banana13',
-    title: 'Album 1',
+    title: 'cats',
     coverImage: placeholder,
     lastUpdated: new Date(2022, 4, 18)
   },
   {
     id: 4,
-    albumOwner: 'Proud Mom',
-    title: 'Album 2',
+    albumOwner: 'ProudMom',
+    title: 'dogs',
     coverImage: placeholder,
     lastUpdated: new Date(2022, 4, 18)
   },
   {
     id: 5,
     albumOwner: 'The Rock',
-    title: 'My Album',
+    title: 'stones',
     coverImage: placeholder,
     lastUpdated: new Date(2022, 4, 23)
   },
@@ -60,28 +60,28 @@ export const albumsData = [
   {
     id: 8,
     albumOwner: 'The Rock',
-    title: 'My Album',
+    title: 'The Rocks Album',
     coverImage: placeholder,
     lastUpdated: new Date(2022, 4, 23)
   },
   {
     id: 9,
     albumOwner: 'Giles',
-    title: 'Album 1',
+    title: 'more birds',
     coverImage: placeholder,
     lastUpdated: new Date(2022, 4, 18)
   },
   {
     id: 10,
     albumOwner: 'Giles',
-    title: 'Album 2',
+    title: 'way more birds',
     coverImage: placeholder,
     lastUpdated: new Date(2022, 4, 18)
   },
   {
     id: 11,
-    albumOwner: 'The Rock',
-    title: 'My Album',
+    albumOwner: 'Besters',
+    title: 'best album',
     coverImage: placeholder,
     lastUpdated: new Date(2022, 4, 23)
   },
@@ -220,36 +220,36 @@ export const albumsData = [
   },
   {
     id: 31,
-    albumOwner: 'Giles',
-    title: 'Album 2',
+    albumOwner: 'BobbyB',
+    title: 'abcde',
     coverImage: placeholder,
     lastUpdated: new Date(2022, 4, 18)
   },
   {
     id: 32,
-    albumOwner: 'The Rock',
-    title: 'My Album',
+    albumOwner: 'Besters',
+    title: 'my best yet',
     coverImage: placeholder,
     lastUpdated: new Date(2022, 4, 23)
   },
   {
     id: 33,
-    albumOwner: 'Giles',
-    title: 'Album 1',
+    albumOwner: 'banana13',
+    title: 'toby',
     coverImage: placeholder,
     lastUpdated: new Date(2022, 4, 18)
   },
   {
     id: 34,
-    albumOwner: 'Giles',
-    title: 'Album 2',
+    albumOwner: 'Yesters',
+    title: 'ye',
     coverImage: placeholder,
     lastUpdated: new Date(2022, 4, 18)
   },
   {
     id: 35,
-    albumOwner: 'The Rock',
-    title: 'My Album',
+    albumOwner: 'Yesters',
+    title: 'yes',
     coverImage: placeholder,
     lastUpdated: new Date(2022, 4, 23)
   }

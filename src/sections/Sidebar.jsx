@@ -19,7 +19,7 @@ export default function Sidebar () {
   const { user } = useContext(UserContext)
 
   return (
-    <header className="sticky top-0 h-screen max-h-full w-fit overflow-y-scroll bg-white">
+    <header className="sticky top-0 h-screen max-h-full w-fit overflow-y-auto bg-white">
       <div className="flex flex-col items-end justify-between gap-3 h-full w-full p-3">
         <div className="flex flex-col gap-3">
           <IconWrapper icon={<GiTurtleShell />} />
@@ -28,7 +28,7 @@ export default function Sidebar () {
             <HeaderLink icon={<FiBell />} url="/#/notifications"text="Notifications" />
             <HeaderLink icon={<AiOutlineMessage />} url="/#/messages" text="Messages" />
             <HeaderLink icon={<GrLike />} url="/#/likes" text="Likes" />
-            <HeaderLink icon={<BiPhotoAlbum />} url="/#/myalbums" text="Albums" />
+            <HeaderLink icon={<BiPhotoAlbum />} url="/#/albums" text="Albums" />
             <HeaderLink icon={<FiUser />} url="/#/profile" text="Profile" />
           </nav>
           <HeaderSnapButton icon={<AiOutlinePlus />} />
