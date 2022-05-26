@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import { GiTurtleShell } from 'react-icons/gi'
 import { RiHome7Fill } from 'react-icons/ri'
 import { FiBell, FiUser } from 'react-icons/fi'
-import { AiOutlineMessage, AiOutlinePlus } from 'react-icons/ai'
+import { AiOutlinePlus } from 'react-icons/ai'
 import { GrLike } from 'react-icons/gr'
 import { BiPhotoAlbum } from 'react-icons/bi'
 import IconWrapper from '../components/IconWrapper'
@@ -26,7 +26,6 @@ export default function Sidebar () {
           <nav>
             <HeaderLink icon={<RiHome7Fill />} url ="/#/" text="Home" />
             <HeaderLink icon={<FiBell />} url="/#/notifications"text="Notifications" />
-            <HeaderLink icon={<AiOutlineMessage />} url="/#/messages" text="Messages" />
             <HeaderLink icon={<GrLike />} url="/#/likes" text="Likes" />
             <HeaderLink icon={<BiPhotoAlbum />} url="/#/albums" text="Albums" />
             <HeaderLink icon={<FiUser />} url="/#/profile" text="Profile" />

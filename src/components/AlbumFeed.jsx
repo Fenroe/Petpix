@@ -15,10 +15,10 @@ export default function AlbumFeed ({ feedName, feedData }) {
         return <AlbumFeedItem
         key={getNewKey.next().value}
         id={item.id}
-        coverImage={item.coverImage}
+        cover={item.cover}
         title={item.title}
-        albumOwner={item.albumOwner}
-        lastUpdated={item.lastUpdated}
+        userId={item.userId}
+        updated={item.updated}
         pins={item.pins}
         />
       })}

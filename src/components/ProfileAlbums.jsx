@@ -10,7 +10,7 @@ export default function ProfileAlbums () {
       <div className="page-heading-wrapper">
         <h1 className="page-heading">Your albums</h1>
       </div>
-      <AlbumFeed feedName='my albums' feedData={user.albums.filter((album) => album.albumOwner === user.username ? album : null)} />
+      <AlbumFeed feedName='my albums' feedData={user.albums.filter((album) => album.userId === user.username ? album : null)} />
     </>
   )
 }
