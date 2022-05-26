@@ -12,17 +12,18 @@ export default function Albums () {
   function viewExploreAlbums () {
     setViewing('explore albums')
   }
+
   return (
     <section>
       <div className="page-heading-wrapper">
         <h1 className="page-heading">Albums</h1>
       </div>
-      <div className="w-full">
-        <button className="w-1/2" onClick={viewMyAlbums}>
-          <h2 className="text-xl font-bold hover:bg-red-500 hover:text-white">My Albums</h2>
+      <div className="w-full border-b-2 border-b-black">
+        <button className="w-1/2 p-3 hover:bg-red-500 hover:text-white" onClick={viewMyAlbums}>
+          <h2 className="text-xl font-bold">My Albums</h2>
         </button>
-        <button className="w-1/2" onClick={viewExploreAlbums}>
-          <h2 className="text-xl font-bold hover:bg-red-500 hover:text-white">Explore Albums</h2>
+        <button className="w-1/2 p-3 hover:bg-red-500 hover:text-white" onClick={viewExploreAlbums}>
+          <h2 className="text-xl font-bold">Explore Albums</h2>
         </button>
       </div>
       {viewing === 'my albums' ? <MyAlbums /> : <ExploreAlbums />}

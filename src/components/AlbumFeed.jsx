@@ -12,7 +12,15 @@ export default function AlbumFeed ({ feedName, feedData }) {
     <section className="w-full flex flex-col gap-3 p-3">
       {returnFeedData(feedData).length === 0 ? <EmptyFeed message={returnFeedMessage(feedName)} /> : null}
       {returnFeedData(feedData).map((item) => {
-        return <AlbumFeedItem key={getNewKey.next().value} id={item.id} coverImage={item.coverImage} title={item.title} albumOwner={item.albumOwner} lastUpdated={item.lastUpdated} />
+        return <AlbumFeedItem
+        key={getNewKey.next().value}
+        id={item.id}
+        coverImage={item.coverImage}
+        title={item.title}
+        albumOwner={item.albumOwner}
+        lastUpdated={item.lastUpdated}
+        pins={item.pins}
+        />
       })}
     </section>
   )

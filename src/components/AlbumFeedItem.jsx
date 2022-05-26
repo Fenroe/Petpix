@@ -1,9 +1,8 @@
 import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
-import returnMonthAndYear from '../utils/returnMonthandYear'
 import { UserContext } from '../data/UserContext'
 
-export default function AlbumFeedItem ({ id, coverImage, title, albumOwner, lastUpdated }) {
+export default function AlbumFeedItem ({ id, coverImage, title, albumOwner, lastUpdated, pins }) {
   const { user, setUser } = useContext(UserContext)
 
   function removeFromAlbums (evt) {
@@ -13,6 +12,11 @@ export default function AlbumFeedItem ({ id, coverImage, title, albumOwner, last
       ...prevState,
       albums: filteredAlbums
     }))
+  }
+
+  function formatPinsText (pins) {
+    if (pins === 1) return 'pin'
+    return 'pins'
   }
 
   return (
@@ -25,7 +29,7 @@ export default function AlbumFeedItem ({ id, coverImage, title, albumOwner, last
               <span className="font-bold text-lg">{title}</span>
               <span className="text-sm">{albumOwner}</span>
             </div>
-            <span>last updated {returnMonthAndYear(lastUpdated)}</span>
+            <span>{`${pins} ${formatPinsText(pins)}`}</span>
           </div>
         </div>
       </div>
@@ -45,5 +49,6 @@ AlbumFeedItem.propTypes = {
   coverImage: PropTypes.string,
   title: PropTypes.string,
   albumOwner: PropTypes.string,
-  lastUpdated: PropTypes.object
+  lastUpdated: PropTypes.object,
+  pins: PropTypes.number
 }
