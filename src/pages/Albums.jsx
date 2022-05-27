@@ -18,12 +18,12 @@ export default function Albums () {
       <div className="page-heading-wrapper">
         <h1 className="page-heading">Albums</h1>
       </div>
-      <div className="w-full border-b-2 border-b-black">
-        <button className="w-1/2 p-3 hover:bg-red-500 hover:text-white" onClick={viewMyAlbums}>
-          <h2 className="text-xl font-bold">My Albums</h2>
+      <div className="view-btn-wrapper">
+        <button className="view-btn" onClick={viewMyAlbums}>
+          <h2 className="view-btn-text">My Albums</h2>
         </button>
-        <button className="w-1/2 p-3 hover:bg-red-500 hover:text-white" onClick={viewExploreAlbums}>
-          <h2 className="text-xl font-bold">Explore Albums</h2>
+        <button className="view-btn" onClick={viewExploreAlbums}>
+          <h2 className="view-btn-text">Explore Albums</h2>
         </button>
       </div>
       {viewing === 'my albums' ? <MyAlbums /> : <ExploreAlbums />}

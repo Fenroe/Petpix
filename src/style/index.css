@@ -3,6 +3,131 @@
 @tailwind utilities;
 
 @layer components {
+  /*Global styles */
+  .y-wrapper {
+    @apply flex flex-col gap-3;
+  }
+
+  .three-dots-wrapper {
+    @apply hidden justify-center items-center
+           lg:flex
+  }
+
+  .three-dots {
+    @apply mr-5;
+  }
+  /*App styles */
+  .app {
+    @apply flex justify-center min-h-full bg-red-400;
+  }
+
+  /*Sidebar styles */
+  .sidebar-wrapper {
+    @apply sticky top-0 h-screen max-h-full w-fit overflow-y-auto bg-white;
+  }
+
+  .sidebar {
+    @apply items-end justify-between h-full w-full p-3;
+  }
+
+  .sidebar-bot {
+    @apply relative w-full;
+  }
+
+  .sidebar-account-btn {
+    @apply bg-white flex justify-between items-center w-12 h-12 rounded-full
+            hover:brightness-95
+            lg:w-64
+            lg:p-3;
+  }
+
+  .sidebar-account-btn-left {
+    @apply flex items-center;
+  }
+
+  .sidebar-account-btn-left-span {
+    @apply hidden text-lg mx-3
+           lg:flex;
+  }
+
+  /*Main styles*/
+  .main {
+    @apply w-[417px] bg-white
+           xl:w-[600px];
+  }
+
+  .main-header {
+    @apply flex justify-center items-center gap-3 h-14 w-full;
+  }
+
+  /*Sort*/
+  .sort-wrapper {
+    @apply flex justify-start w-full items-center p-3 gap-3;
+  }
+
+  .sort-label {
+    @apply text-lg font-bold;
+  }
+
+  .sort-input {
+    @apply bg-white text-lg outline-none;
+  }
+
+  /*Profile styles*/
+  .profile-cover-img {
+    @apply w-full h-52 bg-slate-500;
+  }
+
+  .profile-top-wrapper {
+    @apply w-full h-16 flex justify-between items-center;
+  }
+
+  .profile-top-left-wrapper {
+    @apply relative w-full h-full;
+  }
+
+  .profile-top-left {
+    @apply absolute bottom-0 left-6;
+  }
+
+  .profile-info-wrapper {
+    @apply w-full my-3;
+  }
+
+  .profile-username {
+    @apply font-bold text-xl;
+  }
+
+  .profile-bot-wrapper {
+    @apply w-full flex gap-3;
+  }
+
+  .profile-bot-info {
+    @apply flex items-center gap-1;
+  }
+
+  .profile-followers-wrapper {
+    @apply w-full flex gap-3 mt-3;
+  }
+
+  .profile-followers-text {
+    @apply font-medium text-lg;
+  }
+
+  /*View Button styles*/
+  .view-btn-wrapper {
+    @apply w-full border-b-2 border-b-black;
+  }
+
+  .view-btn {
+    @apply w-1/2 p-3
+          hover:bg-red-500
+          hover:text-white;
+  }
+
+  .view-btn-text {
+    @apply text-xl font-bold;
+  }
 
   .icon-wrapper {
     @apply flex justify-center items-center h-14 w-14 p-3 hover:cursor-pointer text-3xl;

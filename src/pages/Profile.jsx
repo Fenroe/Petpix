@@ -28,40 +28,40 @@ export default function Profile () {
 
   return (
     <section className="page">
-      <div className="w-full h-52 bg-slate-500"></div>
-      <div className="w-full h-16 flex space-between items-center">
-        <div className="relative w-full h-full">
-          <div className="absolute bottom-0 left-6">
+      <div className="profile-cover-img"></div>
+      <div className="profile-top-wrapper">
+        <div className="profile-top-left-wrapper">
+          <div className="profile-top-left">
             <ProfilePicture url={defaultProfilePicture} size="large" />
           </div>
         </div>
         <button className="follow-button">Edit Profile</button>
       </div>
-      <div className="w-full my-3">
-        <h1 className="font-bold text-xl">{user.username}</h1>
+      <div className="profile-info-wrapper">
+        <h1 className="profile-username">{user.username}</h1>
       </div>
-      <div className="w-full my-3">
+      <div className="profile-info-wrapper">
         <p>{user.bio}</p>
       </div>
-      <div className="w-full flex gap-3">
-        <div className="flex items-center gap-1">
+      <div className="profile-bot-wrapper">
+        <div className="profile-bot-info">
           <ImLocation2 />
           <span>{user.location}</span>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="profile-bot-info">
           <BsCalendar3 />
           <span>joined {returnMonthAndYear(user.joinedOn)}</span>
         </div>
       </div>
-      <div className="w-full flex gap-3 mt-3">
-        <span className="font-medium text-lg">{formatFollowerText(user.followers)}</span>
+      <div className="profile-followers-wrapper">
+        <span className="profile-followers-text">{formatFollowerText(user.followers)}</span>
       </div>
-      <div className="w-full border-b-2 border-b-black">
-        <button className="w-1/2 p-3 hover:bg-red-500 hover:text-white" onClick={viewSnaps}>
-          <h2 className="text-xl font-bold">Snaps</h2>
+      <div className="view-btn-wrapper">
+        <button className="view-btn" onClick={viewSnaps}>
+          <h2 className="view-btn-text">Snaps</h2>
         </button>
-        <button className="w-1/2 p-3 hover:bg-red-500 hover:text-white" onClick={viewAlbums}>
-          <h2 className="text-xl font-bold">Albums</h2>
+        <button className="view-btn" onClick={viewAlbums}>
+          <h2 className="view-btn-text">Albums</h2>
         </button>
       </div>
       { viewing === 'snaps' ? <ProfileSnaps /> : <ProfileAlbums />}

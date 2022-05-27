@@ -24,9 +24,9 @@ export default function Home () {
   return (
     <section className="page">
       <CreateSnap />
-      <div className="flex items-center p-3 gap-3">
-        <h2 className="text-lg font-bold">Sort by: </h2>
-        <select onChange={(e) => setSortBy(e.target.value)}name="" id="" className="bg-white text-lg outline-none">
+      <div className="sort-wrapper">
+        <label htmlFor="sort" className="sort-label">Sort by: </label>
+        <select onChange={(e) => setSortBy(e.target.value)}name="sort" id="sort" className="sort-input">
           <option value="newest">Newest</option>
           <option value="most liked">Most liked</option>
         </select>

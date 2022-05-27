@@ -10,8 +10,8 @@ import Snap from '../pages/Snap'
 
 export default function Main () {
   return (
-    <main className="w-[417px] bg-white xl:w-[600px]">
-      <section className="flex justify-center items-center gap-3 h-14 w-full">
+    <main className="main">
+      <section className="main-header">
         <SearchBar />
       </section>
       <HashRouter>

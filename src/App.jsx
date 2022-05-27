@@ -23,7 +23,7 @@ function App () {
   })
 
   return (
-    <div className="flex justify-center min-h-full bg-red-400">
+    <div className="app">
       <UserContext.Provider value={{ user, setUser }}>
         <Sidebar />
         <Main />

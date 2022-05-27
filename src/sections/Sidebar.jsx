@@ -19,9 +19,9 @@ export default function Sidebar () {
   const { user } = useContext(UserContext)
 
   return (
-    <header className="sticky top-0 h-screen max-h-full w-fit overflow-y-auto bg-white">
-      <div className="flex flex-col items-end justify-between gap-3 h-full w-full p-3">
-        <div className="flex flex-col gap-3">
+    <header className="sidebar-wrapper">
+      <div className="y-wrapper sidebar">
+        <div className="y-wrapper">
           <IconWrapper icon={<GiTurtleShell />} />
           <nav>
             <HeaderLink icon={<RiHome7Fill />} url ="/#/" text="Home" />
@@ -32,20 +32,19 @@ export default function Sidebar () {
           </nav>
           <HeaderSnapButton icon={<AiOutlinePlus />} />
         </div>
-        <div className="relative w-full">
+        <div className="sidebar-bot">
           {accountMenuVisible ? <AccountMenu image={user.profilePicture} username={user.username} setMenuIsVisible={setAccountMenuVisible}/> : null}
-          <button className="p-3 flex justify-between items-center w-12 h-12 rounded-full lg:w-64 hover:brightness-95" onClick={() => setAccountMenuVisible(true)}>
+          <button className="sidebar-account-btn" onClick={() => setAccountMenuVisible(true)}>
             <div className="flex items-center">
               <ProfilePicture url={user.profilePicture} size="small" />
-              <span className="hidden text-lg mx-3 lg:flex">{user.username}</span>
+              <span className="sidebar-account-btn-left-span">{user.username}</span>
             </div>
-            <div className="hidden justify-center items-center lg:flex">
-              <BsThreeDots className="mr-5"/>
+            <div className="three-dots-wrapper">
+              <BsThreeDots className="three-dots"/>
             </div>
           </button>
         </div>
       </div>
-
     </header>
   )
 }
