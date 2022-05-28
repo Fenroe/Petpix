@@ -38,9 +38,9 @@ export default function CreateAlbum ({ closeModal }) {
           <h1 className="font-bold text-lg">Make your album</h1>
         </div>
         <div className="mx-10 p-3 h-full">
-          <div className="relative border-b-2 border-black border-solid my-8">
-            <input ref={inputRef} onChange={updateTitle} required type="text" className="w-full px-1 h-10 text-lg outline-none bg-none peer" />
-            <label htmlFor="" className="text-slate-400 absolute top-1/2 left-1 -translate-y-1/2 text-lg pointer-events-none duration-300 peer-valid:-top-1 peer-valid:text-sm peer-focus:-top-1 peer-focus:text-sm">Album title</label>
+          <div className="relative border-2 border-slate-400 mt-8 focus-within:border-blue-500">
+            <input ref={inputRef} required type="text" className="w-full px-3 pt-5 min-h-[64px] text-lg outline-none bg-none peer" onChange={updateTitle} />
+            <label htmlFor="" className="ml-2 text-slate-400 absolute top-1/2 left-1 -translate-y-1/2 text-lg pointer-events-none duration-300 peer-valid:top-4 peer-valid:text-sm peer-focus:top-4 peer-focus:text-sm">Album title</label>
           </div>
           <div className="flex items-center justify-center w-full h-fit p-3 rounded-lg">
             {coverImage === ''

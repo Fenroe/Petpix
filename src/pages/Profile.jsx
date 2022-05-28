@@ -7,11 +7,22 @@ import { UserContext } from '../data/UserContext'
 import returnMonthAndYear from '../utils/returnMonthandYear'
 import ProfileSnaps from '../components/ProfileSnaps'
 import ProfileAlbums from '../components/ProfileAlbums'
+import UpdateProfile from '../components/UpdateProfile'
 
 export default function Profile () {
   const [viewing, setViewing] = useState('snaps')
 
+  const [viewEditProfile, setViewEditProfile] = useState(false)
+
   const { user } = useContext(UserContext)
+
+  function openEditProfile () {
+    setViewEditProfile(true)
+  }
+
+  function closeEditProfile () {
+    setViewEditProfile(false)
+  }
 
   function formatFollowerText (followers) {
     if (followers === 1) return `${followers} Follower`
@@ -35,7 +46,7 @@ export default function Profile () {
             <ProfilePicture url={defaultProfilePicture} size="large" />
           </div>
         </div>
-        <button className="follow-button">Edit Profile</button>
+        <button className="follow-button" onClick={openEditProfile}>Edit Profile</button>
       </div>
       <div className="profile-info-wrapper">
         <h1 className="profile-username">{user.username}</h1>
@@ -65,6 +76,7 @@ export default function Profile () {
         </button>
       </div>
       { viewing === 'snaps' ? <ProfileSnaps /> : <ProfileAlbums />}
+      {viewEditProfile ? <UpdateProfile closeModal={closeEditProfile}/> : null}
     </section>
   )
 }

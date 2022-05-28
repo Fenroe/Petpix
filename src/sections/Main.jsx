@@ -7,6 +7,7 @@ import Likes from '../pages/Likes'
 import Profile from '../pages/Profile'
 import Albums from '../pages/Albums'
 import Snap from '../pages/Snap'
+import SearchResults from '../pages/SearchResults'
 
 export default function Main () {
   return (
@@ -22,6 +23,7 @@ export default function Main () {
             <Route exact path="/profile" element={<Profile />} />
             <Route exact path="/albums" element={<Albums />} />
             <Route exact path="/snap" element={<Snap />} />
+            <Route exact path="/search" element={<SearchResults />} />
           </Routes>
       </HashRouter>
     </main>
