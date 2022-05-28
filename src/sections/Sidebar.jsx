@@ -12,9 +12,19 @@ import HeaderSnapButton from '../components/HeaderSnapButton'
 import { BsThreeDots } from 'react-icons/bs'
 import ProfilePicture from '../components/ProfilePicture'
 import { UserContext } from '../data/UserContext'
+import SidebarSnapModal from '../components/SidebarSnapModal'
 
 export default function Sidebar () {
   const [accountMenuVisible, setAccountMenuVisible] = useState(false)
+
+  const [snapModalVisible, setSnapModalVisible] = useState(false)
+
+  function openSnapModal () {
+    setSnapModalVisible(true)
+  }
+  function closeSnapModal () {
+    setSnapModalVisible(false)
+  }
 
   const { user } = useContext(UserContext)
 
@@ -30,7 +40,7 @@ export default function Sidebar () {
             <HeaderLink icon={<BiPhotoAlbum />} url="/#/albums" text="Albums" />
             <HeaderLink icon={<FiUser />} url="/#/profile" text="Profile" />
           </nav>
-          <HeaderSnapButton icon={<AiOutlinePlus />} />
+          <HeaderSnapButton icon={<AiOutlinePlus />} openModal={openSnapModal} />
         </div>
         <div className="sidebar-bot">
           {accountMenuVisible ? <AccountMenu image={user.profilePicture} username={user.username} setMenuIsVisible={setAccountMenuVisible}/> : null}
@@ -45,6 +55,7 @@ export default function Sidebar () {
           </button>
         </div>
       </div>
+      {snapModalVisible ? <SidebarSnapModal closeModal={closeSnapModal}/> : null}
     </header>
   )
 }

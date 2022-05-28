@@ -9,7 +9,7 @@ import { getNewKey } from '../utils/generateKey'
 
 export default function AlbumFeed ({ feedName, feedData }) {
   return (
-    <section className="w-full flex flex-col gap-3 p-3">
+    <section className="feed">
       {returnFeedData(feedData).length === 0 ? <EmptyFeed message={returnFeedMessage(feedName)} /> : null}
       {returnFeedData(feedData).map((item) => {
         return <AlbumFeedItem

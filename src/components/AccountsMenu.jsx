@@ -22,17 +22,17 @@ export default function AccountMenu ({ image, username, setMenuIsVisible }) {
 
   return ReactDOM.createPortal(
     <>
-      <div className="fixed inset-0 z-40"></div>
-      <div className="fixed w-80 bottom-20 left-4 bg-white rounded-md drop-shadow-lg z-50 sm:left-12 md:left-24 lg:left-48 xl:left-1/4" ref={menuRef}>
-        <div className="flex items-center w-full h-20">
+      <div className="menu-underlay" />
+      <div className="account-menu-wrapper" ref={menuRef}>
+        <div className="account-menu-info-wrapper">
           <ProfilePicture url={image} size="small" />
-          <span className="ml-3 text-lg text-left font-bold">{username}</span>
+          <span className="account-menu-info-text">{username}</span>
         </div>
-        <button onClick={() => setMenuIsVisible(false)} className="w-full h-14 p-4">
-          <span className="text-lg">Settings</span>
+        <button onClick={() => setMenuIsVisible(false)} className="account-menu-item">
+          <span className="account-menu-item-text">Settings</span>
         </button>
-        <button onClick={() => setMenuIsVisible(false)} className="w-full h-14 p-4">
-          <span className="text-lg">Log out</span>
+        <button onClick={() => setMenuIsVisible(false)} className="account-menu-item">
+          <span className="account-menu-item-text">Log out</span>
         </button>
       </div>
     </>, document.getElementById('menu')

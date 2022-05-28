@@ -12,7 +12,7 @@ export default function SnapFeed ({ feedName, feedData }) {
   useFeedInterval()
 
   return (
-    <section className="flex flex-col gap-3">
+    <section className="feed">
       {caughtNewsFeedData.length === 0 ? <EmptyFeed message={returnFeedMessage(feedName)}/> : null}
       {caughtNewsFeedData.map((item) => {
         return <SnapFeedItem

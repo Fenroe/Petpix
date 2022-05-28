@@ -27,9 +27,9 @@ export default function MyAlbums () {
 
   return (
     <>
-      <div className="flex items-center p-3 gap-3">
-        <h2 className="text-lg font-bold">Sort by: </h2>
-        <select onChange={(e) => setSortBy(e.target.value)}name="" id="" className="bg-white text-lg outline-none">
+      <div className="sort-wrapper">
+        <label className="sort label">Sort by: </label>
+        <select onChange={(e) => setSortBy(e.target.value)}name="" id="" className="sort-input">
           <option value="new">New</option>
           <option value="most pinned">Most pinned</option>
           <option value="recently updated">Recently Updated</option>
