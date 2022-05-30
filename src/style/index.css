@@ -19,7 +19,7 @@
   
   /*App styles */
   .app {
-    @apply flex justify-center min-h-full bg-red-400;
+    @apply flex justify-center min-h-full bg-white;
   }
   /*Sidebar styles */
   .sidebar-wrapper {
@@ -72,11 +72,11 @@
   }
   /*Profile styles*/
   .profile-cover-img {
-    @apply w-full h-52 bg-slate-500;
+    @apply w-full min-h-[208px] bg-slate-500;
   }
 
   .profile-top-wrapper {
-    @apply w-full h-16 flex justify-between items-center;
+    @apply w-full min-h-[64px] flex justify-between items-center;
   }
 
   .profile-top-left-wrapper {

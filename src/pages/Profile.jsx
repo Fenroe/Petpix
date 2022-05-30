@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react'
 import { ImLocation2 } from 'react-icons/im'
 import { BsCalendar3 } from 'react-icons/bs'
 import ProfilePicture from '../components/ProfilePicture'
-import defaultProfilePicture from '../assets/profilePictures/the-rock.jpg'
 import { UserContext } from '../data/UserContext'
 import returnMonthAndYear from '../utils/returnMonthandYear'
 import ProfileSnaps from '../components/ProfileSnaps'
@@ -37,13 +36,17 @@ export default function Profile () {
     setViewing('albums')
   }
 
+  console.table(user)
+
   return (
     <section className="page">
-      <div className="profile-cover-img"></div>
+      <div className="profile-cover-img">
+        <img src={user.coverPicture} />
+      </div>
       <div className="profile-top-wrapper">
         <div className="profile-top-left-wrapper">
           <div className="profile-top-left">
-            <ProfilePicture url={defaultProfilePicture} size="large" />
+            <ProfilePicture url={user.profilePicture} size="large" />
           </div>
         </div>
         <button className="follow-button" onClick={openEditProfile}>Edit Profile</button>
@@ -61,7 +64,7 @@ export default function Profile () {
         </div>
         <div className="profile-bot-info">
           <BsCalendar3 />
-          <span>joined {returnMonthAndYear(user.joinedOn)}</span>
+          <span>joined {returnMonthAndYear(user.joinedOn.toDate())}</span>
         </div>
       </div>
       <div className="profile-followers-wrapper">

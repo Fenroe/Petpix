@@ -10,7 +10,7 @@ export default function Likes () {
       <div className="page-heading-wrapper">
         <h1 className="page-heading">Your likes</h1>
       </div>
-      <SnapFeed feedName="likes" feedData={user.likes.sort((a, b) => b.timestamp - a.timestamp)}/>
+      <SnapFeed feedName="likes" feedData={user.likes}/>
     </section>
   )
 }
