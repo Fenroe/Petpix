@@ -1,25 +1,51 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CreateSnap from '../components/CreateSnap'
 import SnapFeed from '../components/SnapFeed'
-import { snapCollection } from '../data/snapCollection'
+import { db } from '../firebase'
+import { collection, query, getDocs, where, limit } from 'firebase/firestore'
 
 export default function Home () {
+  const [feedData, setFeedData] = useState([])
+
   const [sortBy, setSortBy] = useState('newest')
 
   function sortFeedData (method) {
     let sortedFeed = []
     switch (method) {
       case 'newest': {
-        sortedFeed = snapCollection.sort((a, b) => b.timestamp - a.timestamp)
+        sortedFeed = feedData.sort((a, b) => b.timestamp - a.timestamp)
         break
       }
       case 'most liked': {
-        sortedFeed = snapCollection.sort((a, b) => b.likes - a.likes)
+        sortedFeed = feedData.sort((a, b) => b.likes - a.likes)
         break
       }
     }
     return sortedFeed
   }
+
+  useEffect(() => {
+    async function fetchHomeSnaps () {
+      const snapQuery = query(collection(db, 'snaps'), where('id', '!=', 'test'), limit(25))
+      const docs = await getDocs(snapQuery)
+      const snaps = []
+      docs.forEach((doc) => {
+        const snap = {
+          id: doc.data().id,
+          userId: doc.data().userId,
+          username: doc.data().username,
+          profilePicture: doc.data().profilePicture,
+          posted: doc.data().posted.toDate(),
+          image: doc.data().image,
+          text: doc.data().text,
+          likedBy: doc.data().likedBy
+        }
+        snaps.push(snap)
+      })
+      setFeedData(snaps)
+    }
+    fetchHomeSnaps()
+  }, [])
 
   return (
     <section className="page">

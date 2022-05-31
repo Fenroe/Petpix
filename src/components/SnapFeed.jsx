@@ -18,12 +18,13 @@ export default function SnapFeed ({ feedName, feedData }) {
         return <SnapFeedItem
         key={getNewKey.next().value}
         id={item.id}
-        userProfilePicture={item.userProfilePicture}
+        userId={item.userId}
         username={item.username}
-        timestamp={item.timestamp}
+        profilePicture={item.profilePicture}
+        posted={item.posted}
         image={item.image}
         text={item.text}
-        likes={item.likes}/>
+        likedBy={item.likedBy}/>
       })}
     </section>
   )

@@ -36,15 +36,13 @@ export default function Profile () {
     setViewing('albums')
   }
 
-  console.table(user)
-
   return (
     <section className="page">
-      <div className="profile-cover-img">
-        <img src={user.coverPicture} />
+      <div className="profile-cover-img relative">
+        <img className="h-full w-full object-cover"src={user.coverPicture} />
       </div>
       <div className="profile-top-wrapper">
-        <div className="profile-top-left-wrapper">
+        <div className="profile-top-left-wrapper relative">
           <div className="profile-top-left">
             <ProfilePicture url={user.profilePicture} size="large" />
           </div>
@@ -58,10 +56,17 @@ export default function Profile () {
         <p>{user.bio}</p>
       </div>
       <div className="profile-bot-wrapper">
-        <div className="profile-bot-info">
-          <ImLocation2 />
-          <span>{user.location}</span>
-        </div>
+        {user.location !== ''
+          ? (
+          <div className="profile-bot-info">
+            <ImLocation2 />
+            <span>{user.location}</span>
+          </div>
+            )
+          : (
+              null
+            )}
+
         <div className="profile-bot-info">
           <BsCalendar3 />
           <span>joined {returnMonthAndYear(user.joinedOn.toDate())}</span>

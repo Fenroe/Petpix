@@ -4,11 +4,13 @@ import ProfilePicture from './ProfilePicture'
 import TextareaAutosize from 'react-textarea-autosize'
 import { AiOutlinePicture } from 'react-icons/ai'
 import { UserContext } from '../data/UserContext'
+import { db, uploadProfilePicture, uploadCoverPicture, getURL } from '../firebase'
+import { doc, setDoc } from 'firebase/firestore'
 
-export default function ProfileSetup ({ markSetup }) {
+export default function ProfileSetup ({ setRecentlyUpdated }) {
   const { user } = useContext(UserContext)
 
-  const [cover, setCover] = useState('')
+  const [cover, setCover] = useState()
 
   const [profile, setProfile] = useState()
 
@@ -45,11 +47,6 @@ export default function ProfileSetup ({ markSetup }) {
     }
   }
 
-  function handleSave () {
-    if (!validateUsername() || !validateBio() || !validateLocation()) return
-    markSetup(profile, cover, usernameRef.current.value, bioRef.current.value, locationRef.current.value)
-  }
-
   function validateBio () {
     let error = ''
     if (bioRef.current.value.length > 150) error = 'Bio can\'t be longer than 150 characters'
@@ -75,27 +72,46 @@ export default function ProfileSetup ({ markSetup }) {
     return true
   }
 
-  function handleImageUpload (evt, setCallback) {
-    const reader = new FileReader()
-    reader.onload = () => {
-      if (reader.readyState !== 2) return
-      setCallback(reader.result)
-    }
-    reader.readAsDataURL(evt.target.files[0])
+  function validateAll () {
+    let validated = true
+    if (!validateBio) validated = false
+    if (!validateLocation) validated = false
+    if (!validateUsername) validated = false
+    return validated
   }
 
   function handleProfileChange (evt) {
-    handleImageUpload(evt, setProfile)
+    uploadProfilePicture(evt.target.files[0])
+      .then((result) => getURL(result))
+      .then((result) => setProfile(result))
   }
 
   function handleCoverChange (evt) {
-    handleImageUpload(evt, setCover)
+    uploadCoverPicture(evt.target.files[0])
+      .then((result) => getURL(result))
+      .then((result) => setCover(result))
+  }
+
+  async function handleSave () {
+    if (!validateAll()) return
+    const userRef = doc(db, 'users', user.userId)
+    await setDoc(userRef, {
+      profilePicture: profile,
+      coverPicture: cover,
+      username: usernameRef.current.value,
+      bio: bioRef.current.value,
+      location: locationRef.current.value,
+      setup: true
+    }, {
+      merge: true
+    })
+    setRecentlyUpdated(true)
   }
 
   useEffect(() => {
     setProfile(user.profilePicture)
     setCover(user.coverPicture)
-  })
+  }, [])
 
   return ReactDOM.createPortal(
     <>
@@ -129,7 +145,6 @@ export default function ProfileSetup ({ markSetup }) {
           <div className="text-red-400 p-2 opacity-100 transition-opacity">
             <span>{errors.username}</span>
           </div>
-
           <div className="relative border-2 border-slate-400 mt-8 focus-within:border-blue-500">
             <TextareaAutosize ref={bioRef} onChange={validateBio} required className="w-full px-3 pt-7 min-h-[64px] text-lg outline-none bg-none peer resize-none" />
             <label className="ml-2 text-slate-400 absolute top-1/2 left-1 -translate-y-1/2 text-lg pointer-events-none duration-300 peer-valid:top-4 peer-valid:text-sm peer-focus:top-4 peer-focus:text-sm">Bio</label>

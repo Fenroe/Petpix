@@ -1,5 +1,5 @@
 import './style/index.css'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Sidebar from './sections/Sidebar'
 import Main from './sections/Main'
@@ -13,36 +13,34 @@ import { onAuthStateChanged } from 'firebase/auth'
 function App () {
   const [signedIn, setSignedIn] = useState(false)
 
+  const [recentlyUpdated, setRecentlyUpdated] = useState(false)
+
   const [user, setUser] = useState({})
 
-  async function markProfileSetup (profilePicture, coverPicture, username, bio, location) {
-    setUser((prevState) => ({
-      ...prevState,
-      profilePicture,
-      coverPicture,
-      username,
-      bio,
-      location,
-      setup: true
-    }))
-  }
-
-  onAuthStateChanged(auth, (user) => {
-    if (user && !signedIn) {
-      getUserData(user.uid, setUser)
-      setSignedIn(true)
-    }
-    if (!user) {
+  onAuthStateChanged(auth, (currentUser) => {
+    if (currentUser) {
+      if (!signedIn) {
+        getUserData(setUser)
+        setSignedIn(true)
+      }
+    } else {
       setSignedIn(false)
     }
   })
+
+  useEffect(() => {
+    if (recentlyUpdated) {
+      setRecentlyUpdated(false)
+      getUserData(setUser)
+    }
+  }, [recentlyUpdated])
 
   return (
     <div className="app">
       {signedIn
         ? (
         <UserContext.Provider value={{ user, setUser }}>
-          {user.setup === false ? <ProfileSetup markSetup={markProfileSetup}/> : null}
+          {user.setup === false ? <ProfileSetup setRecentlyUpdated={setRecentlyUpdated}/> : null}
           <Sidebar />
           <Main />
         </UserContext.Provider>

@@ -1,43 +1,27 @@
 import React, { useState, useContext, useRef } from 'react'
 import { AiOutlinePicture } from 'react-icons/ai'
 import { MdOutlineClose } from 'react-icons/md'
-import exampleProfilePicture from '../assets/profilePictures/the-rock.jpg'
 import TextareaAutosize from 'react-textarea-autosize'
 import ProfilePicture from './ProfilePicture'
 import { UserContext } from '../data/UserContext'
-import { snapCollection } from '../data/snapCollection'
+import { uploadSnapPicture, getURL, postSnap } from '../firebase'
 
 export default function CreateSnap () {
   const [uploadedImage, setUploadedImage] = useState('')
 
   const textareaRef = useRef(null)
 
-  const { user, setUser } = useContext(UserContext)
+  const { user } = useContext(UserContext)
 
   function handleImageUpload (evt) {
-    const reader = new FileReader()
-    reader.onload = () => {
-      if (reader.readyState !== 2) return
-      setUploadedImage(reader.result)
-    }
-    reader.readAsDataURL(evt.target.files[0])
+    uploadSnapPicture(evt.target.files[0])
+      .then((result) => getURL(result))
+      .then((result) => setUploadedImage(result))
   }
 
-  function handleSubmit (evt) {
+  async function handleSubmit (evt) {
     evt.preventDefault()
-    const newSnap = {
-      userProfilePicture: user.profilePicture,
-      username: user.username,
-      timestamp: new Date(),
-      image: uploadedImage,
-      text: textareaRef.current.value,
-      likes: 0
-    }
-    snapCollection.push(newSnap)
-    setUser((prevState) => ({
-      ...prevState,
-      snaps: snapCollection.filter((snap) => snap.username === user.username ? snap : null)
-    }))
+    await postSnap(user.username, user.profilePicture, uploadedImage, textareaRef.current.value)
     setUploadedImage('')
   }
 
@@ -45,7 +29,7 @@ export default function CreateSnap () {
     <div className="story-box">
       <div className="sb-profile-picture-wrapper">
         <a href="" className="">
-          <ProfilePicture url={exampleProfilePicture} size="small" />
+          <ProfilePicture url={user.profilePicture} size="small" />
         </a>
       </div>
       <div className="w-full">

@@ -1,7 +1,8 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore'
+import { getFirestore, doc, setDoc, getDoc, onSnapshot, addDoc, collection } from 'firebase/firestore'
 import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
-import { getStorage } from 'firebase/storage'
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { v4 } from 'uuid'
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -34,12 +35,11 @@ export async function emailSignup (email, password) {
     await setDoc(doc(db, 'users', userId), {
       username: '',
       userId, // property shorthand
-      profilePicture: 'https://firebasestorage.googleapis.com/v0/b/snapshot-96f38.appspot.com/o/default.jpg?alt=media&token=03d58bcb-440c-4115-81a7-aec2ea37f691',
-      coverPicture: 'https://firebasestorage.googleapis.com/v0/b/snapshot-96f38.appspot.com/o/defaultCover.png?alt=media&token=2897f1cc-ceac-4fb1-a483-a65d7ed19ad1',
+      profilePicture: 'https://firebasestorage.googleapis.com/v0/b/snapshot-18036.appspot.com/o/defaults%2Fdefault.jpg?alt=media&token=63652fc4-b63f-4326-99fe-b936e7d8baf6',
+      coverPicture: 'https://firebasestorage.googleapis.com/v0/b/snapshot-18036.appspot.com/o/defaults%2FdefaultCover.png?alt=media&token=b83e125c-06d2-46a7-b320-a3492ff8d14d',
       bio: '',
       location: '',
       joinedOn: new Date(),
-      snaps: [],
       likes: [],
       albums: [],
       notifications: [],
@@ -59,9 +59,10 @@ export async function emailLogin (email, password, errorFunc) {
   return result
 }
 
-export async function getUserData (id, callback) {
+export async function getUserData (callback) {
   try {
-    const docRef = doc(db, 'users', id)
+    const uid = auth.currentUser.uid
+    const docRef = doc(db, 'users', uid)
     const docSnap = await getDoc(docRef)
     if (docSnap.exists()) {
       callback(docSnap.data())
@@ -69,6 +70,14 @@ export async function getUserData (id, callback) {
   } catch (error) {
     console.log(error.message)
   }
+}
+
+export function listenForUser (callback) {
+  const docRef = doc(db, 'users', auth.currentUser.uid)
+  const unsub = onSnapshot(docRef, (doc) => {
+    callback(doc.data())
+  })
+  return unsub
 }
 
 export async function updateUserData (state) {
@@ -79,4 +88,48 @@ export async function updateUserData (state) {
   } catch (error) {
     console.log(error.message)
   }
+}
+
+export async function uploadProfilePicture (picture) {
+  if (picture === null) return
+  const uid = auth.currentUser.uid
+  const imageRef = ref(storage, `${uid}/profpics/${uid + v4()}`)
+  await uploadBytes(imageRef, picture)
+  return imageRef
+}
+
+export async function uploadCoverPicture (picture) {
+  if (picture === null) return
+  const uid = auth.currentUser.uid
+  const imageRef = ref(storage, `${uid}/coverpics/${uid + v4()}`)
+  await uploadBytes(imageRef, picture)
+  return imageRef
+}
+
+export async function uploadSnapPicture (picture) {
+  if (picture === null) return
+  const uid = auth.currentUser.uid
+  const imageRef = ref(storage, `${uid}/snaps/${uid + v4()}`)
+  await uploadBytes(imageRef, picture)
+  return imageRef
+}
+
+export async function getURL (ref) {
+  const pictureURL = await getDownloadURL(ref)
+  return pictureURL
+}
+
+export async function postSnap (username, profilePicture, image, text) {
+  const docRef = await addDoc(collection(db, 'snaps'), {})
+  await setDoc(docRef, {
+    id: docRef.id,
+    userId: auth.currentUser.uid,
+    username,
+    profilePicture,
+    posted: new Date(),
+    image,
+    text,
+    likedBy: []
+  })
+  return docRef
 }
