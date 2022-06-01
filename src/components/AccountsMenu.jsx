@@ -2,9 +2,15 @@ import React, { useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import ProfilePicture from './ProfilePicture'
+import { appSignOut } from '../firebase'
 
 export default function AccountMenu ({ image, username, setMenuIsVisible }) {
   const menuRef = useRef(null)
+
+  async function handleSignOut () {
+    await appSignOut()
+    setMenuIsVisible(false)
+  }
 
   useEffect(() => {
     function detectOutsideClick (evt) {
@@ -31,7 +37,7 @@ export default function AccountMenu ({ image, username, setMenuIsVisible }) {
         <button onClick={() => setMenuIsVisible(false)} className="account-menu-item">
           <span className="account-menu-item-text">Settings</span>
         </button>
-        <button onClick={() => setMenuIsVisible(false)} className="account-menu-item">
+        <button onClick={handleSignOut} className="account-menu-item">
           <span className="account-menu-item-text">Log out</span>
         </button>
       </div>

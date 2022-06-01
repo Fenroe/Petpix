@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import assignSize from '../utils/assignSize'
+import profile from '../assets/defaults/profile.jpg'
 
 export default function ProfilePicture ({ url, size }) {
   return (
-    <img src={url} className={assignSize(size)} />
+    <img src={url || profile} className={assignSize(size)} />
   )
 }
 

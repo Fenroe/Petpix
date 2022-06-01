@@ -72,7 +72,7 @@
   }
   /*Profile styles*/
   .profile-cover-img {
-    @apply w-full min-h-[208px] bg-slate-500;
+    @apply w-full bg-slate-500;
   }
 
   .profile-top-wrapper {

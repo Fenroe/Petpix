@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { GiTurtleShell } from 'react-icons/gi'
 import backgroundImage from '../assets/background.jpg'
+import { emailLogin } from '../firebase'
 
 export default function Login () {
   const emailRef = useRef()
@@ -42,8 +43,16 @@ export default function Login () {
     return true
   }
 
-  function handleSubmit (evt) {
+  function validateAll () {
+    if (!validateEmail()) return false
+    if (!validatePassword()) return false
+    return true
+  }
+
+  async function handleSubmit (evt) {
     evt.preventDefault()
+    if (!validateAll()) return
+    await emailLogin(emailRef.current.value, passwordRef.current.value)
     emailRef.current.value = ''
     passwordRef.current.value = ''
   }
@@ -59,7 +68,7 @@ export default function Login () {
             <GiTurtleShell className="text-7xl"/>
             <h1 className="text-7xl font-bold font-serif">Welcome back</h1>
           </div>
-          <form className="flex flex-col items-center mt-12" noValidate action="">
+          <form className="flex flex-col items-center mt-12" noValidate>
             <div className="w-80 mt-8">
               <button className="h-16 border-2 border-black rounded-full w-full text-xl bg-white hover:brightness-95">Continue with Google</button>
             </div>

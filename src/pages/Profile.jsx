@@ -7,13 +7,16 @@ import returnMonthAndYear from '../utils/returnMonthandYear'
 import ProfileSnaps from '../components/ProfileSnaps'
 import ProfileAlbums from '../components/ProfileAlbums'
 import UpdateProfile from '../components/UpdateProfile'
+import useUpdate from '../hooks/useUpdate'
 
 export default function Profile () {
   const [viewing, setViewing] = useState('snaps')
 
   const [viewEditProfile, setViewEditProfile] = useState(false)
 
-  const { user } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
+
+  const update = useUpdate(setUser)
 
   function openEditProfile () {
     setViewEditProfile(true)
@@ -24,8 +27,8 @@ export default function Profile () {
   }
 
   function formatFollowerText (followers) {
-    if (followers === 1) return `${followers} Follower`
-    return `${followers} Followers`
+    if (followers === 1) return 'Follower'
+    return 'Followers'
   }
 
   function viewSnaps () {
@@ -38,42 +41,38 @@ export default function Profile () {
 
   return (
     <section className="page">
-      <div className="profile-cover-img relative">
-        <img className="h-full w-full object-cover"src={user.coverPicture} />
-      </div>
-      <div className="profile-top-wrapper">
-        <div className="profile-top-left-wrapper relative">
-          <div className="profile-top-left">
+      <div className="w-full mb-3">
+        <div className="w-full h-80 bg-slate-500">
+          <img src={user.coverPicture} className="h-80 w-full object-cover" />
+        </div>
+        <div className="flex h-16 justify-end items-start relative w-full">
+          <div className="absolute left-3 bottom-0">
             <ProfilePicture url={user.profilePicture} size="large" />
           </div>
+          <div className="p-3">
+            <button onClick={openEditProfile}>Click me</button>
+          </div>
         </div>
-        <button className="follow-button" onClick={openEditProfile}>Edit Profile</button>
-      </div>
-      <div className="profile-info-wrapper">
-        <h1 className="profile-username">{user.username}</h1>
-      </div>
-      <div className="profile-info-wrapper">
-        <p>{user.bio}</p>
-      </div>
-      <div className="profile-bot-wrapper">
-        {user.location !== ''
-          ? (
-          <div className="profile-bot-info">
+        <div className="h-16 flex items-center p-3">
+          <h1 className="text-2xl font-bold">{user.username}</h1>
+        </div>
+        <div className="h-16 p-3">
+          <p>{user.bio}</p>
+        </div>
+        <div className="h-16 p-3 flex gap-3">
+          <div className="flex gap-3">
             <ImLocation2 />
             <span>{user.location}</span>
           </div>
-            )
-          : (
-              null
-            )}
-
-        <div className="profile-bot-info">
-          <BsCalendar3 />
-          <span>joined {returnMonthAndYear(user.joinedOn.toDate())}</span>
+          <div className="flex gap-3">
+            <BsCalendar3 />
+            <span>{returnMonthAndYear(user.joinedOn.toDate())}</span>
+          </div>
         </div>
-      </div>
-      <div className="profile-followers-wrapper">
-        <span className="profile-followers-text">{formatFollowerText(user.followers)}</span>
+        <div className="h-8 p-3 flex gap-1">
+          <span className="font-bold">{user.followers}</span>
+          <span>{formatFollowerText(user.followers)}</span>
+        </div>
       </div>
       <div className="view-btn-wrapper">
         <button className="view-btn" onClick={viewSnaps}>
@@ -84,7 +83,7 @@ export default function Profile () {
         </button>
       </div>
       { viewing === 'snaps' ? <ProfileSnaps /> : <ProfileAlbums />}
-      {viewEditProfile ? <UpdateProfile closeModal={closeEditProfile}/> : null}
+      {viewEditProfile ? <UpdateProfile closeModal={closeEditProfile} setRecentlyUpdated={update} /> : null}
     </section>
   )
 }

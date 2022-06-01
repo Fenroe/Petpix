@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import CreateSnap from '../components/CreateSnap'
 import SnapFeed from '../components/SnapFeed'
 import { db } from '../firebase'
 import { collection, query, getDocs, where, limit } from 'firebase/firestore'
+import { UserContext } from '../data/UserContext'
 
 export default function Home () {
   const [feedData, setFeedData] = useState([])
 
   const [sortBy, setSortBy] = useState('newest')
 
+  const { user } = useContext(UserContext)
+
   function sortFeedData (method) {
     let sortedFeed = []
     switch (method) {
       case 'newest': {
-        sortedFeed = feedData.sort((a, b) => b.timestamp - a.timestamp)
+        sortedFeed = feedData.sort((a, b) => b.posted - a.posted)
         break
       }
       case 'most liked': {
@@ -45,7 +48,7 @@ export default function Home () {
       setFeedData(snaps)
     }
     fetchHomeSnaps()
-  }, [])
+  }, [user])
 
   return (
     <section className="page">

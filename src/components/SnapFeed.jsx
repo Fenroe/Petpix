@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import SnapFeedItem from './SnapFeedItem'
 import { getNewKey } from '../utils/generateKey'
 import useFeedInterval from '../hooks/useFeedInterval'
 import EmptyFeed from './EmptyFeed'
 import returnFeedMessage from '../utils/returnFeedMessage'
+import useUpdate from '../hooks/useUpdate'
+import { UserContext } from '../data/UserContext'
 
 export default function SnapFeed ({ feedName, feedData }) {
   const caughtNewsFeedData = feedData || []
+
+  const { setUser } = useContext(UserContext)
+
+  const update = useUpdate(setUser)
 
   useFeedInterval()
 
@@ -24,7 +30,8 @@ export default function SnapFeed ({ feedName, feedData }) {
         posted={item.posted}
         image={item.image}
         text={item.text}
-        likedBy={item.likedBy}/>
+        likedBy={item.likedBy}
+        update={update}/>
       })}
     </section>
   )

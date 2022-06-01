@@ -10,9 +10,17 @@ import { doc, setDoc } from 'firebase/firestore'
 export default function ProfileSetup ({ setRecentlyUpdated }) {
   const { user } = useContext(UserContext)
 
-  const [cover, setCover] = useState()
+  const [cover, setCover] = useState({
+    reference: null,
+    preview: null,
+    file: null
+  })
 
-  const [profile, setProfile] = useState()
+  const [profile, setProfile] = useState({
+    reference: null,
+    preview: null,
+    file: null
+  })
 
   const [errors, setErrors] = useState({
     username: '',
@@ -81,23 +89,53 @@ export default function ProfileSetup ({ setRecentlyUpdated }) {
   }
 
   function handleProfileChange (evt) {
-    uploadProfilePicture(evt.target.files[0])
-      .then((result) => getURL(result))
-      .then((result) => setProfile(result))
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (reader.readyState !== 2) return
+      setProfile((prevState) => ({
+        ...prevState,
+        preview: reader.result,
+        file: evt.target.files[0]
+      }))
+    }
+    reader.readAsDataURL(evt.target.files[0])
   }
 
   function handleCoverChange (evt) {
-    uploadCoverPicture(evt.target.files[0])
-      .then((result) => getURL(result))
-      .then((result) => setCover(result))
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (reader.readyState !== 2) return
+      setCover((prevState) => ({
+        ...prevState,
+        preview: reader.result,
+        file: evt.target.files[0]
+      }))
+    }
+    reader.readAsDataURL(evt.target.files[0])
   }
 
   async function handleSave () {
-    if (!validateAll()) return
     const userRef = doc(db, 'users', user.userId)
+    if (!validateAll()) return
+    if (cover.preview !== cover.reference) {
+      const ref = await uploadCoverPicture(cover.file)
+      const coverURL = await getURL(ref)
+      await setDoc(userRef, {
+        coverPicture: coverURL
+      }, {
+        merge: true
+      })
+    }
+    if (profile.preview !== profile.reference) {
+      const ref = await uploadProfilePicture(profile.file)
+      const profileURL = await getURL(ref)
+      await setDoc(userRef, {
+        profilePicture: profileURL
+      }, {
+        merge: true
+      })
+    }
     await setDoc(userRef, {
-      profilePicture: profile,
-      coverPicture: cover,
       username: usernameRef.current.value,
       bio: bioRef.current.value,
       location: locationRef.current.value,
@@ -109,8 +147,16 @@ export default function ProfileSetup ({ setRecentlyUpdated }) {
   }
 
   useEffect(() => {
-    setProfile(user.profilePicture)
-    setCover(user.coverPicture)
+    setCover({
+      reference: user.coverPicture,
+      preview: user.coverPicture,
+      file: null
+    })
+    setProfile({
+      reference: user.profilePicture,
+      preview: user.profilePicture,
+      file: null
+    })
   }, [])
 
   return ReactDOM.createPortal(
@@ -124,7 +170,7 @@ export default function ProfileSetup ({ setRecentlyUpdated }) {
           </div>
         </div>
         <div className="profile-cover-img relative">
-          <img src={cover} className="h-full w-full object-cover" />
+          <img src={cover.preview} className="h-full w-full object-cover" />
           <label htmlFor="cover-picture" className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute border-2 bg-red-500 rounded-full p-3 text-white font-bold hover:cursor-pointer opacity-50 hover:opacity-100"><AiOutlinePicture /></label>
           <input type="file" name="cover-picture" id="cover-picture" accepts="image/*"className="hidden" onChange={(e) => handleCoverChange(e)}/>
         </div>
@@ -133,7 +179,7 @@ export default function ProfileSetup ({ setRecentlyUpdated }) {
             <div className="profile-top-left">
               <label htmlFor="profile-picture" className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute border-2 bg-red-500 rounded-full p-3 text-white font-bold hover:cursor-pointer opacity-50 hover:opacity-100"><AiOutlinePicture /></label>
               <input type="file" name="profile-picture" id="profile-picture" accepts="image/*"className="hidden" onChange={(e) => handleProfileChange(e)}/>
-              <ProfilePicture url={profile} size="large" />
+              <ProfilePicture url={profile.preview} size="large" />
             </div>
           </div>
         </div>

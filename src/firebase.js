@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore, doc, setDoc, getDoc, onSnapshot, addDoc, collection } from 'firebase/firestore'
-import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
+import { getFirestore, doc, setDoc, getDoc, onSnapshot, addDoc, collection, deleteDoc } from 'firebase/firestore'
+import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { v4 } from 'uuid'
 
@@ -59,6 +59,10 @@ export async function emailLogin (email, password, errorFunc) {
   return result
 }
 
+export async function appSignOut () {
+  await signOut(auth)
+}
+
 export async function getUserData (callback) {
   try {
     const uid = auth.currentUser.uid
@@ -93,7 +97,7 @@ export async function updateUserData (state) {
 export async function uploadProfilePicture (picture) {
   if (picture === null) return
   const uid = auth.currentUser.uid
-  const imageRef = ref(storage, `${uid}/profpics/${uid + v4()}`)
+  const imageRef = ref(storage, `${uid}/profile`)
   await uploadBytes(imageRef, picture)
   return imageRef
 }
@@ -101,7 +105,7 @@ export async function uploadProfilePicture (picture) {
 export async function uploadCoverPicture (picture) {
   if (picture === null) return
   const uid = auth.currentUser.uid
-  const imageRef = ref(storage, `${uid}/coverpics/${uid + v4()}`)
+  const imageRef = ref(storage, `${uid}/cover`)
   await uploadBytes(imageRef, picture)
   return imageRef
 }
@@ -109,7 +113,7 @@ export async function uploadCoverPicture (picture) {
 export async function uploadSnapPicture (picture) {
   if (picture === null) return
   const uid = auth.currentUser.uid
-  const imageRef = ref(storage, `${uid}/snaps/${uid + v4()}`)
+  const imageRef = ref(storage, `${uid}/snaps/${v4()}`)
   await uploadBytes(imageRef, picture)
   return imageRef
 }
@@ -132,4 +136,8 @@ export async function postSnap (username, profilePicture, image, text) {
     likedBy: []
   })
   return docRef
+}
+
+export async function deleteSnap (snapId) {
+  await deleteDoc(doc(db, 'snaps', snapId))
 }
