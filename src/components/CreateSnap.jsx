@@ -4,25 +4,54 @@ import { MdOutlineClose } from 'react-icons/md'
 import TextareaAutosize from 'react-textarea-autosize'
 import ProfilePicture from './ProfilePicture'
 import { UserContext } from '../data/UserContext'
-import { uploadSnapPicture, getURL, postSnap } from '../firebase'
+import { db, postSnap, uploadSnapPicture, getURL } from '../firebase'
+import { addDoc, collection } from 'firebase/firestore'
 
 export default function CreateSnap () {
-  const [uploadedImage, setUploadedImage] = useState('')
+  const [uploadedImage, setUploadedImage] = useState({
+    preview: '',
+    file: null
+  })
 
   const textareaRef = useRef(null)
 
-  const { user } = useContext(UserContext)
+  const { user, recentSnaps, setRecentSnaps } = useContext(UserContext)
 
   function handleImageUpload (evt) {
-    uploadSnapPicture(evt.target.files[0])
-      .then((result) => getURL(result))
-      .then((result) => setUploadedImage(result))
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (reader.readyState !== 2) return
+      setUploadedImage({
+        preview: reader.result,
+        file: evt.target.files[0]
+      })
+    }
+    reader.readAsDataURL(evt.target.files[0])
   }
 
   async function handleSubmit (evt) {
     evt.preventDefault()
-    await postSnap(user.username, user.profilePicture, uploadedImage, textareaRef.current.value)
-    setUploadedImage('')
+    if (uploadedImage.file === null) return
+    const docRef = await addDoc(collection(db, 'snaps'), {})
+    const file = uploadedImage.file
+    const snapText = textareaRef.current.value
+    setRecentSnaps([...recentSnaps, {
+      id: docRef.id,
+      image: uploadedImage.preview,
+      likedBy: [],
+      posted: new Date(),
+      profilePicture: user.profilePicture,
+      text: snapText,
+      userId: user.userId,
+      username: user.username
+    }])
+    setUploadedImage({
+      preview: '',
+      file: null
+    })
+    const imageRef = await uploadSnapPicture(file)
+    const imageURL = await getURL(imageRef)
+    await postSnap(docRef, user.username, user.profilePicture, imageURL, snapText)
   }
 
   return (
@@ -33,7 +62,7 @@ export default function CreateSnap () {
         </a>
       </div>
       <div className="w-full">
-        {uploadedImage === ''
+        {uploadedImage.file === null
           ? (
           <div className="w-full h-28 flex items-center justify-center">
             <label htmlFor="post-image-input" className="border-2 bg-red-500 rounded-full p-3 text-white font-bold hover:cursor-pointer"><AiOutlinePicture className="text-2xl"/></label>
@@ -44,10 +73,10 @@ export default function CreateSnap () {
             <div className="sb-content-wrapper>">
               <TextareaAutosize ref={textareaRef} className="sb-text-area" placeholder="Text goes here" />
               <div className="relative text-3xl rounded">
-                <button className="absolute top-3 left-3 rounded-full hover:cursor-pointer text-white bg-black" onClick={() => setUploadedImage('')}>
+                <button className="absolute top-3 left-3 rounded-full hover:cursor-pointer text-white bg-black" onClick={() => setUploadedImage({ preview: '', file: null })}>
                   <MdOutlineClose />
                 </button>
-                <img src={uploadedImage} className="rounded-xl" />
+                <img src={uploadedImage.preview} className="rounded-xl" />
               </div>
             </div>
             )}

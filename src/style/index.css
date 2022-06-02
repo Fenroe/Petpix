@@ -190,11 +190,11 @@
   }
 
   .profile-picture-small {
-    @apply h-12 w-12 rounded-full;
+    @apply h-12 w-12 rounded-full object-cover;
   }
 
   .profile-picture-large {
-    @apply h-36 w-36 rounded-full;
+    @apply h-36 w-36 rounded-full object-cover;
   }
 
   .page-heading-wrapper {

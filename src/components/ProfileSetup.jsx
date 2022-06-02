@@ -6,9 +6,10 @@ import { AiOutlinePicture } from 'react-icons/ai'
 import { UserContext } from '../data/UserContext'
 import { db, uploadProfilePicture, uploadCoverPicture, getURL } from '../firebase'
 import { doc, setDoc } from 'firebase/firestore'
+import CoverPicture from './CoverPicture'
 
-export default function ProfileSetup ({ setRecentlyUpdated }) {
-  const { user } = useContext(UserContext)
+export default function ProfileSetup () {
+  const { user, setUser } = useContext(UserContext)
 
   const [cover, setCover] = useState({
     reference: null,
@@ -82,9 +83,9 @@ export default function ProfileSetup ({ setRecentlyUpdated }) {
 
   function validateAll () {
     let validated = true
-    if (!validateBio) validated = false
-    if (!validateLocation) validated = false
-    if (!validateUsername) validated = false
+    if (!validateBio()) validated = false
+    if (!validateLocation()) validated = false
+    if (!validateUsername()) validated = false
     return validated
   }
 
@@ -115,8 +116,20 @@ export default function ProfileSetup ({ setRecentlyUpdated }) {
   }
 
   async function handleSave () {
-    const userRef = doc(db, 'users', user.userId)
     if (!validateAll()) return
+    const username = usernameRef.current.value
+    const bio = bioRef.current.value
+    const location = locationRef.current.value
+    setUser((prevState) => ({
+      ...prevState,
+      username,
+      profilePicture: profile.preview,
+      coverPicture: cover.preview,
+      bio,
+      location,
+      setup: true
+    }))
+    const userRef = doc(db, 'users', user.userId)
     if (cover.preview !== cover.reference) {
       const ref = await uploadCoverPicture(cover.file)
       const coverURL = await getURL(ref)
@@ -136,14 +149,13 @@ export default function ProfileSetup ({ setRecentlyUpdated }) {
       })
     }
     await setDoc(userRef, {
-      username: usernameRef.current.value,
-      bio: bioRef.current.value,
-      location: locationRef.current.value,
+      username,
+      bio,
+      location,
       setup: true
     }, {
       merge: true
     })
-    setRecentlyUpdated(true)
   }
 
   useEffect(() => {
@@ -170,7 +182,7 @@ export default function ProfileSetup ({ setRecentlyUpdated }) {
           </div>
         </div>
         <div className="profile-cover-img relative">
-          <img src={cover.preview} className="h-full w-full object-cover" />
+          <CoverPicture url={cover.preview} />
           <label htmlFor="cover-picture" className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute border-2 bg-red-500 rounded-full p-3 text-white font-bold hover:cursor-pointer opacity-50 hover:opacity-100"><AiOutlinePicture /></label>
           <input type="file" name="cover-picture" id="cover-picture" accepts="image/*"className="hidden" onChange={(e) => handleCoverChange(e)}/>
         </div>

@@ -1,8 +1,9 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore, doc, setDoc, getDoc, onSnapshot, addDoc, collection, deleteDoc } from 'firebase/firestore'
+import { getFirestore, doc, setDoc, getDoc, onSnapshot, deleteDoc, where, limit, query, collection, updateDoc, arrayRemove, arrayUnion } from 'firebase/firestore'
 import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { v4 } from 'uuid'
+import { useCollectionData } from 'react-firebase-hooks/firestore'
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -35,15 +36,12 @@ export async function emailSignup (email, password) {
     await setDoc(doc(db, 'users', userId), {
       username: '',
       userId, // property shorthand
-      profilePicture: 'https://firebasestorage.googleapis.com/v0/b/snapshot-18036.appspot.com/o/defaults%2Fdefault.jpg?alt=media&token=63652fc4-b63f-4326-99fe-b936e7d8baf6',
-      coverPicture: 'https://firebasestorage.googleapis.com/v0/b/snapshot-18036.appspot.com/o/defaults%2FdefaultCover.png?alt=media&token=b83e125c-06d2-46a7-b320-a3492ff8d14d',
+      profilePicture: '',
+      coverPicture: '',
       bio: '',
       location: '',
       joinedOn: new Date(),
-      likes: [],
-      albums: [],
-      notifications: [],
-      followers: 0,
+      followedBy: [],
       setup: false
     })
     await setDoc(doc(db, 'emails', email), {
@@ -74,6 +72,12 @@ export async function getUserData (callback) {
   } catch (error) {
     console.log(error.message)
   }
+}
+
+export async function getProfileData (uid) {
+  const docRef = doc(db, 'users', uid)
+  const docSnap = await getDoc(docRef)
+  if (docSnap.exists()) return docSnap.data()
 }
 
 export function listenForUser (callback) {
@@ -123,8 +127,29 @@ export async function getURL (ref) {
   return pictureURL
 }
 
-export async function postSnap (username, profilePicture, image, text) {
-  const docRef = await addDoc(collection(db, 'snaps'), {})
+export const snapQuery = query(collection(db, 'snaps'), where('id', '!=', 'test'), limit(25))
+
+export function fetchSnaps (callback) {
+  const snapQuery = query(collection(db, 'snaps'), where('id', '!=', 'test'), limit(25))
+  const [messages] = useCollectionData(snapQuery)
+  const snaps = []
+  messages.forEach((doc) => {
+    const snap = {
+      id: doc.id,
+      userId: doc.userId,
+      username: doc.username,
+      profilePicture: doc.profilePicture,
+      posted: doc.posted.toDate(),
+      image: doc.image,
+      text: doc.text,
+      likedBy: doc.likedBy
+    }
+    snaps.push(snap)
+  })
+  callback(snaps)
+}
+
+export async function postSnap (docRef, username, profilePicture, image, text) {
   await setDoc(docRef, {
     id: docRef.id,
     userId: auth.currentUser.uid,
@@ -140,4 +165,16 @@ export async function postSnap (username, profilePicture, image, text) {
 
 export async function deleteSnap (snapId) {
   await deleteDoc(doc(db, 'snaps', snapId))
+}
+
+export async function likeSnap (snapId, userId) {
+  await updateDoc(doc(db, 'snaps', snapId), {
+    likedBy: arrayUnion(userId)
+  })
+}
+
+export async function unlikeSnap (snapId, userId) {
+  await updateDoc(doc(db, 'snaps', snapId), {
+    likedBy: arrayRemove(userId)
+  })
 }

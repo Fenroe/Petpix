@@ -7,9 +7,10 @@ import { UserContext } from '../data/UserContext'
 import { db, uploadProfilePicture, uploadCoverPicture, getURL } from '../firebase'
 import { doc, setDoc } from 'firebase/firestore'
 import { MdOutlineClose } from 'react-icons/md'
+import CoverPicture from './CoverPicture'
 
-export default function UpdateProfile ({ closeModal, setRecentlyUpdated }) {
-  const { user } = useContext(UserContext)
+export default function UpdateProfile ({ closeModal }) {
+  const { user, setUser } = useContext(UserContext)
 
   const [cover, setCover] = useState({
     reference: null,
@@ -66,8 +67,8 @@ export default function UpdateProfile ({ closeModal, setRecentlyUpdated }) {
 
   function validateAll () {
     let validated = true
-    if (!validateBio) validated = false
-    if (!validateLocation) validated = false
+    if (!validateBio()) validated = false
+    if (!validateLocation()) validated = false
     return validated
   }
 
@@ -98,8 +99,18 @@ export default function UpdateProfile ({ closeModal, setRecentlyUpdated }) {
   }
 
   async function handleSave () {
-    const userRef = doc(db, 'users', user.userId)
     if (!validateAll()) return
+    const bio = bioRef.current.value
+    const location = locationRef.current.value
+    setUser((prevState) => ({
+      ...prevState,
+      profilePicture: profile.preview,
+      coverPicture: cover.preview,
+      bio,
+      location
+    }))
+    closeModal()
+    const userRef = doc(db, 'users', user.userId)
     if (cover.preview !== cover.reference) {
       const ref = await uploadCoverPicture(cover.file)
       const coverURL = await getURL(ref)
@@ -119,14 +130,11 @@ export default function UpdateProfile ({ closeModal, setRecentlyUpdated }) {
       })
     }
     await setDoc(userRef, {
-      bio: bioRef.current.value,
-      location: locationRef.current.value,
-      setup: true
+      bio,
+      location
     }, {
       merge: true
     })
-    setRecentlyUpdated(true)
-    closeModal()
   }
 
   useEffect(() => {
@@ -154,27 +162,27 @@ export default function UpdateProfile ({ closeModal, setRecentlyUpdated }) {
           </div>
         </div>
         <div className="w-full h-80 bg-slate-500 relative">
-          <img src={cover.preview} className="h-80 w-full object-cover" />
+          <CoverPicture url={cover.preview} />
           <label htmlFor="cover-picture" className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute border-2 bg-red-500 rounded-full p-3 text-white font-bold hover:cursor-pointer opacity-50 hover:opacity-100"><AiOutlinePicture /></label>
           <input type="file" name="cover-picture" id="cover-picture" accepts="image/*"className="hidden" onChange={(e) => handleCoverChange(e)}/>
         </div>
-          <div className="flex h-16 justify-end items-start relative w-36">
-            <div className="absolute left-3 bottom-0">
-              <label htmlFor="profile-picture" className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute border-2 bg-red-500 rounded-full p-3 text-white font-bold hover:cursor-pointer opacity-50 hover:opacity-100"><AiOutlinePicture /></label>
-              <input type="file" name="profile-picture" id="profile-picture" accepts="image/*"className="hidden" onChange={(e) => handleProfileChange(e)}/>
-              <ProfilePicture url={profile.preview} size="large" />
-            </div>
+        <div className="flex h-16 justify-end items-start relative w-36">
+          <div className="absolute left-3 bottom-0">
+            <label htmlFor="profile-picture" className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute border-2 bg-red-500 rounded-full p-3 text-white font-bold hover:cursor-pointer opacity-50 hover:opacity-100"><AiOutlinePicture /></label>
+            <input type="file" name="profile-picture" id="profile-picture" accepts="image/*"className="hidden" onChange={(e) => handleProfileChange(e)}/>
+            <ProfilePicture url={profile.preview} size="large" />
           </div>
+        </div>
         <form className="flex flex-col" noValidate action="">
           <div className="relative border-2 border-slate-400 mt-8 focus-within:border-blue-500">
-            <TextareaAutosize ref={bioRef} onChange={validateBio} required className="w-full px-3 pt-7 min-h-[64px] text-lg outline-none bg-none peer resize-none" />
+            <TextareaAutosize ref={bioRef} onChange={validateBio} required className="w-full px-3 pt-7 min-h-[64px] text-lg outline-none bg-none peer resize-none" value={user.bio}/>
             <label className="ml-2 text-slate-400 absolute top-1/2 left-1 -translate-y-1/2 text-lg pointer-events-none duration-300 peer-valid:top-4 peer-valid:text-sm peer-focus:top-4 peer-focus:text-sm">Bio</label>
           </div>
           <div className="text-red-400 p-2 opacity-100 transition-opacity">
             <span>{errors.bio}</span>
           </div>
           <div className="relative border-2 border-slate-400 mt-8 focus-within:border-blue-500">
-            <input ref={locationRef} onChange={validateLocation} required type="text" className="w-full px-3 pt-5 min-h-[64px] text-lg outline-none bg-none peer" />
+            <input ref={locationRef} onChange={validateLocation} required type="text" className="w-full px-3 pt-5 min-h-[64px] text-lg outline-none bg-none peer" value={user.location} />
             <label className="ml-2 text-slate-400 absolute top-1/2 left-1 -translate-y-1/2 text-lg pointer-events-none duration-300 peer-valid:top-4 peer-valid:text-sm peer-focus:top-4 peer-focus:text-sm">Location</label>
           </div>
           <div className="text-red-400 p-2 opacity-100 transition-opacity">

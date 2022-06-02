@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import ProfilePicture from './ProfilePicture'
 import TextareaAutosize from 'react-textarea-autosize'
@@ -7,9 +7,15 @@ import { GrLike } from 'react-icons/gr'
 import { BiPhotoAlbum } from 'react-icons/bi'
 import { BsThreeDots } from 'react-icons/bs'
 import SnapOptions from './SnapOptions'
+import { UserContext } from '../data/UserContext'
+import { likeSnap, unlikeSnap } from '../firebase'
 
 export default function SnapFeedItem ({ id, userId, username, profilePicture, posted, image, text, likedBy, update }) {
   const [menuOpen, setMenuOpen] = useState(false)
+
+  const [liked, setLiked] = useState(false)
+
+  const { user } = useContext(UserContext)
 
   function closeMenu () {
     setMenuOpen(false)
@@ -18,6 +24,25 @@ export default function SnapFeedItem ({ id, userId, username, profilePicture, po
   function openMenu () {
     setMenuOpen(true)
   }
+
+  function handleLike () {
+    likedBy.push(user.userId)
+    setLiked(true)
+    likeSnap(id, user.userId)
+  }
+
+  function handleUnlike () {
+    // pop because it doesn't matter what userId is removed, but this might cause bugs if decided later that behaviour should change
+    likedBy.pop()
+    setLiked(false)
+    unlikeSnap(id, user.userId)
+  }
+
+  useEffect(() => {
+    if (likedBy.includes(user.userId)) {
+      setLiked(true)
+    }
+  }, [])
 
   return (
     <div className="story-box">
@@ -43,10 +68,20 @@ export default function SnapFeedItem ({ id, userId, username, profilePicture, po
             <img src={image} className="sb-image" />
           </div>
           <div className="flex items-center justify-around">
-              <button className="flex gap-3 items-center">
+            {liked
+              ? (
+              <button className="flex gap-3 items-center text-blue-500 font-bold" onClick={handleUnlike}>
                 <GrLike />
                 <span>{likedBy.length}</span>
               </button>
+                )
+              : (
+              <button className="flex gap-3 items-center" onClick={handleLike}>
+                <GrLike />
+                <span>{likedBy.length}</span>
+              </button>
+                )}
+
             <button>
               <BiPhotoAlbum />
             </button>

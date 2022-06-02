@@ -15,7 +15,7 @@ export default function Main () {
           <Route exact path="/" element={<Home />} />
           <Route exact path ="/notifications" element={<Notifications />} />
           <Route exact path="/likes" element={<Likes />} />
-          <Route exact path="/profile" element={<Profile />} />
+          <Route exact path="/profile/:id" element={<Profile />} />
           <Route exact path="/albums" element={<Albums />} />
           <Route exact path="/snap" element={<Snap />} />
           <Route path="/login" element={<Navigate replace to="/" />}/>

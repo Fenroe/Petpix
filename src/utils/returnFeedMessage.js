@@ -22,6 +22,10 @@ export default function returnFeedMessage (feedName) {
       message = 'You haven\'t pinned any albums yet'
       break
     }
+    case 'explore albums': {
+      message = 'There are no albums to show'
+      break
+    }
     case 'notifications': {
       message = 'You have no new notifications'
       break

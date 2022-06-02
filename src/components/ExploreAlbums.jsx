@@ -1,13 +1,13 @@
-import React, { useState, useContext } from 'react'
+import React, { useState /* useContext */ } from 'react'
 import AlbumFeed from './AlbumFeed'
-import { UserContext } from '../data/UserContext'
+// import { UserContext } from '../data/UserContext'
 
 export default function MyAlbums () {
-  const { user } = useContext(UserContext)
+  // const { user } = useContext(UserContext)
 
   const [sortBy, setSortBy] = useState('new')
 
-  function sortFeedData (method) {
+  /* function sortFeedData (method) {
     let sortedFeed = []
     switch (method) {
       case 'new': {
@@ -23,7 +23,7 @@ export default function MyAlbums () {
       }
     }
     return sortedFeed
-  }
+  } */
 
   return (
     <>
@@ -35,7 +35,7 @@ export default function MyAlbums () {
           <option value="recently updated">Recently Updated</option>
         </select>
       </div>
-      <AlbumFeed feedName='my albums' feedData={sortFeedData(sortBy)} />
+      <AlbumFeed feedName='explore albums' feedData={sortBy ? [] : null} />
     </>
   )
 }

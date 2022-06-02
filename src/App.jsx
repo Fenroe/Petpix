@@ -9,14 +9,13 @@ import { UserContext } from './data/UserContext'
 import ProfileSetup from './components/ProfileSetup'
 import { auth, getUserData } from './firebase'
 import { onAuthStateChanged } from 'firebase/auth'
-import useUpdate from './hooks/useUpdate'
 
 function App () {
   const [signedIn, setSignedIn] = useState(false)
 
   const [user, setUser] = useState({})
 
-  const update = useUpdate(setUser)
+  const [recentSnaps, setRecentSnaps] = useState([])
 
   onAuthStateChanged(auth, (currentUser) => {
     if (currentUser) {
@@ -33,8 +32,8 @@ function App () {
     <div className="app">
       {signedIn
         ? (
-        <UserContext.Provider value={{ user, setUser }}>
-          {user.setup === false ? <ProfileSetup setRecentlyUpdated={update}/> : null}
+        <UserContext.Provider value={{ user, setUser, recentSnaps, setRecentSnaps }}>
+          {user.setup === false ? <ProfileSetup /> : null}
           <Sidebar />
           <Main />
         </UserContext.Provider>

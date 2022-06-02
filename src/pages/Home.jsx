@@ -10,7 +10,9 @@ export default function Home () {
 
   const [sortBy, setSortBy] = useState('newest')
 
-  const { user } = useContext(UserContext)
+  const [loading, setLoading] = useState(false)
+
+  const { recentSnaps, setRecentSnaps } = useContext(UserContext)
 
   function sortFeedData (method) {
     let sortedFeed = []
@@ -47,8 +49,15 @@ export default function Home () {
       })
       setFeedData(snaps)
     }
-    fetchHomeSnaps()
-  }, [user])
+
+    setRecentSnaps([])
+    setLoading(true)
+    fetchHomeSnaps().then(() => setLoading(false))
+  }, [])
+
+  useEffect(() => {
+    setFeedData([...feedData, ...recentSnaps])
+  }, [recentSnaps])
 
   return (
     <section className="page">
@@ -63,7 +72,14 @@ export default function Home () {
       <div className="page-heading-wrapper">
         <h1 className="page-heading">See what&apos;s new</h1>
       </div>
-      <SnapFeed feedName="home" feedData={sortFeedData(sortBy)}/>
+      {loading
+        ? (
+        <h1>Loading</h1>
+          )
+        : (
+        <SnapFeed feedName="home" feedData={sortFeedData(sortBy)}/>
+          )}
+
     </section>
   )
 }
