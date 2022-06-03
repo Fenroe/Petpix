@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { ImLocation2 } from 'react-icons/im'
 import { BsCalendar3 } from 'react-icons/bs'
@@ -12,7 +13,7 @@ import useUpdate from '../hooks/useUpdate'
 import { getProfileData } from '../firebase'
 import CoverPicture from '../components/CoverPicture'
 
-export default function Profile () {
+export default function Profile ({ snapFeedData }) {
   const [viewing, setViewing] = useState('snaps')
 
   const [viewEditProfile, setViewEditProfile] = useState(false)
@@ -128,7 +129,7 @@ export default function Profile () {
                   <h2 className="view-btn-text">Albums</h2>
                 </button>
               </div>
-              { viewing === 'snaps' ? <ProfileSnaps /> : <ProfileAlbums />}
+              { viewing === 'snaps' ? <ProfileSnaps feedData={snapFeedData} userId={profileInfo.userId}/> : <ProfileAlbums />}
               {viewEditProfile ? <UpdateProfile closeModal={closeEditProfile} setRecentlyUpdated={update} /> : null}
             </div>
           )
@@ -137,4 +138,8 @@ export default function Profile () {
           )}
     </section>
   )
+}
+
+Profile.propTypes = {
+  snapFeedData: PropTypes.array
 }

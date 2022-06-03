@@ -15,6 +15,8 @@ export default function SnapFeedItem ({ id, userId, username, profilePicture, po
 
   const [liked, setLiked] = useState(false)
 
+  const [loading, setLoading] = useState(false)
+
   const { user } = useContext(UserContext)
 
   function closeMenu () {
@@ -22,20 +24,25 @@ export default function SnapFeedItem ({ id, userId, username, profilePicture, po
   }
 
   function openMenu () {
+    console.log('hi')
     setMenuOpen(true)
   }
 
   function handleLike () {
+    if (loading) return
+    setLoading(true)
     likedBy.push(user.userId)
     setLiked(true)
-    likeSnap(id, user.userId)
+    likeSnap(id, user.userId).then(() => setLoading(false))
   }
 
   function handleUnlike () {
+    if (loading) return
+    setLoading(true)
     // pop because it doesn't matter what userId is removed, but this might cause bugs if decided later that behaviour should change
     likedBy.pop()
     setLiked(false)
-    unlikeSnap(id, user.userId)
+    unlikeSnap(id, user.userId).then(() => setLoading(false))
   }
 
   useEffect(() => {

@@ -1,14 +1,21 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useContext } from 'react'
 import ReactDOM from 'react-dom'
 import { MdOutlineClose } from 'react-icons/md'
 import PropTypes from 'prop-types'
+import { createAlbum, getURL, uploadAlbumCover } from '../firebase'
+import { UserContext } from '../data/UserContext'
 
 export default function CreateAlbum ({ closeModal }) {
-  const [coverImage, setCoverImage] = useState('')
+  const [coverImage, setCoverImage] = useState({
+    preview: '',
+    file: null
+  })
 
   const [title, setTitle] = useState('')
 
   const inputRef = useRef(null)
+
+  const { user } = useContext(UserContext)
 
   function updateTitle () {
     setTitle(inputRef.current.value)
@@ -18,15 +25,25 @@ export default function CreateAlbum ({ closeModal }) {
     const reader = new FileReader()
     reader.onload = () => {
       if (reader.readyState !== 2) return
-      setCoverImage(reader.result)
+      setCoverImage({
+        preview: reader.result,
+        file: evt.target.files[0]
+      })
     }
     reader.readAsDataURL(evt.target.files[0])
   }
 
-  function newAlbum () {
+  async function handleSubmit () {
     if (inputRef.current.value === '') return
-    console.log(title)
+    const title = inputRef.current.value
+    const file = coverImage.file
+    let imageURL = ''
     closeModal()
+    if (file !== null) {
+      const imageRef = await uploadAlbumCover(file)
+      imageURL = await getURL(imageRef)
+    }
+    await createAlbum(title, imageURL, user.userId, user.username, user.profilePicture)
   }
 
   return ReactDOM.createPortal(
@@ -43,20 +60,20 @@ export default function CreateAlbum ({ closeModal }) {
             <label htmlFor="" className="ml-2 text-slate-400 absolute top-1/2 left-1 -translate-y-1/2 text-lg pointer-events-none duration-300 peer-valid:top-4 peer-valid:text-sm peer-focus:top-4 peer-focus:text-sm">Album title</label>
           </div>
           <div className="flex items-center justify-center w-full h-fit p-3 rounded-lg">
-            {coverImage === ''
+            {coverImage.file === null
               ? <div className="">
                   <label htmlFor="cover" className="cursor-pointer hover:text-red-500">Upload a cover image</label>
                   <input name="cover" id="cover" className="hidden" type="file" accept="image/*" onChange={(e) => handleImageUpload(e)} />
                 </div>
               : <div className="relative w-full">
-                  <img src={coverImage} className="rounded-lg" />
-                  <button className="absolute top-3 left-3 rounded-full hover:cursor-pointer text-white bg-black" onClick={() => setCoverImage('')}>
+                  <img src={coverImage.preview} className="rounded-lg" />
+                  <button className="absolute top-3 left-3 rounded-full hover:cursor-pointer text-white bg-black" onClick={() => setCoverImage({ preview: '', file: null })}>
                     <MdOutlineClose />
                   </button>
                 </div>}
           </div>
           <div className="flex bg-white justify-center w-full bottom-0 mt-3">
-            <button onClick={newAlbum} className={title === '' ? 'inactive-button w-40' : 'follow-button w-48'}>Create Album</button>
+            <button onClick={handleSubmit} className={title === '' ? 'inactive-button w-40' : 'follow-button w-48'}>Create Album</button>
           </div>
         </div>
 

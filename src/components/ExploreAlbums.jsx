@@ -1,29 +1,27 @@
-import React, { useState /* useContext */ } from 'react'
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import AlbumFeed from './AlbumFeed'
-// import { UserContext } from '../data/UserContext'
 
-export default function MyAlbums () {
-  // const { user } = useContext(UserContext)
-
+export default function ExploreAlbums ({ feedData }) {
   const [sortBy, setSortBy] = useState('new')
 
-  /* function sortFeedData (method) {
+  function sortFeedData (method) {
     let sortedFeed = []
     switch (method) {
       case 'new': {
-        sortedFeed = user.albums.sort((a, b) => b.created - a.created)
+        sortedFeed = feedData.sort((a, b) => b.posted - a.posted)
         break
       }
       case 'most pinned': {
-        sortedFeed = user.albums.sort((a, b) => b.pins - a.pins)
+        sortedFeed = feedData.sort((a, b) => b.pinnedBy.length - a.pinnedBy.length)
         break
       }
       case 'recently updated': {
-        sortedFeed = user.albums.sort((a, b) => b.updated - a.updated)
+        sortedFeed = feedData.sort((a, b) => b.updated - a.updated)
       }
     }
     return sortedFeed
-  } */
+  }
 
   return (
     <>
@@ -35,7 +33,11 @@ export default function MyAlbums () {
           <option value="recently updated">Recently Updated</option>
         </select>
       </div>
-      <AlbumFeed feedName='explore albums' feedData={sortBy ? [] : null} />
+      <AlbumFeed feedName='explore albums' feedData={sortFeedData(sortBy)} />
     </>
   )
+}
+
+ExploreAlbums.propTypes = {
+  feedData: PropTypes.array
 }

@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore, doc, setDoc, getDoc, onSnapshot, deleteDoc, where, limit, query, collection, updateDoc, arrayRemove, arrayUnion } from 'firebase/firestore'
+import { getFirestore, doc, setDoc, getDoc, deleteDoc, where, limit, query, collection, updateDoc, arrayRemove, arrayUnion, addDoc, getDocs } from 'firebase/firestore'
 import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { v4 } from 'uuid'
@@ -23,6 +23,14 @@ export const storage = getStorage(app)
 export const googleProvider = new GoogleAuthProvider()
 
 export const auth = getAuth(app)
+
+export const snapCollection = collection(db, 'snaps')
+
+export const albumCollection = collection(db, 'albums')
+
+export const getMyAlbumsQuery = (uid) => query(albumCollection, where('userId', '==', uid))
+
+export const getPinnedAlbumsQuery = (uid) => query(albumCollection, where('pinnedBy', 'array-contains', uid))
 
 export async function continueWithGoogle () {
   const result = await signInWithPopup(auth, googleProvider)
@@ -80,14 +88,6 @@ export async function getProfileData (uid) {
   if (docSnap.exists()) return docSnap.data()
 }
 
-export function listenForUser (callback) {
-  const docRef = doc(db, 'users', auth.currentUser.uid)
-  const unsub = onSnapshot(docRef, (doc) => {
-    callback(doc.data())
-  })
-  return unsub
-}
-
 export async function updateUserData (state) {
   try {
     await setDoc(doc(db, 'users', state.userId), {
@@ -118,6 +118,14 @@ export async function uploadSnapPicture (picture) {
   if (picture === null) return
   const uid = auth.currentUser.uid
   const imageRef = ref(storage, `${uid}/snaps/${v4()}`)
+  await uploadBytes(imageRef, picture)
+  return imageRef
+}
+
+export async function uploadAlbumCover (picture) {
+  if (picture === null) return
+  const uid = auth.currentUser.uid
+  const imageRef = ref(storage, `${uid}/albumcovers/${v4()}`)
   await uploadBytes(imageRef, picture)
   return imageRef
 }
@@ -177,4 +185,50 @@ export async function unlikeSnap (snapId, userId) {
   await updateDoc(doc(db, 'snaps', snapId), {
     likedBy: arrayRemove(userId)
   })
+}
+
+export async function fetchAlbums (callback) {
+  const albumQuery = query(albumCollection)
+  const albumSnapshot = await getDocs(albumQuery)
+  const albums = []
+  albumSnapshot.forEach((doc) => {
+    const album = {
+      ...doc.data(),
+      posted: doc.data().posted.toDate(),
+      edited: doc.data().posted.toDate()
+    }
+    albums.push(album)
+  })
+  callback(albums)
+}
+
+export async function createAlbum (title, albumCover, userId, username, profilePicture) {
+  const docRef = await addDoc(albumCollection, {})
+  await updateDoc(docRef, {
+    id: docRef.id,
+    title,
+    userId,
+    username,
+    profilePicture,
+    albumCover,
+    posted: new Date(),
+    updated: new Date(),
+    pinnedBy: []
+  })
+}
+
+export async function pinAlbum (albumId, userId) {
+  await updateDoc(doc(db, 'albums', albumId), {
+    pinnedBy: arrayUnion(userId)
+  })
+}
+
+export async function unpinAlbum (albumId, userId) {
+  await updateDoc(doc(db, 'albums', albumId), {
+    pinnedBy: arrayRemove(userId)
+  })
+}
+
+export async function deleteAlbum (id) {
+  deleteDoc(doc(db, 'albums', id))
 }

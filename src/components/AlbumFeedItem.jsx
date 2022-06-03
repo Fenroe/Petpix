@@ -1,17 +1,14 @@
 import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import { UserContext } from '../data/UserContext'
+import defaultAlbumCover from '../assets/defaults/album.jpg'
+import { pinAlbum, unpinAlbum, deleteAlbum } from '../firebase'
 
-export default function AlbumFeedItem ({ id, cover, title, userId, updated, created, pins }) {
-  const { user, setUser } = useContext(UserContext)
+export default function AlbumFeedItem ({ id, albumCover, title, userId, username, profilePicture, updated, posted, pinnedBy }) {
+  const { user } = useContext(UserContext)
 
-  function removeFromAlbums (evt) {
-    evt.preventDefault()
-    const filteredAlbums = user.albums.filter((album) => album.id !== id ? album : null)
-    setUser((prevState) => ({
-      ...prevState,
-      albums: filteredAlbums
-    }))
+  function handleDelete () {
+    deleteAlbum(id)
   }
 
   function formatPinsText (pins) {
@@ -19,37 +16,61 @@ export default function AlbumFeedItem ({ id, cover, title, userId, updated, crea
     return 'pins'
   }
 
+  function handlePin () {
+    pinAlbum(id, user.userId)
+  }
+
+  function handleUnpin () {
+    unpinAlbum(id, user.userId)
+  }
+
   return (
-    <a className="justify-between flex items-center gap-3">
+    <a href={`/albums/${id}`} className="justify-between flex items-center gap-3 bg-white hover:brightness-95">
       <div className="flex items-center gap-3">
-        <img src={cover} className="h-10 w-10 rounded-lg" />
+        <img src={albumCover || defaultAlbumCover} className="h-10 w-10 rounded-lg" />
         <div className="flex flex-col justify-start items-start">
           <div className="flex flex-col">
             <div className="flex gap-3 items-center">
               <span className="font-bold text-lg">{title}</span>
-              <span className="text-sm">{userId}</span>
+              <span className="text-sm">{username}</span>
             </div>
-            <span>{`${pins} ${formatPinsText(pins)}`}</span>
+            <span>{`${pinnedBy.length} ${formatPinsText(pinnedBy.length)}`}</span>
           </div>
         </div>
       </div>
-      {userId === user.username
+      {userId === user.userId
         ? (
-        <button className="follow-button" onClick={(e) => removeFromAlbums(e)}>Delete</button>
+        <button className="follow-button" onClick={handleDelete}>Delete</button>
           )
         : (
-        <button className="follow-button" onClick={(e) => removeFromAlbums(e)}>Remove</button>
+            null
+          )}
+      {userId !== user.userId && pinnedBy.includes(user.userId)
+        ? (
+        <button className="follow-button" onClick={handleUnpin}>Unpin</button>
+          )
+        : (
+            null
+          )}
+      {userId !== user.userId && !pinnedBy.includes(user.userId)
+        ? (
+        <button className="follow-button" onClick={handlePin}>Pin</button>
+          )
+        : (
+            null
           )}
     </a>
   )
 }
 
 AlbumFeedItem.propTypes = {
-  id: PropTypes.number,
-  cover: PropTypes.string,
+  id: PropTypes.string,
+  albumCover: PropTypes.string,
   title: PropTypes.string,
   userId: PropTypes.string,
   updated: PropTypes.object,
-  created: PropTypes.object,
-  pins: PropTypes.number
+  posted: PropTypes.object,
+  pinnedBy: PropTypes.array,
+  username: PropTypes.string,
+  profilePicture: PropTypes.string
 }
