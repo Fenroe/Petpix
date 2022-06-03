@@ -37,7 +37,7 @@ export default function Sidebar () {
             <HeaderLink icon={<RiHome7Fill />} url ="/#/" text="Home" />
             <HeaderLink icon={<FiBell />} url="/#/notifications"text="Notifications" />
             <HeaderLink icon={<GrLike />} url="/#/likes" text="Likes" />
-            <HeaderLink icon={<BiPhotoAlbum />} url="/#/albums/myalbums" text="Albums" />
+            <HeaderLink icon={<BiPhotoAlbum />} url="/#/albums" text="Albums" />
             <HeaderLink icon={<FiUser />} url={`/#/profile/${user.userId}`} text="Profile" />
           </nav>
           <HeaderSnapButton icon={<AiOutlinePlus />} openModal={openSnapModal} />

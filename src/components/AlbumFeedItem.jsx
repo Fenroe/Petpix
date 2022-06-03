@@ -25,13 +25,13 @@ export default function AlbumFeedItem ({ id, albumCover, title, userId, username
   }
 
   return (
-    <a href={`/albums/${id}`} className="justify-between flex items-center gap-3 bg-white hover:brightness-95">
+    <div className="justify-between flex items-center gap-3 bg-white hover:brightness-95">
       <div className="flex items-center gap-3">
         <img src={albumCover || defaultAlbumCover} className="h-10 w-10 rounded-lg" />
         <div className="flex flex-col justify-start items-start">
           <div className="flex flex-col">
             <div className="flex gap-3 items-center">
-              <span className="font-bold text-lg">{title}</span>
+              <a href={`/#/album/${id}`}className="font-bold text-lg">{title}</a>
               <span className="text-sm">{username}</span>
             </div>
             <span>{`${pinnedBy.length} ${formatPinsText(pinnedBy.length)}`}</span>
@@ -40,26 +40,26 @@ export default function AlbumFeedItem ({ id, albumCover, title, userId, username
       </div>
       {userId === user.userId
         ? (
-        <button className="follow-button" onClick={handleDelete}>Delete</button>
+        <button className="follow-button z-50" onClick={handleDelete}>Delete</button>
           )
         : (
             null
           )}
       {userId !== user.userId && pinnedBy.includes(user.userId)
         ? (
-        <button className="follow-button" onClick={handleUnpin}>Unpin</button>
+        <button className="follow-button z-50" onClick={handleUnpin}>Unpin</button>
           )
         : (
             null
           )}
       {userId !== user.userId && !pinnedBy.includes(user.userId)
         ? (
-        <button className="follow-button" onClick={handlePin}>Pin</button>
+        <button className="follow-button z-50" onClick={handlePin}>Pin</button>
           )
         : (
             null
           )}
-    </a>
+    </div>
   )
 }
 

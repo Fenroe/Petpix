@@ -4,7 +4,7 @@ import AlbumFeed from './AlbumFeed'
 // import { UserContext } from '../data/UserContext'
 import CreateAlbum from './CreateAlbum'
 
-export default function MyAlbums ({ myAlbums }) {
+export default function MyAlbums ({ myAlbums, pinnedAlbums }) {
   const [viewModal, setViewModal] = useState(false)
 
   // const { user } = useContext(UserContext)
@@ -32,11 +32,12 @@ export default function MyAlbums ({ myAlbums }) {
           <h1 className="page-heading">Pinned Albums</h1>
         </div>
       </div>
-      <AlbumFeed feedName="pinned albums" feedData={[]} />
+      <AlbumFeed feedName="pinned albums" feedData={pinnedAlbums} />
     </>
   )
 }
 
 MyAlbums.propTypes = {
-  myAlbums: PropTypes.array
+  myAlbums: PropTypes.array,
+  pinnedAlbums: PropTypes.array
 }

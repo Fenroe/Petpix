@@ -28,10 +28,6 @@ export const snapCollection = collection(db, 'snaps')
 
 export const albumCollection = collection(db, 'albums')
 
-export const getMyAlbumsQuery = (uid) => query(albumCollection, where('userId', '==', uid))
-
-export const getPinnedAlbumsQuery = (uid) => query(albumCollection, where('pinnedBy', 'array-contains', uid))
-
 export async function continueWithGoogle () {
   const result = await signInWithPopup(auth, googleProvider)
   return result
@@ -187,6 +183,17 @@ export async function unlikeSnap (snapId, userId) {
   })
 }
 
+export async function fetchAlbum (id, callback) {
+  const docRef = doc(db, 'albums', id)
+  const albumData = await getDoc(docRef)
+  const album = {
+    ...albumData.data(),
+    posted: albumData.data().posted.toDate(),
+    updated: albumData.data().updated.toDate()
+  }
+  callback(album)
+}
+
 export async function fetchAlbums (callback) {
   const albumQuery = query(albumCollection)
   const albumSnapshot = await getDocs(albumQuery)
@@ -195,7 +202,7 @@ export async function fetchAlbums (callback) {
     const album = {
       ...doc.data(),
       posted: doc.data().posted.toDate(),
-      edited: doc.data().posted.toDate()
+      updated: doc.data().updated.toDate()
     }
     albums.push(album)
   })

@@ -1,59 +1,42 @@
-import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useEffect, useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import MyAlbums from '../components/MyAlbums'
 import ExploreAlbums from '../components/ExploreAlbums'
-import { fetchAlbums } from '../firebase'
+import { UserContext } from '../data/UserContext'
 
-export default function Albums ({ myAlbums }) {
-  // const [albumData, setAlbumData] = useState({})
+export default function Albums ({ feedData }) {
+  const [viewing, setViewing] = useState('my albums')
 
-  const [exploreFeedData, setExploreFeedData] = useState([])
+  const [myAlbums, setMyAlbums] = useState([])
 
-  const { id } = useParams()
+  const [pinnedAlbums, setPinnedAlbums] = useState([])
+
+  const { user } = useContext(UserContext)
 
   useEffect(() => {
-    fetchAlbums(setExploreFeedData)
-  }, [])
+    setMyAlbums(feedData.filter((album) => album.userId === user.userId ? album : null))
+    setPinnedAlbums(feedData.filter((album) => album.pinnedBy.includes(user.userId) ? album : null))
+  }, [feedData])
 
-  if (id === 'myalbums') {
-    return (
+  return (
     <section>
       <div className="page-heading-wrapper">
         <h1 className="page-heading">Albums</h1>
       </div>
       <div className="view-btn-wrapper">
-        <a className="view-btn" href="/albums/myalbums">
+        <button className="view-btn" onClick={() => setViewing('my albums')}>
           <h2 className="view-btn-text">My Albums</h2>
-        </a>
-        <a className="view-btn" href="/albums/explore">
+        </button>
+        <button className="view-btn" onClick={() => setViewing('explore')}>
           <h2 className="view-btn-text">Explore Albums</h2>
-        </a>
+        </button>
       </div>
-      <MyAlbums myAlbums={myAlbums}/>
+      { viewing === 'my albums' ? <MyAlbums myAlbums={myAlbums} pinnedAlbums={pinnedAlbums} /> : null}
+      { viewing === 'explore' ? <ExploreAlbums feedData={feedData} /> : null}
     </section>
-    )
-  }
-  if (id === 'explore') {
-    return (
-      <section>
-        <div className="page-heading-wrapper">
-          <h1 className="page-heading">Albums</h1>
-        </div>
-        <div className="view-btn-wrapper">
-          <a className="view-btn" href="/albums/myalbums">
-            <h2 className="view-btn-text">My Albums</h2>
-          </a>
-          <a className="view-btn" href="/albums/explore">
-            <h2 className="view-btn-text">Explore Albums</h2>
-          </a>
-        </div>
-        <ExploreAlbums feedData={exploreFeedData}/>
-      </section>
-    )
-  }
+  )
 }
 
 Albums.propTypes = {
-  myAlbums: PropTypes.array
+  feedData: PropTypes.array
 }

@@ -6,13 +6,14 @@ import Likes from '../pages/Likes'
 import Profile from '../pages/Profile'
 import Albums from '../pages/Albums'
 import Snap from '../pages/Snap'
+import Album from '../pages/Album'
 import { onSnapshot } from 'firebase/firestore'
-import { auth, snapCollection, getMyAlbumsQuery } from '../firebase'
+import { snapCollection, albumCollection } from '../firebase'
 
 export default function Main () {
   const [snaps, setSnaps] = useState([])
 
-  const [myAlbums, setMyAlbums] = useState([])
+  const [albums, setAlbums] = useState([])
 
   useEffect(
     () => // expected to implicitly return its unsub function on unmount
@@ -33,18 +34,18 @@ export default function Main () {
 
   useEffect(
     () =>
-      onSnapshot(getMyAlbumsQuery(auth.currentUser.uid), (snapshot) => {
-        const myAlbumsData = []
+      onSnapshot(albumCollection, (snapshot) => {
+        const albumsData = []
         snapshot.forEach((doc) => {
           if (!doc.data().id) return
           const album = {
             ...doc.data(),
             posted: doc.data().posted.toDate(),
-            edited: doc.data().posted.toDate()
+            updated: doc.data().updated.toDate()
           }
-          myAlbumsData.push(album)
+          albumsData.push(album)
         })
-        setMyAlbums(myAlbumsData)
+        setAlbums(albumsData)
       }),
     []
   )
@@ -54,13 +55,13 @@ export default function Main () {
       <main className="main">
         <Routes>
           <Route exact path="/" element={<Home feedData={snaps}/>} />
+          <Route exact path="/snap/:id" element={<Snap />} />
           <Route exact path ="/notifications" element={<Notifications />} />
           <Route exact path="/likes" element={<Likes feedData={snaps}/>} />
-          <Route exact path="/profile/:id" element={<Profile snapFeedData={snaps} />} />
-          <Route exact path="/albums/:id" element={<Albums myAlbums={myAlbums} />} />
-          <Route exact path="/snap" element={<Snap />} />
-          <Route path="/login" element={<Navigate replace to="/" />}/>
-          <Route path="signup" element={<Navigate replace to="/" />}/>
+          <Route exact path="/profile/:id" element={<Profile snapFeedData={snaps} albumFeedData={albums} />} />
+          <Route exact path="/albums/" element={<Albums feedData={albums} />} />
+          <Route exact path="/album/:id" element={<Album />} />
+          <Route path="*" element={<Navigate replace to="/" />}/>
         </Routes>
       </main>
     </HashRouter>
