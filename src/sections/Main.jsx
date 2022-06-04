@@ -54,7 +54,7 @@ export default function Main () {
     <HashRouter>
       <main className="main">
         <Routes>
-          <Route exact path="/" element={<Home feedData={snaps}/>} />
+          <Route exact path="/" element={<Home feedData={snaps} />} />
           <Route exact path="/snap/:id" element={<Snap />} />
           <Route exact path ="/notifications" element={<Notifications />} />
           <Route exact path="/likes" element={<Likes feedData={snaps}/>} />

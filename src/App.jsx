@@ -15,7 +15,7 @@ function App () {
 
   const [user, setUser] = useState({})
 
-  const [recentSnaps, setRecentSnaps] = useState([])
+  const [localSnaps, setlocalSnaps] = useState([])
 
   onAuthStateChanged(auth, (currentUser) => {
     if (currentUser) {
@@ -32,7 +32,7 @@ function App () {
     <div className="app">
       {signedIn
         ? (
-        <UserContext.Provider value={{ user, setUser, recentSnaps, setRecentSnaps }}>
+        <UserContext.Provider value={{ user, setUser, localSnaps, setlocalSnaps }}>
           {user.setup === false ? <ProfileSetup /> : null}
           <Sidebar />
           <Main />

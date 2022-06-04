@@ -10,7 +10,7 @@ import SnapOptions from './SnapOptions'
 import { UserContext } from '../data/UserContext'
 import { likeSnap, unlikeSnap } from '../firebase'
 
-export default function SnapFeedItem ({ id, userId, username, profilePicture, posted, image, text, likedBy, update }) {
+export default function SnapFeedItem ({ id, userId, username, profilePicture, posted, image, text, likedBy }) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const [liked, setLiked] = useState(false)
@@ -39,7 +39,6 @@ export default function SnapFeedItem ({ id, userId, username, profilePicture, po
   function handleUnlike () {
     if (loading) return
     setLoading(true)
-    // pop because it doesn't matter what userId is removed, but this might cause bugs if decided later that behaviour should change
     likedBy.pop()
     setLiked(false)
     unlikeSnap(id, user.userId).then(() => setLoading(false))
@@ -68,7 +67,7 @@ export default function SnapFeedItem ({ id, userId, username, profilePicture, po
             <button onClick={openMenu}>
               <BsThreeDots />
             </button>
-            {menuOpen ? <SnapOptions snapUserId={userId} snapId={id} closeMenu={closeMenu} update={update}/> : null}
+            {menuOpen ? <SnapOptions snapUserId={userId} snapId={id} closeMenu={closeMenu}/> : null}
           </div>
           {text ? <TextareaAutosize readOnly className="sb-text-area" value={text}/> : null}
           <div className="sb-image-wrapper">
@@ -107,6 +106,5 @@ SnapFeedItem.propTypes = {
   posted: PropTypes.object,
   image: PropTypes.string,
   text: PropTypes.string,
-  likedBy: PropTypes.array,
-  update: PropTypes.func
+  likedBy: PropTypes.array
 }

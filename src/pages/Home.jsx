@@ -27,14 +27,14 @@ export default function Home ({ feedData }) {
       <div className="sort-wrapper">
         <label htmlFor="sort" className="sort-label">Sort by: </label>
         <select onChange={(e) => setSortBy(e.target.value)}name="sort" id="sort" className="sort-input">
-          <option value="newest">Newest</option>
+          <option value="newest">Recent</option>
           <option value="most liked">Most liked</option>
         </select>
       </div>
       <div className="page-heading-wrapper">
         <h1 className="page-heading">See what&apos;s new</h1>
       </div>
-      <SnapFeed feedName="home" feedData={sortFeedData(sortBy)}/>
+      <SnapFeed feedName="home" feedData={sortFeedData(sortBy)} />
     </section>
   )
 }

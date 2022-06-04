@@ -167,8 +167,8 @@ export async function postSnap (docRef, username, profilePicture, image, text) {
   return docRef
 }
 
-export async function deleteSnap (snapId) {
-  await deleteDoc(doc(db, 'snaps', snapId))
+export function deleteSnap (snapId) {
+  deleteDoc(doc(db, 'snaps', snapId))
 }
 
 export async function likeSnap (snapId, userId) {

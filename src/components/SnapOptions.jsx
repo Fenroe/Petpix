@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 import { UserContext } from '../data/UserContext'
 import { deleteSnap } from '../firebase'
 
-export default function SnapOptions ({ snapUserId, snapId, closeMenu, update }) {
+export default function SnapOptions ({ snapUserId, snapId, closeMenu }) {
   const { user } = useContext(UserContext)
 
-  async function handleDelete () {
-    await deleteSnap(snapId)
+  function handleDelete () {
     closeMenu()
-    await update(true)
+    deleteSnap(snapId)
   }
+
   return (
     <div className="absolute top-0 right-0 w-48 h-16 z-50 bg-white">
       {user.userId === snapUserId
@@ -32,5 +32,5 @@ SnapOptions.propTypes = {
   snapUserId: PropTypes.string,
   snapId: PropTypes.string,
   closeMenu: PropTypes.func,
-  update: PropTypes.func
+  sync: PropTypes.func
 }

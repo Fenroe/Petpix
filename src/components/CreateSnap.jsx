@@ -15,7 +15,7 @@ export default function CreateSnap () {
 
   const textareaRef = useRef(null)
 
-  const { user, recentSnaps, setRecentSnaps } = useContext(UserContext)
+  const { user, localSnaps, setlocalSnaps } = useContext(UserContext)
 
   function handleImageUpload (evt) {
     const reader = new FileReader()
@@ -35,7 +35,7 @@ export default function CreateSnap () {
     const docRef = await addDoc(collection(db, 'snaps'), {})
     const file = uploadedImage.file
     const snapText = textareaRef.current.value
-    setRecentSnaps([...recentSnaps, {
+    setlocalSnaps([...localSnaps, {
       id: docRef.id,
       image: uploadedImage.preview,
       likedBy: [],
