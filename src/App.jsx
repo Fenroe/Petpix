@@ -41,12 +41,12 @@ function App () {
         : (
         <HashRouter>
           <Routes>
-            <Route path="/" element={<Navigate replace to="/login" />} />
-            <Route exact path ="/notifications" element={<Navigate replace to="/login" />} />
-            <Route exact path="/likes" element={<Navigate replace to="/login" />} />
-            <Route exact path="/profile" element={<Navigate replace to="/login" />} />
-            <Route exact path="/albums" element={<Navigate replace to="/login" />} />
-            <Route exact path="/snap" element={<Navigate replace to="/login" />} />
+            <Route path="/" element={<Navigate replace to="/signup" />} />
+            <Route exact path ="/notifications" element={<Navigate replace to="/signup" />} />
+            <Route exact path="/likes" element={<Navigate replace to="/signup" />} />
+            <Route exact path="/profile" element={<Navigate replace to="/signup" />} />
+            <Route exact path="/albums" element={<Navigate replace to="/signup" />} />
+            <Route exact path="/snap" element={<Navigate replace to="/signup" />} />
             <Route path="/login" element={<Login />}/>
             <Route path="signup" element={<Signup />}/>
           </Routes>

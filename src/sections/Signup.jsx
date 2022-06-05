@@ -3,58 +3,55 @@ import { GiTurtleShell } from 'react-icons/gi'
 import backgroundImage from '../assets/background.jpg'
 import { emailSignup } from '../firebase'
 
-export default function Login () {
-  const unavailableEmails = ['example@123.com']
-
+export default function Signup () {
   const emailRef = useRef()
 
   const passwordRef = useRef()
 
-  const [emailErrorMessage, setEmailErrorMessage] = useState('')
+  const confirmPasswordRef = useRef()
 
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
-  function handleErrors (error, input) {
-    if (input === 'email') {
-      if (!error) setEmailErrorMessage('')
-      setEmailErrorMessage(error)
-    }
-    if (input === 'password') {
-      if (!error) setPasswordErrorMessage('')
-      setPasswordErrorMessage(error)
-    }
+  function handleErrors (error) {
+    setErrorMessage(error)
+  }
+
+  function resetErrorMessage () {
+    setErrorMessage('')
   }
 
   function validateEmail () {
-    let error = ''
     if (!emailRef) return
+    if (emailRef.current.value === '') return handleErrors('Email field can\'t be left blank')
     const email = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g
-    if (!email.test(emailRef.current.value)) error = 'Please enter a valid email'
-    if (unavailableEmails.includes(emailRef.current.value)) error = 'That email is already in use'
-    handleErrors(error, 'email')
-    if (error) return false
+    if (!email.test(emailRef.current.value)) return handleErrors('Please enter a valid email')
+    resetErrorMessage()
     return true
   }
 
   function validatePassword () {
-    let error = ''
     if (!passwordRef) return
+    if (emailRef.current.value === '') return handleErrors('Password field can\'t be left blank')
     const password = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
-    if (!password.test(passwordRef.current.value)) error = 'Passwords must have eight or more characters and contain at least one lowercase letter, uppercase letter, and number'
-    handleErrors(error, 'password')
-    if (error) return false
+    if (!password.test(passwordRef.current.value)) return handleErrors('Passwords must have eight or more characters and contain at least one lowercase letter, uppercase letter, and number')
+    resetErrorMessage()
+    return true
+  }
+
+  function validateConfirmPassword () {
+    if (!confirmPasswordRef) return
+    if (passwordRef.current.value === '') return
+    if (passwordRef.current.value !== confirmPasswordRef.current.value) return handleErrors('Passwords don\'t match')
+    resetErrorMessage()
     return true
   }
 
   function handleSubmit (evt) {
     evt.preventDefault()
-    if (unavailableEmails.includes(emailRef.current.value)) {
-      handleErrors('That email is already in use', 'email')
-      return false
-    }
-    emailSignup(emailRef.current.value, passwordRef.current.value)
-    emailRef.current.value = ''
-    passwordRef.current.value = ''
+    if (validateEmail() !== true) return
+    if (validatePassword() !== true) return
+    if (validateConfirmPassword() !== true) return
+    emailSignup(emailRef.current.value, passwordRef.current.value, handleErrors)
   }
 
   return (
@@ -75,21 +72,22 @@ export default function Login () {
             <div className="mt-8">
               <span>OR</span>
             </div>
-            <div className="relative border-2 border-slate-400 mt-8 focus-within:border-blue-500">
+            <div className="relative border-2 border-slate-400 mt-8 focus-within:border-blue-500 mb-3">
               <input ref={emailRef} onBlur={validateEmail} required formNoValidate type="text" className="w-full px-3 pt-5 min-h-[64px] text-lg outline-none bg-none peer" />
               <label htmlFor="" className="ml-2 text-slate-400 absolute top-1/2 left-1 -translate-y-1/2 text-lg pointer-events-none duration-300 peer-valid:top-4 peer-valid:text-sm peer-focus:top-4 peer-focus:text-sm">Email</label>
             </div>
-            <div className="text-red-400 p-2 max-w-full">
-              <span>{emailErrorMessage}</span>
-            </div>
-            <div className="relative border-2 border-slate-400 focus-within:border-blue-500">
+            <div className="relative border-2 border-slate-400 focus-within:border-blue-500 mb-3">
               <input ref={passwordRef} onBlur={validatePassword} required formNoValidate type="password" className="w-full px-3 pt-5 min-h-[64px] text-lg outline-none bg-none peer" />
               <label htmlFor="" className="ml-2 text-slate-400 absolute top-1/2 left-1 -translate-y-1/2 text-lg pointer-events-none duration-300 peer-valid:top-4 peer-valid:text-sm peer-focus:top-4 peer-focus:text-sm">Password</label>
             </div>
-            <div className="text-red-400 p-2 max-w-full">
-              <span>{passwordErrorMessage}</span>
+            <div className="relative border-2 border-slate-400 focus-within:border-blue-500 mb-3">
+              <input ref={confirmPasswordRef} onBlur={validateConfirmPassword} required formNoValidate type="password" className="w-full px-3 pt-5 min-h-[64px] text-lg outline-none bg-none peer" />
+              <label htmlFor="" className="ml-2 text-slate-400 absolute top-1/2 left-1 -translate-y-1/2 text-lg pointer-events-none duration-300 peer-valid:top-4 peer-valid:text-sm peer-focus:top-4 peer-focus:text-sm">Confirm Password</label>
             </div>
             <button onClick={(e) => handleSubmit(e)} className="mt-3 h-10 w-48 px-3 rounded-full border-2 border-white text-xl font-bold text-white bg-red-500 hover:brightness-125">Sign up</button>
+            <div className="text-red-400 p-2 max-w-full">
+              <span>{errorMessage}</span>
+            </div>
           </form>
           <span className="text-lg mt-3 mb-3">Already have an account? <a className="text-red-500" href="/#/login">Log in</a></span>
         </div>

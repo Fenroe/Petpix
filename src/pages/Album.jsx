@@ -14,13 +14,13 @@ export default function Album () {
 
   return (
     <div className="p-3">
-      <div className="flex justify-between">
+      <div className="flex flex-col drop-shadow-lg xl:flex-row xl:justify-between">
         <div className="p-3 w-full flex gap-6">
           <AlbumCover url={albumInfo.albumCover} />
           <div className="flex flex-col">
             <div className="flex flex-col gap-6">
-              <h1 className="text-3xl">{albumInfo.title}</h1>
-              <h2 className="text-xl">By {albumInfo.username}</h2>
+              <h1 className="text-2xl font-bold">{albumInfo.title}</h1>
+              <h2 className="text-lg">Twenty Characters Lo</h2>
             </div>
           </div>
         </div>

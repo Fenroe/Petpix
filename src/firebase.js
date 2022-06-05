@@ -3,7 +3,6 @@ import { getFirestore, doc, setDoc, getDoc, deleteDoc, where, limit, query, coll
 import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { v4 } from 'uuid'
-import { useCollectionData } from 'react-firebase-hooks/firestore'
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -33,7 +32,7 @@ export async function continueWithGoogle () {
   return result
 }
 
-export async function emailSignup (email, password) {
+export async function emailSignup (email, password, errorHandler) {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password)
     const userId = userCredential.user.uid
@@ -52,13 +51,25 @@ export async function emailSignup (email, password) {
       userId
     })
   } catch (error) {
-    console.log(error.message)
+    errorHandler(error.message) || console.log(error.message)
   }
 }
 
-export async function emailLogin (email, password, errorFunc) {
-  const result = await signInWithEmailAndPassword(auth, email, password)
-  return result
+export async function emailLogin (email, password, errorHandler) {
+  try {
+    await signInWithEmailAndPassword(auth, email, password)
+  } catch (error) {
+    switch (error.code) {
+      case 'auth/user-not-found': {
+        errorHandler('We couldn\'t find an account using this email')
+        break
+      }
+      default : {
+        errorHandler('Sorry, we couldn\'t verify your login details')
+        break
+      }
+    }
+  }
 }
 
 export async function appSignOut () {
@@ -133,26 +144,6 @@ export async function getURL (ref) {
 
 export const snapQuery = query(collection(db, 'snaps'), where('id', '!=', 'test'), limit(25))
 
-export function fetchSnaps (callback) {
-  const snapQuery = query(collection(db, 'snaps'), where('id', '!=', 'test'), limit(25))
-  const [messages] = useCollectionData(snapQuery)
-  const snaps = []
-  messages.forEach((doc) => {
-    const snap = {
-      id: doc.id,
-      userId: doc.userId,
-      username: doc.username,
-      profilePicture: doc.profilePicture,
-      posted: doc.posted.toDate(),
-      image: doc.image,
-      text: doc.text,
-      likedBy: doc.likedBy
-    }
-    snaps.push(snap)
-  })
-  callback(snaps)
-}
-
 export async function postSnap (docRef, username, profilePicture, image, text) {
   await setDoc(docRef, {
     id: docRef.id,
@@ -220,7 +211,8 @@ export async function createAlbum (title, albumCover, userId, username, profileP
     albumCover,
     posted: new Date(),
     updated: new Date(),
-    pinnedBy: []
+    pinnedBy: [],
+    contents: []
   })
 }
 
