@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { GiTurtleShell } from 'react-icons/gi'
 import backgroundImage from '../assets/background.jpg'
 import { emailLogin } from '../firebase'
@@ -9,6 +10,8 @@ export default function Login () {
   const passwordRef = useRef()
 
   const [errorMessage, setErrorMessage] = useState('')
+
+  const navigate = useNavigate()
 
   function handleErrors (error, input) {
     if (!error) setErrorMessage('')
@@ -41,7 +44,7 @@ export default function Login () {
     evt.preventDefault()
     if (validateEmail() !== true) return
     if (validatePassword() !== true) return
-    await emailLogin(emailRef.current.value, passwordRef.current.value, handleErrors)
+    emailLogin(emailRef.current.value, passwordRef.current.value, handleErrors).then(() => navigate('/'))
   }
 
   return (

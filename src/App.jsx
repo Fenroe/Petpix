@@ -1,14 +1,14 @@
 import './style/index.css'
 import React, { useState } from 'react'
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
-import Sidebar from './sections/Sidebar'
+import { HashRouter, Routes, Route } from 'react-router-dom'
 import Main from './sections/Main'
 import Login from './sections/Login'
 import Signup from './sections/Signup'
+import { Private } from './pages/Private'
 import { UserContext } from './data/UserContext'
-import ProfileSetup from './components/ProfileSetup'
 import { auth, getUserData } from './firebase'
 import { onAuthStateChanged } from 'firebase/auth'
+import { AuthProvider } from './contexts/AuthContext'
 
 function App () {
   const [signedIn, setSignedIn] = useState(false)
@@ -30,28 +30,21 @@ function App () {
 
   return (
     <div className="app">
-      {signedIn
-        ? (
+      <AuthProvider>
         <UserContext.Provider value={{ user, setUser, localSnaps, setlocalSnaps }}>
-          {user.setup === false ? <ProfileSetup /> : null}
-          <Sidebar />
-          <Main />
+          <HashRouter>
+            <Routes>
+              <Route path="*" element={
+              <Private>
+                <Main />
+              </Private>
+              } />
+              <Route path="/login" element={<Login />}/>
+              <Route path="signup" element={<Signup />}/>
+            </Routes>
+          </HashRouter>
         </UserContext.Provider>
-          )
-        : (
-        <HashRouter>
-          <Routes>
-            <Route path="/" element={<Navigate replace to="/signup" />} />
-            <Route exact path ="/notifications" element={<Navigate replace to="/signup" />} />
-            <Route exact path="/likes" element={<Navigate replace to="/signup" />} />
-            <Route exact path="/profile" element={<Navigate replace to="/signup" />} />
-            <Route exact path="/albums" element={<Navigate replace to="/signup" />} />
-            <Route exact path="/snap" element={<Navigate replace to="/signup" />} />
-            <Route path="/login" element={<Login />}/>
-            <Route path="signup" element={<Signup />}/>
-          </Routes>
-        </HashRouter>
-          )}
+      </AuthProvider>
     </div>
   )
 }

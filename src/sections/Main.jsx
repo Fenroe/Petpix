@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom'
+import React, { useState, useEffect, useContext } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Home from '../pages/Home'
 import Notifications from '../pages/Notifications'
 import Likes from '../pages/Likes'
@@ -9,11 +9,16 @@ import Snap from '../pages/Snap'
 import Album from '../pages/Album'
 import { onSnapshot } from 'firebase/firestore'
 import { snapCollection, albumCollection } from '../firebase'
+import Sidebar from './Sidebar'
+import ProfileSetup from '../components/ProfileSetup'
+import { UserContext } from '../data/UserContext'
 
 export default function Main () {
   const [snaps, setSnaps] = useState([])
 
   const [albums, setAlbums] = useState([])
+
+  const { user } = useContext(UserContext)
 
   useEffect(
     () => // expected to implicitly return its unsub function on unmount
@@ -51,7 +56,9 @@ export default function Main () {
   )
 
   return (
-    <HashRouter>
+    <>
+      {user.setup === false ? <ProfileSetup /> : null}
+      <Sidebar />
       <main className="main">
         <Routes>
           <Route exact path="/" element={<Home feedData={snaps} />} />
@@ -64,6 +71,6 @@ export default function Main () {
           <Route path="*" element={<Navigate replace to="/" />}/>
         </Routes>
       </main>
-    </HashRouter>
+    </>
   )
 }
