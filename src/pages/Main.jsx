@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Home } from './Home'
-import { Notifications } from './Notifications'
 import { Likes } from './Likes'
 import { Profile } from './Profile'
 import { Albums } from './Albums'
@@ -61,7 +60,6 @@ export const Main = () => {
       <main className="main">
         <Routes>
           <Route exact path="/" element={<Home feedData={snaps} />} />
-          <Route exact path ="/notifications" element={<Notifications />} />
           <Route exact path="/likes" element={<Likes feedData={snaps}/>} />
           <Route exact path="/profile/:id" element={<Profile snapFeedData={snaps} albumFeedData={albums} />} />
           <Route exact path="/albums/" element={<Albums feedData={albums} />} />
