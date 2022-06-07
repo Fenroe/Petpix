@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { createAlbum, getURL, uploadAlbumCover } from '../firebase'
 import { UserContext } from '../data/UserContext'
 
-export default function CreateAlbum ({ closeModal }) {
+export const CreateAlbum = ({ closeModal }) => {
   const [coverImage, setCoverImage] = useState({
     preview: '',
     file: null
@@ -17,11 +17,11 @@ export default function CreateAlbum ({ closeModal }) {
 
   const { user } = useContext(UserContext)
 
-  function updateTitle () {
+  const updateTitle = () => {
     setTitle(inputRef.current.value)
   }
 
-  function handleImageUpload (evt) {
+  const handleImageUpload = (evt) => {
     const reader = new FileReader()
     reader.onload = () => {
       if (reader.readyState !== 2) return
@@ -33,7 +33,7 @@ export default function CreateAlbum ({ closeModal }) {
     reader.readAsDataURL(evt.target.files[0])
   }
 
-  async function handleSubmit () {
+  const handleSubmit = async () => {
     if (inputRef.current.value === '') return
     const title = inputRef.current.value
     const file = coverImage.file

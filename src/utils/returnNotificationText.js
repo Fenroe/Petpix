@@ -1,4 +1,4 @@
-export default function returnNotificationText (action, username) {
+export const returnNotificationText = (action, username) => {
   let text = ''
   switch (action) {
     case 'like': {

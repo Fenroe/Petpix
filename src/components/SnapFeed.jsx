@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import SnapFeedItem from './SnapFeedItem'
+import { SnapFeedItem } from './SnapFeedItem'
 import { getNewKey } from '../utils/generateKey'
-import useFeedInterval from '../hooks/useFeedInterval'
-import EmptyFeed from './EmptyFeed'
-import returnFeedMessage from '../utils/returnFeedMessage'
+import { useFeedInterval } from '../hooks/useFeedInterval'
+import { EmptyFeed } from './EmptyFeed'
+import { returnFeedMessage } from '../utils/returnFeedMessage'
 
-export default function SnapFeed ({ feedName, feedData }) {
+export const SnapFeed = ({ feedName, feedData }) => {
   useFeedInterval()
 
   return (

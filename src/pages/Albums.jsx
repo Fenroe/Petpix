@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react'
 import PropTypes from 'prop-types'
-import MyAlbums from '../components/MyAlbums'
-import ExploreAlbums from '../components/ExploreAlbums'
+import { MyAlbums } from '../components/MyAlbums'
+import { ExploreAlbums } from '../components/ExploreAlbums'
 import { UserContext } from '../data/UserContext'
 
-export default function Albums ({ feedData }) {
+export const Albums = ({ feedData }) => {
   const [viewing, setViewing] = useState('my albums')
 
   const [myAlbums, setMyAlbums] = useState([])

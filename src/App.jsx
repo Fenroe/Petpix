@@ -1,16 +1,16 @@
 import './style/index.css'
 import React, { useState } from 'react'
 import { HashRouter, Routes, Route } from 'react-router-dom'
-import Main from './sections/Main'
-import Login from './sections/Login'
-import Signup from './sections/Signup'
+import { Main } from './sections/Main'
+import { Login } from './sections/Login'
+import { Signup } from './sections/Signup'
 import { Private } from './pages/Private'
 import { UserContext } from './data/UserContext'
 import { auth, getUserData } from './firebase'
 import { onAuthStateChanged } from 'firebase/auth'
 import { AuthProvider } from './contexts/AuthContext'
 
-function App () {
+const App = () => {
   const [signedIn, setSignedIn] = useState(false)
 
   const [user, setUser] = useState({})

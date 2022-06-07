@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { fetchAlbum } from '../firebase'
-import AlbumCover from '../components/AlbumCover'
+import { AlbumCover } from '../components/AlbumCover'
 
-export default function Album () {
+export const Album = () => {
   const [albumInfo, setAlbumInfo] = useState({})
 
   const { id } = useParams()

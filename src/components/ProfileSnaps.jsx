@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import SnapFeed from './SnapFeed'
+import { SnapFeed } from './SnapFeed'
 
-export default function ProfileSnaps ({ feedData, userId }) {
+export const ProfileSnaps = ({ feedData, userId }) => {
   return (
     <>
       <div className="page-heading-wrapper">

@@ -1,4 +1,4 @@
-import renderTimeDifference from '../renderTimeDifference'
+import { renderTimeDifference } from '../renderTimeDifference'
 
 const startOfYear = new Date(2018, 0, 1, 0, 0, 0, 0)
 const oneSecondLater = new Date(2018, 0, 1, 0, 0, 1)

@@ -1,8 +1,8 @@
 import React, { /* useContext  */} from 'react'
-import AlbumFeed from './AlbumFeed'
+import { AlbumFeed } from './AlbumFeed'
 // import { UserContext } from '../data/UserContext'
 
-export default function ProfileAlbums () {
+export const ProfileAlbums = () => {
   return (
     <>
       <div className="page-heading-wrapper">

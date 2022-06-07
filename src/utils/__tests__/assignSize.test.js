@@ -1,4 +1,4 @@
-import assignSize from '../assignSize'
+import { assignSize } from '../assignSize'
 
 test('returns x-small', () => {
   expect(assignSize('x-small')).toBe('profile-picture-x-small')

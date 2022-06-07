@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import CreateSnap from '../components/CreateSnap'
-import SnapFeed from '../components/SnapFeed'
+import { CreateSnap } from '../components/CreateSnap'
+import { SnapFeed } from '../components/SnapFeed'
 
-export default function Home ({ feedData }) {
+export const Home = ({ feedData }) => {
   const [sortBy, setSortBy] = useState('newest')
 
-  function sortFeedData (method) {
+  const sortFeedData = (method) => {
     let sortedFeed = []
     switch (method) {
       case 'newest': {

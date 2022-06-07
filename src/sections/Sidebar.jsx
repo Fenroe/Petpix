@@ -5,24 +5,25 @@ import { FiBell, FiUser } from 'react-icons/fi'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { GrLike } from 'react-icons/gr'
 import { BiPhotoAlbum } from 'react-icons/bi'
-import IconWrapper from '../components/IconWrapper'
-import AccountMenu from '../components/AccountsMenu'
-import HeaderLink from '../components/HeaderLink'
-import HeaderSnapButton from '../components/HeaderSnapButton'
+import { IconWrapper } from '../components/IconWrapper'
+import { AccountMenu } from '../components/AccountsMenu'
+import { HeaderLink } from '../components/HeaderLink'
+import { HeaderSnapButton } from '../components/HeaderSnapButton'
 import { BsThreeDots } from 'react-icons/bs'
-import ProfilePicture from '../components/ProfilePicture'
+import { ProfilePicture } from '../components/ProfilePicture'
 import { UserContext } from '../data/UserContext'
-import SidebarSnapModal from '../components/SidebarSnapModal'
+import { SidebarSnapModal } from '../components/SidebarSnapModal'
 
-export default function Sidebar () {
+export const Sidebar = () => {
   const [accountMenuVisible, setAccountMenuVisible] = useState(false)
 
   const [snapModalVisible, setSnapModalVisible] = useState(false)
 
-  function openSnapModal () {
+  const openSnapModal = () => {
     setSnapModalVisible(true)
   }
-  function closeSnapModal () {
+
+  const closeSnapModal = () => {
     setSnapModalVisible(false)
   }
 

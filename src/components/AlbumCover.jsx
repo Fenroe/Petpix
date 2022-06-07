@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import albumCover from '../assets/defaults/album.jpg'
 
-export default function AlbumCover ({ url }) {
+export const AlbumCover = ({ url }) => {
   return (
     <img src={url || albumCover} className="h-48 rounded-lg aspect-[4/5] object-cover"/>
   )

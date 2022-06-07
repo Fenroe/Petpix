@@ -27,12 +27,11 @@ export const snapCollection = collection(db, 'snaps')
 
 export const albumCollection = collection(db, 'albums')
 
-export async function continueWithGoogle () {
-  const result = await signInWithPopup(auth, googleProvider)
-  return result
+export const continueWithGoogle = () => {
+  signInWithPopup(auth, googleProvider)
 }
 
-export async function emailSignup (email, password, errorHandler) {
+export const emailSignup = async (email, password, errorHandler) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password)
     const userId = userCredential.user.uid
@@ -55,7 +54,7 @@ export async function emailSignup (email, password, errorHandler) {
   }
 }
 
-export async function emailLogin (email, password, errorHandler) {
+export const emailLogin = async (email, password, errorHandler) => {
   try {
     await signInWithEmailAndPassword(auth, email, password)
   } catch (error) {
@@ -72,11 +71,11 @@ export async function emailLogin (email, password, errorHandler) {
   }
 }
 
-export async function appSignOut () {
+export const appSignOut = async () => {
   await signOut(auth)
 }
 
-export async function getUserData (callback) {
+export const getUserData = async (callback) => {
   try {
     const uid = auth.currentUser.uid
     const docRef = doc(db, 'users', uid)
@@ -89,13 +88,13 @@ export async function getUserData (callback) {
   }
 }
 
-export async function getProfileData (uid) {
+export const getProfileData = async (uid) => {
   const docRef = doc(db, 'users', uid)
   const docSnap = await getDoc(docRef)
   if (docSnap.exists()) return docSnap.data()
 }
 
-export async function updateUserData (state) {
+export const updateUserData = async (state) => {
   try {
     await setDoc(doc(db, 'users', state.userId), {
       state
@@ -105,7 +104,7 @@ export async function updateUserData (state) {
   }
 }
 
-export async function uploadProfilePicture (picture) {
+export const uploadProfilePicture = async (picture) => {
   if (picture === null) return
   const uid = auth.currentUser.uid
   const imageRef = ref(storage, `${uid}/profile`)
@@ -113,7 +112,7 @@ export async function uploadProfilePicture (picture) {
   return imageRef
 }
 
-export async function uploadCoverPicture (picture) {
+export const uploadCoverPicture = async (picture) => {
   if (picture === null) return
   const uid = auth.currentUser.uid
   const imageRef = ref(storage, `${uid}/cover`)
@@ -121,7 +120,7 @@ export async function uploadCoverPicture (picture) {
   return imageRef
 }
 
-export async function uploadSnapPicture (picture) {
+export const uploadSnapPicture = async (picture) => {
   if (picture === null) return
   const uid = auth.currentUser.uid
   const imageRef = ref(storage, `${uid}/snaps/${v4()}`)
@@ -129,7 +128,7 @@ export async function uploadSnapPicture (picture) {
   return imageRef
 }
 
-export async function uploadAlbumCover (picture) {
+export const uploadAlbumCover = async (picture) => {
   if (picture === null) return
   const uid = auth.currentUser.uid
   const imageRef = ref(storage, `${uid}/albumcovers/${v4()}`)
@@ -137,14 +136,14 @@ export async function uploadAlbumCover (picture) {
   return imageRef
 }
 
-export async function getURL (ref) {
+export const getURL = async (ref) => {
   const pictureURL = await getDownloadURL(ref)
   return pictureURL
 }
 
 export const snapQuery = query(collection(db, 'snaps'), where('id', '!=', 'test'), limit(25))
 
-export async function postSnap (docRef, username, profilePicture, image, text) {
+export const postSnap = async (docRef, username, profilePicture, image, text) => {
   await setDoc(docRef, {
     id: docRef.id,
     userId: auth.currentUser.uid,
@@ -158,23 +157,23 @@ export async function postSnap (docRef, username, profilePicture, image, text) {
   return docRef
 }
 
-export function deleteSnap (snapId) {
+export const deleteSnap = (snapId) => {
   deleteDoc(doc(db, 'snaps', snapId))
 }
 
-export async function likeSnap (snapId, userId) {
+export const likeSnap = async (snapId, userId) => {
   await updateDoc(doc(db, 'snaps', snapId), {
     likedBy: arrayUnion(userId)
   })
 }
 
-export async function unlikeSnap (snapId, userId) {
+export const unlikeSnap = async (snapId, userId) => {
   await updateDoc(doc(db, 'snaps', snapId), {
     likedBy: arrayRemove(userId)
   })
 }
 
-export async function fetchAlbum (id, callback) {
+export const fetchAlbum = async (id, callback) => {
   const docRef = doc(db, 'albums', id)
   const albumData = await getDoc(docRef)
   const album = {
@@ -185,7 +184,7 @@ export async function fetchAlbum (id, callback) {
   callback(album)
 }
 
-export async function fetchAlbums (callback) {
+export const fetchAlbums = async (callback) => {
   const albumQuery = query(albumCollection)
   const albumSnapshot = await getDocs(albumQuery)
   const albums = []
@@ -200,7 +199,7 @@ export async function fetchAlbums (callback) {
   callback(albums)
 }
 
-export async function createAlbum (title, albumCover, userId, username, profilePicture) {
+export const createAlbum = async (title, albumCover, userId, username, profilePicture) => {
   const docRef = await addDoc(albumCollection, {})
   await updateDoc(docRef, {
     id: docRef.id,
@@ -216,18 +215,18 @@ export async function createAlbum (title, albumCover, userId, username, profileP
   })
 }
 
-export async function pinAlbum (albumId, userId) {
+export const pinAlbum = async (albumId, userId) => {
   await updateDoc(doc(db, 'albums', albumId), {
     pinnedBy: arrayUnion(userId)
   })
 }
 
-export async function unpinAlbum (albumId, userId) {
+export const unpinAlbum = async (albumId, userId) => {
   await updateDoc(doc(db, 'albums', albumId), {
     pinnedBy: arrayRemove(userId)
   })
 }
 
-export async function deleteAlbum (id) {
+export const deleteAlbum = (id) => {
   deleteDoc(doc(db, 'albums', id))
 }

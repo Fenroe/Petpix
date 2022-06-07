@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import ReactDOM from 'react-dom'
-import ProfilePicture from './ProfilePicture'
+import { ProfilePicture } from './ProfilePicture'
 import TextareaAutosize from 'react-textarea-autosize'
 import { AiOutlinePicture } from 'react-icons/ai'
 import { UserContext } from '../data/UserContext'
 import { db, uploadProfilePicture, uploadCoverPicture, getURL } from '../firebase'
 import { doc, setDoc } from 'firebase/firestore'
 import { MdOutlineClose } from 'react-icons/md'
-import CoverPicture from './CoverPicture'
+import { CoverPicture } from './CoverPicture'
 
-export default function UpdateProfile ({ closeModal }) {
+export const UpdateProfile = ({ closeModal }) => {
   const { user, setUser } = useContext(UserContext)
 
   const [cover, setCover] = useState({
@@ -34,7 +34,7 @@ export default function UpdateProfile ({ closeModal }) {
 
   const locationRef = useRef()
 
-  function handleErrors (input, message) {
+  const handleErrors = (input, message) => {
     if (input === 'bio') {
       setErrors((prevState) => ({
         ...prevState,
@@ -49,7 +49,7 @@ export default function UpdateProfile ({ closeModal }) {
     }
   }
 
-  function validateBio () {
+  const validateBio = () => {
     let error = ''
     if (bioRef.current.value.length > 150) error = 'Bio can\'t be longer than 150 characters'
     handleErrors('bio', error)
@@ -57,7 +57,7 @@ export default function UpdateProfile ({ closeModal }) {
     return true
   }
 
-  function validateLocation () {
+  const validateLocation = () => {
     let error = ''
     if (locationRef.current.value.length > 50) error = 'Location can\'t be longer than 50 characters'
     handleErrors('location', error)
@@ -65,14 +65,14 @@ export default function UpdateProfile ({ closeModal }) {
     return true
   }
 
-  function validateAll () {
+  const validateAll = () => {
     let validated = true
     if (!validateBio()) validated = false
     if (!validateLocation()) validated = false
     return validated
   }
 
-  function handleProfileChange (evt) {
+  const handleProfileChange = (evt) => {
     const reader = new FileReader()
     reader.onload = () => {
       if (reader.readyState !== 2) return
@@ -85,7 +85,7 @@ export default function UpdateProfile ({ closeModal }) {
     reader.readAsDataURL(evt.target.files[0])
   }
 
-  function handleCoverChange (evt) {
+  const handleCoverChange = (evt) => {
     const reader = new FileReader()
     reader.onload = () => {
       if (reader.readyState !== 2) return
@@ -98,7 +98,7 @@ export default function UpdateProfile ({ closeModal }) {
     reader.readAsDataURL(evt.target.files[0])
   }
 
-  async function handleSave () {
+  const handleSave = async () => {
     if (!validateAll()) return
     const bio = bioRef.current.value
     const location = locationRef.current.value

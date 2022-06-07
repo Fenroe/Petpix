@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import { UserContext } from '../data/UserContext'
 import { deleteSnap } from '../firebase'
 
-export default function SnapOptions ({ snapUserId, snapId, closeMenu }) {
+export const SnapOptions = ({ snapUserId, snapId, closeMenu }) => {
   const { user } = useContext(UserContext)
 
-  function handleDelete () {
+  const handleDelete = () => {
     closeMenu()
     deleteSnap(snapId)
   }

@@ -1,4 +1,4 @@
-import returnFeedData from '../returnFeedData'
+import { returnFeedData } from '../returnFeedData'
 
 const undefinedData = undefined
 

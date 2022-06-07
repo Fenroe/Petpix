@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
-import SnapFeed from '../components/SnapFeed'
+import { SnapFeed } from '../components/SnapFeed'
 import { UserContext } from '../data/UserContext'
 
-export default function Likes ({ feedData }) {
+export const Likes = ({ feedData }) => {
   const { user } = useContext(UserContext)
 
   return (

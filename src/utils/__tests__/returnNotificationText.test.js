@@ -1,4 +1,4 @@
-import returnNotificationText from '../returnNotificationText'
+import { returnNotificationText } from '../returnNotificationText'
 
 const userOne = 'Tester'
 const userTwo = 'Mocksy'

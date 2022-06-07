@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import CreateSnap from './CreateSnap'
+import { CreateSnap } from './CreateSnap'
 import PropTypes from 'prop-types'
 import { MdOutlineClose } from 'react-icons/md'
 
-export default function SidebarSnapModal ({ closeModal }) {
+export const SidebarSnapModal = ({ closeModal }) => {
   return ReactDOM.createPortal(
     <>
       <div className="bg-black bg-opacity-50 fixed inset-0 z-40"/>

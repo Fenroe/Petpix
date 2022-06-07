@@ -3,7 +3,7 @@ function checkDateObject (date) {
   return false
 }
 
-export default function returnMonthAndYear (date) {
+export const returnMonthAndYear = (date) => {
   if (!checkDateObject(date)) throw new Error('Invalid date')
   const options = { year: 'numeric', month: 'long' }
   return new Intl.DateTimeFormat('en-US', options).format(date)

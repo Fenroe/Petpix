@@ -4,23 +4,23 @@ import { UserContext } from '../data/UserContext'
 import defaultAlbumCover from '../assets/defaults/album.jpg'
 import { pinAlbum, unpinAlbum, deleteAlbum } from '../firebase'
 
-export default function AlbumFeedItem ({ id, albumCover, title, userId, username, profilePicture, updated, posted, pinnedBy }) {
+export const AlbumFeedItem = ({ id, albumCover, title, userId, username, profilePicture, updated, posted, pinnedBy }) => {
   const { user } = useContext(UserContext)
 
-  function handleDelete () {
+  const handleDelete = () => {
     deleteAlbum(id)
   }
 
-  function formatPinsText (pins) {
+  const formatPinsText = (pins) => {
     if (pins === 1) return 'pin'
     return 'pins'
   }
 
-  function handlePin () {
+  const handlePin = () => {
     pinAlbum(id, user.userId)
   }
 
-  function handleUnpin () {
+  const handleUnpin = () => {
     unpinAlbum(id, user.userId)
   }
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getUserData } from '../firebase'
 
-export default function useUpdate (callback) {
+export const useUpdate = (callback) => {
   // create recentlyUpdated state
   const [recentlyUpdated, setRecentlyUpdated] = useState(false)
   // listen for recentlyUpdated

@@ -2,12 +2,12 @@ import React, { useState, useContext, useRef } from 'react'
 import { AiOutlinePicture } from 'react-icons/ai'
 import { MdOutlineClose } from 'react-icons/md'
 import TextareaAutosize from 'react-textarea-autosize'
-import ProfilePicture from './ProfilePicture'
+import { ProfilePicture } from './ProfilePicture'
 import { UserContext } from '../data/UserContext'
 import { db, postSnap, uploadSnapPicture, getURL } from '../firebase'
 import { addDoc, collection } from 'firebase/firestore'
 
-export default function CreateSnap () {
+export const CreateSnap = () => {
   const [uploadedImage, setUploadedImage] = useState({
     preview: '',
     file: null
@@ -17,7 +17,7 @@ export default function CreateSnap () {
 
   const { user, localSnaps, setlocalSnaps } = useContext(UserContext)
 
-  function handleImageUpload (evt) {
+  const handleImageUpload = (evt) => {
     const reader = new FileReader()
     reader.onload = () => {
       if (reader.readyState !== 2) return
@@ -29,7 +29,7 @@ export default function CreateSnap () {
     reader.readAsDataURL(evt.target.files[0])
   }
 
-  async function handleSubmit (evt) {
+  const handleSubmit = async (evt) => {
     evt.preventDefault()
     if (uploadedImage.file === null) return
     const docRef = await addDoc(collection(db, 'snaps'), {})

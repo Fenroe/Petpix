@@ -1,4 +1,4 @@
-import returnFeedMessage from '../returnFeedMessage'
+import { returnFeedMessage } from '../returnFeedMessage'
 
 test('returns message for ProfileP', () => {
   expect(returnFeedMessage('profile')).toBe('You haven\'t posted any Snaps yet.')

@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
-import ProfilePicture from './ProfilePicture'
+import { ProfilePicture } from './ProfilePicture'
 import { appSignOut } from '../firebase'
 
-export default function AccountMenu ({ image, username, setMenuIsVisible }) {
+export const AccountMenu = ({ image, username, setMenuIsVisible }) => {
   const menuRef = useRef(null)
 
-  async function handleSignOut () {
+  const handleSignOut = async () => {
     await appSignOut()
     setMenuIsVisible(false)
   }

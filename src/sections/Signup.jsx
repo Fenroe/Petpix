@@ -4,7 +4,7 @@ import { GiTurtleShell } from 'react-icons/gi'
 import backgroundImage from '../assets/background.jpg'
 import { emailSignup } from '../firebase'
 
-export default function Signup () {
+export const Signup = () => {
   const emailRef = useRef()
 
   const passwordRef = useRef()
@@ -15,15 +15,15 @@ export default function Signup () {
 
   const navigate = useNavigate()
 
-  function handleErrors (error) {
+  const handleErrors = (error) => {
     setErrorMessage(error)
   }
 
-  function resetErrorMessage () {
+  const resetErrorMessage = () => {
     setErrorMessage('')
   }
 
-  function validateEmail () {
+  const validateEmail = () => {
     if (!emailRef) return
     if (emailRef.current.value === '') return handleErrors('Email field can\'t be left blank')
     const email = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g
@@ -32,7 +32,7 @@ export default function Signup () {
     return true
   }
 
-  function validatePassword () {
+  const validatePassword = () => {
     if (!passwordRef) return
     if (emailRef.current.value === '') return handleErrors('Password field can\'t be left blank')
     const password = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
@@ -41,7 +41,7 @@ export default function Signup () {
     return true
   }
 
-  function validateConfirmPassword () {
+  const validateConfirmPassword = () => {
     if (!confirmPasswordRef) return
     if (passwordRef.current.value === '') return
     if (passwordRef.current.value !== confirmPasswordRef.current.value) return handleErrors('Passwords don\'t match')
@@ -49,7 +49,7 @@ export default function Signup () {
     return true
   }
 
-  function handleSubmit (evt) {
+  const handleSubmit = (evt) => {
     evt.preventDefault()
     if (validateEmail() !== true) return
     if (validatePassword() !== true) return

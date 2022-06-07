@@ -1,16 +1,16 @@
 import React, { useState, useContext, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import ProfilePicture from './ProfilePicture'
+import { ProfilePicture } from './ProfilePicture'
 import TextareaAutosize from 'react-textarea-autosize'
-import renderTimeDifference from '../utils/renderTimeDifference'
+import { renderTimeDifference } from '../utils/renderTimeDifference'
 import { GrLike } from 'react-icons/gr'
 import { BiPhotoAlbum } from 'react-icons/bi'
 import { BsThreeDots } from 'react-icons/bs'
-import SnapOptions from './SnapOptions'
+import { SnapOptions } from './SnapOptions'
 import { UserContext } from '../data/UserContext'
 import { likeSnap, unlikeSnap } from '../firebase'
 
-export default function SnapFeedItem ({ id, userId, username, profilePicture, posted, image, text, likedBy }) {
+export const SnapFeedItem = ({ id, userId, username, profilePicture, posted, image, text, likedBy }) => {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const [liked, setLiked] = useState(false)
@@ -19,16 +19,16 @@ export default function SnapFeedItem ({ id, userId, username, profilePicture, po
 
   const { user } = useContext(UserContext)
 
-  function closeMenu () {
+  const closeMenu = () => {
     setMenuOpen(false)
   }
 
-  function openMenu () {
+  const openMenu = () => {
     console.log('hi')
     setMenuOpen(true)
   }
 
-  function handleLike () {
+  const handleLike = () => {
     if (loading) return
     setLoading(true)
     likedBy.push(user.userId)
@@ -36,7 +36,7 @@ export default function SnapFeedItem ({ id, userId, username, profilePicture, po
     likeSnap(id, user.userId).then(() => setLoading(false))
   }
 
-  function handleUnlike () {
+  const handleUnlike = () => {
     if (loading) return
     setLoading(true)
     likedBy.pop()

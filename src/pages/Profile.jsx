@@ -3,17 +3,17 @@ import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { ImLocation2 } from 'react-icons/im'
 import { BsCalendar3 } from 'react-icons/bs'
-import ProfilePicture from '../components/ProfilePicture'
+import { ProfilePicture } from '../components/ProfilePicture'
 import { UserContext } from '../data/UserContext'
-import returnMonthAndYear from '../utils/returnMonthandYear'
-import ProfileSnaps from '../components/ProfileSnaps'
-import ProfileAlbums from '../components/ProfileAlbums'
-import UpdateProfile from '../components/UpdateProfile'
-import useUpdate from '../hooks/useUpdate'
+import { returnMonthAndYear } from '../utils/returnMonthandYear'
+import { ProfileSnaps } from '../components/ProfileSnaps'
+import { ProfileAlbums } from '../components/ProfileAlbums'
+import { UpdateProfile } from '../components/UpdateProfile'
+import { useUpdate } from '../hooks/useUpdate'
 import { getProfileData } from '../firebase'
-import CoverPicture from '../components/CoverPicture'
+import { CoverPicture } from '../components/CoverPicture'
 
-export default function Profile ({ snapFeedData }) {
+export const Profile = ({ snapFeedData }) => {
   const [viewing, setViewing] = useState('snaps')
 
   const [viewEditProfile, setViewEditProfile] = useState(false)
@@ -26,24 +26,24 @@ export default function Profile ({ snapFeedData }) {
 
   const update = useUpdate(setUser)
 
-  function openEditProfile () {
+  const openEditProfile = () => {
     setViewEditProfile(true)
   }
 
-  function closeEditProfile () {
+  const closeEditProfile = () => {
     setViewEditProfile(false)
   }
 
-  function formatFollowerText (followers) {
+  const formatFollowerText = (followers) => {
     if (followers === 1) return 'Follower'
     return 'Followers'
   }
 
-  function viewSnaps () {
+  const viewSnaps = () => {
     setViewing('snaps')
   }
 
-  function viewAlbums () {
+  const viewAlbums = () => {
     setViewing('albums')
   }
 

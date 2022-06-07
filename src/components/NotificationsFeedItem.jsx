@@ -1,15 +1,15 @@
 import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
-import ProfilePicture from './ProfilePicture'
-import returnNotificationText from '../utils/returnNotificationText'
-import renderTimeDifference from '../utils/renderTimeDifference'
+import { ProfilePicture } from './ProfilePicture'
+import { returnNotificationText } from '../utils/returnNotificationText'
+import { renderTimeDifference } from '../utils/renderTimeDifference'
 import { UserContext } from '../data/UserContext'
 import { MdOutlineClose } from 'react-icons/md'
 
-export default function NotificationsFeedItem ({ id, profilePicture, link, action, fromUser, timestamp }) {
+export const NotificationsFeedItem = ({ id, profilePicture, link, action, fromUser, timestamp }) => {
   const { user, setUser } = useContext(UserContext)
 
-  function removeFromNotifications (evt) {
+  const removeFromNotifications = (evt) => {
     evt.preventDefault()
     const filteredNotifications = user.notifications.filter((item) => item.id !== id ? item : null)
     setUser((prevState) => ({

@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
-import NotificationsFeed from '../components/NotificationsFeed'
+import { NotificationsFeed } from '../components/NotificationsFeed'
 import { UserContext } from '../data/UserContext'
 
-export default function Notifications () {
+export const Notifications = () => {
   const { user } = useContext(UserContext)
 
   return (

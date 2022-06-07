@@ -1,19 +1,19 @@
 import React, { useState /* useContext */ } from 'react'
 import PropTypes from 'prop-types'
-import AlbumFeed from './AlbumFeed'
+import { AlbumFeed } from './AlbumFeed'
 // import { UserContext } from '../data/UserContext'
-import CreateAlbum from './CreateAlbum'
+import { CreateAlbum } from './CreateAlbum'
 
-export default function MyAlbums ({ myAlbums, pinnedAlbums }) {
+export const MyAlbums = ({ myAlbums, pinnedAlbums }) => {
   const [viewModal, setViewModal] = useState(false)
 
   // const { user } = useContext(UserContext)
 
-  function openModal () {
+  const openModal = () => {
     setViewModal(true)
   }
 
-  function closeModal () {
+  const closeModal = () => {
     setViewModal(false)
   }
 

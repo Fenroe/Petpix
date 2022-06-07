@@ -1,3 +1,3 @@
-export default function buttonClicked () {
+export const buttonClicked = () => {
   console.log('button clicked')
 }

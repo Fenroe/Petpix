@@ -1,4 +1,4 @@
-import returnMonthAndYear from '../returnMonthandYear'
+import { returnMonthAndYear } from '../returnMonthandYear'
 
 const mockDateJan = new Date(2018, 0)
 const mockDateMay = new Date(2016, 4)

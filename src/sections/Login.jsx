@@ -4,7 +4,7 @@ import { GiTurtleShell } from 'react-icons/gi'
 import backgroundImage from '../assets/background.jpg'
 import { emailLogin } from '../firebase'
 
-export default function Login () {
+export const Login = () => {
   const emailRef = useRef()
 
   const passwordRef = useRef()
@@ -13,16 +13,16 @@ export default function Login () {
 
   const navigate = useNavigate()
 
-  function handleErrors (error, input) {
+  const handleErrors = (error) => {
     if (!error) setErrorMessage('')
     setErrorMessage(error)
   }
 
-  function resetErrorMessage () {
+  const resetErrorMessage = () => {
     setErrorMessage('')
   }
 
-  function validateEmail () {
+  const validateEmail = () => {
     if (!emailRef) return
     if (emailRef.current.value === '') return handleErrors('Email field can\'t be left blank')
     const email = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g
@@ -31,7 +31,7 @@ export default function Login () {
     return true
   }
 
-  function validatePassword () {
+  const validatePassword = () => {
     if (!passwordRef) return
     if (emailRef.current.value === '') return handleErrors('Password field can\'t be left blank')
     const password = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
@@ -40,7 +40,7 @@ export default function Login () {
     return true
   }
 
-  async function handleSubmit (evt) {
+  const handleSubmit = (evt) => {
     evt.preventDefault()
     if (validateEmail() !== true) return
     if (validatePassword() !== true) return

@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import AlbumFeed from './AlbumFeed'
+import { AlbumFeed } from './AlbumFeed'
 
-export default function ExploreAlbums ({ feedData }) {
+export const ExploreAlbums = ({ feedData }) => {
   const [sortBy, setSortBy] = useState('new')
 
-  function sortFeedData (method) {
+  const sortFeedData = (method) => {
     let sortedFeed = []
     switch (method) {
       case 'new': {

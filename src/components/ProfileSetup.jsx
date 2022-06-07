@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import ReactDOM from 'react-dom'
-import ProfilePicture from './ProfilePicture'
+import { ProfilePicture } from './ProfilePicture'
 import TextareaAutosize from 'react-textarea-autosize'
 import { AiOutlinePicture } from 'react-icons/ai'
 import { UserContext } from '../data/UserContext'
 import { db, uploadProfilePicture, uploadCoverPicture, getURL } from '../firebase'
 import { doc, setDoc } from 'firebase/firestore'
-import CoverPicture from './CoverPicture'
+import { CoverPicture } from './CoverPicture'
 
-export default function ProfileSetup () {
+export const ProfileSetup = () => {
   const { user, setUser } = useContext(UserContext)
 
   const [cover, setCover] = useState({
@@ -35,7 +35,7 @@ export default function ProfileSetup () {
 
   const locationRef = useRef()
 
-  function handleErrors (input, message) {
+  const handleErrors = (input, message) => {
     if (input === 'username') {
       setErrors((prevState) => ({
         ...prevState,
@@ -56,7 +56,7 @@ export default function ProfileSetup () {
     }
   }
 
-  function validateBio () {
+  const validateBio = () => {
     let error = ''
     if (bioRef.current.value.length > 150) error = 'Bio can\'t be longer than 150 characters'
     handleErrors('bio', error)
@@ -64,7 +64,7 @@ export default function ProfileSetup () {
     return true
   }
 
-  function validateLocation () {
+  const validateLocation = () => {
     let error = ''
     if (locationRef.current.value.length > 50) error = 'Location can\'t be longer than 50 characters'
     handleErrors('location', error)
@@ -72,7 +72,7 @@ export default function ProfileSetup () {
     return true
   }
 
-  function validateUsername () {
+  const validateUsername = () => {
     let error = ''
     if (usernameRef.current.value.length > 20) error = 'Username must be between 4 and 20 characters long and can\'t be left blank'
     if (usernameRef.current.value.length < 4) error = 'Username must be between 4 and 20 characters long and can\'t be left blank'
@@ -81,7 +81,7 @@ export default function ProfileSetup () {
     return true
   }
 
-  function validateAll () {
+  const validateAll = () => {
     let validated = true
     if (!validateBio()) validated = false
     if (!validateLocation()) validated = false
@@ -89,7 +89,7 @@ export default function ProfileSetup () {
     return validated
   }
 
-  function handleProfileChange (evt) {
+  const handleProfileChange = (evt) => {
     const reader = new FileReader()
     reader.onload = () => {
       if (reader.readyState !== 2) return
@@ -102,7 +102,7 @@ export default function ProfileSetup () {
     reader.readAsDataURL(evt.target.files[0])
   }
 
-  function handleCoverChange (evt) {
+  const handleCoverChange = (evt) => {
     const reader = new FileReader()
     reader.onload = () => {
       if (reader.readyState !== 2) return
@@ -115,7 +115,7 @@ export default function ProfileSetup () {
     reader.readAsDataURL(evt.target.files[0])
   }
 
-  async function handleSave () {
+  const handleSave = async () => {
     if (!validateAll()) return
     const username = usernameRef.current.value
     const bio = bioRef.current.value

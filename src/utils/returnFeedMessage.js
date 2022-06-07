@@ -1,4 +1,4 @@
-export default function returnFeedMessage (feedName) {
+export const returnFeedMessage = (feedName) => {
   if (feedName === undefined) throw new Error('feedName is undefined')
   let message = ''
   switch (feedName) {

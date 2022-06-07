@@ -1,4 +1,4 @@
-export default function returnFeedData (feedData) {
+export const returnFeedData = (feedData) => {
   if (Array.isArray(feedData)) return feedData
   return []
 }
