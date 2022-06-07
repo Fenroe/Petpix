@@ -7,7 +7,7 @@ import { GrLike } from 'react-icons/gr'
 import { BiPhotoAlbum } from 'react-icons/bi'
 import { BsThreeDots } from 'react-icons/bs'
 import { SnapOptions } from './SnapOptions'
-import { UserContext } from '../data/UserContext'
+import { UserContext } from '../contexts/UserContext'
 import { likeSnap, unlikeSnap } from '../firebase'
 
 export const SnapFeedItem = ({ id, userId, username, profilePicture, posted, image, text, likedBy }) => {

@@ -11,7 +11,7 @@ import { HeaderLink } from './HeaderLink'
 import { HeaderSnapButton } from './HeaderSnapButton'
 import { BsThreeDots } from 'react-icons/bs'
 import { ProfilePicture } from './ProfilePicture'
-import { UserContext } from '../data/UserContext'
+import { UserContext } from '../contexts/UserContext'
 import { SidebarSnapModal } from './SidebarSnapModal'
 
 export const Sidebar = () => {

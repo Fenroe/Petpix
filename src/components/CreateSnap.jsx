@@ -3,7 +3,7 @@ import { AiOutlinePicture } from 'react-icons/ai'
 import { MdOutlineClose } from 'react-icons/md'
 import TextareaAutosize from 'react-textarea-autosize'
 import { ProfilePicture } from './ProfilePicture'
-import { UserContext } from '../data/UserContext'
+import { UserContext } from '../contexts/UserContext'
 import { db, postSnap, uploadSnapPicture, getURL } from '../firebase'
 import { addDoc, collection } from 'firebase/firestore'
 

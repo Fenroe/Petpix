@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { MdOutlineClose } from 'react-icons/md'
 import PropTypes from 'prop-types'
 import { createAlbum, getURL, uploadAlbumCover } from '../firebase'
-import { UserContext } from '../data/UserContext'
+import { UserContext } from '../contexts/UserContext'
 
 export const CreateAlbum = ({ closeModal }) => {
   const [coverImage, setCoverImage] = useState({

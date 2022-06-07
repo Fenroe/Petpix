@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import { SnapFeed } from '../components/SnapFeed'
-import { UserContext } from '../data/UserContext'
+import { UserContext } from '../contexts/UserContext'
 
 export const Likes = ({ feedData }) => {
   const { user } = useContext(UserContext)

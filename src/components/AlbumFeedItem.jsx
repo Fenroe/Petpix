@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
-import { UserContext } from '../data/UserContext'
+import { UserContext } from '../contexts/UserContext'
 import defaultAlbumCover from '../assets/defaults/album.jpg'
 import { pinAlbum, unpinAlbum, deleteAlbum } from '../firebase'
 

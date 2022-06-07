@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { GiTurtleShell } from 'react-icons/gi'
 import backgroundImage from '../assets/background.jpg'
-import { emailSignup } from '../firebase'
+import { emailSignup, createUser, addEmail } from '../firebase'
 
 export const Signup = () => {
   const emailRef = useRef()
@@ -34,9 +34,7 @@ export const Signup = () => {
 
   const validatePassword = () => {
     if (!passwordRef) return
-    if (emailRef.current.value === '') return handleErrors('Password field can\'t be left blank')
-    const password = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
-    if (!password.test(passwordRef.current.value)) return handleErrors('Passwords must have eight or more characters and contain at least one lowercase letter, uppercase letter, and number')
+    if (passwordRef.current.value.length < 6) return handleErrors('Your password must be at least six characters long')
     resetErrorMessage()
     return true
   }
@@ -49,12 +47,21 @@ export const Signup = () => {
     return true
   }
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = async (evt) => {
     evt.preventDefault()
-    if (validateEmail() !== true) return
-    if (validatePassword() !== true) return
-    if (validateConfirmPassword() !== true) return
-    emailSignup(emailRef.current.value, passwordRef.current.value, handleErrors).then(() => navigate('/'))
+    try {
+      if (validateEmail() !== true) return
+      if (validatePassword() !== true) return
+      if (validateConfirmPassword() !== true) return
+      const userCredential = await emailSignup(emailRef.current.value, passwordRef.current.value, handleErrors)
+      if (userCredential !== null) {
+        createUser()
+        addEmail(emailRef.current.value)
+        navigate('/')
+      }
+    } catch (error) {
+      handleErrors(error.message)
+    }
   }
 
   return (

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
-import { UserContext } from '../data/UserContext'
+import { UserContext } from '../contexts/UserContext'
 import { deleteSnap } from '../firebase'
 
 export const SnapOptions = ({ snapUserId, snapId, closeMenu }) => {

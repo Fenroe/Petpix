@@ -9,7 +9,7 @@ import { onSnapshot } from 'firebase/firestore'
 import { snapCollection, albumCollection } from '../firebase'
 import { Sidebar } from '../components/Sidebar'
 import { ProfileSetup } from '../components/ProfileSetup'
-import { UserContext } from '../data/UserContext'
+import { UserContext } from '../contexts/UserContext'
 
 export const Main = () => {
   const [snaps, setSnaps] = useState([])

@@ -33,18 +33,39 @@ export const Login = () => {
 
   const validatePassword = () => {
     if (!passwordRef) return
-    if (emailRef.current.value === '') return handleErrors('Password field can\'t be left blank')
-    const password = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm
-    if (!password.test(passwordRef.current.value)) return handleErrors('Passwords must have eight or more characters and contain at least one lowercase letter, uppercase letter, and number')
+    if (passwordRef.current.value === '') return handleErrors('Please enter your password')
     resetErrorMessage()
     return true
   }
 
-  const handleSubmit = (evt) => {
+  const handleSubmit = async (evt) => {
     evt.preventDefault()
-    if (validateEmail() !== true) return
-    if (validatePassword() !== true) return
-    emailLogin(emailRef.current.value, passwordRef.current.value, handleErrors).then(() => navigate('/'))
+    try {
+      if (validateEmail() !== true) return
+      if (validatePassword() !== true) return
+      const userCredential = await emailLogin(emailRef.current.value, passwordRef.current.value)
+      if (userCredential !== null) navigate('/')
+    } catch (error) {
+      switch (error.code) {
+        case 'auth/user-not-found': {
+          handleErrors('Wrong email or password')
+          break
+        }
+        case 'auth/wrong-password': {
+          handleErrors('Wrong email or password')
+          break
+        }
+        case 'auth/too-many-requests': {
+          handleErrors('Too many login attempts, try later')
+          break
+        }
+        default : {
+          handleErrors('Sorry, we couldn\'t verify your login details')
+          console.log(error.code)
+          break
+        }
+      }
+    }
   }
 
   return (

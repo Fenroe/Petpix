@@ -32,43 +32,35 @@ export const continueWithGoogle = () => {
 }
 
 export const emailSignup = async (email, password, errorHandler) => {
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-    const userId = userCredential.user.uid
-    await setDoc(doc(db, 'users', userId), {
-      username: '',
-      userId, // property shorthand
-      profilePicture: '',
-      coverPicture: '',
-      bio: '',
-      location: '',
-      joinedOn: new Date(),
-      followedBy: [],
-      setup: false
-    })
-    await setDoc(doc(db, 'emails', email), {
-      userId
-    })
-  } catch (error) {
-    errorHandler(error.message) || console.log(error.message)
-  }
+  const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+  return userCredential
 }
 
-export const emailLogin = async (email, password, errorHandler) => {
-  try {
-    await signInWithEmailAndPassword(auth, email, password)
-  } catch (error) {
-    switch (error.code) {
-      case 'auth/user-not-found': {
-        errorHandler('We couldn\'t find an account using this email')
-        break
-      }
-      default : {
-        errorHandler('Sorry, we couldn\'t verify your login details')
-        break
-      }
-    }
-  }
+export const emailLogin = async (email, password) => {
+  const userCredential = await signInWithEmailAndPassword(auth, email, password)
+  return userCredential
+}
+
+export const createUser = () => {
+  const uid = auth.currentUser.uid
+  setDoc(doc(db, 'users', uid), {
+    username: '',
+    userId: uid,
+    profilePicture: '',
+    coverPicture: '',
+    bio: '',
+    location: '',
+    joinedOn: new Date(),
+    followedBy: [],
+    setup: false
+  })
+}
+
+export const addEmail = (email) => {
+  const uid = auth.currentUser.uid
+  setDoc(doc(db, 'emails', email), {
+    userId: uid
+  })
 }
 
 export const appSignOut = async () => {

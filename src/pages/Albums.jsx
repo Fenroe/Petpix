@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { MyAlbums } from '../components/MyAlbums'
 import { ExploreAlbums } from '../components/ExploreAlbums'
-import { UserContext } from '../data/UserContext'
+import { UserContext } from '../contexts/UserContext'
 
 export const Albums = ({ feedData }) => {
   const [viewing, setViewing] = useState('my albums')
