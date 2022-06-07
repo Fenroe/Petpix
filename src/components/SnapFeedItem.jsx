@@ -13,6 +13,11 @@ import { likeSnap, unlikeSnap } from '../firebase'
 export const SnapFeedItem = ({ id, userId, username, profilePicture, posted, image, text, likedBy }) => {
   const [menuOpen, setMenuOpen] = useState(false)
 
+  const [menuPosition, setMenuPosition] = useState({
+    x: null,
+    y: null
+  })
+
   const [liked, setLiked] = useState(false)
 
   const [loading, setLoading] = useState(false)
@@ -23,8 +28,11 @@ export const SnapFeedItem = ({ id, userId, username, profilePicture, posted, ima
     setMenuOpen(false)
   }
 
-  const openMenu = () => {
-    console.log('hi')
+  const openMenu = (evt) => {
+    setMenuPosition({
+      x: evt.clientX,
+      y: evt.clientY
+    })
     setMenuOpen(true)
   }
 
@@ -67,7 +75,7 @@ export const SnapFeedItem = ({ id, userId, username, profilePicture, posted, ima
             <button onClick={openMenu}>
               <BsThreeDots />
             </button>
-            {menuOpen ? <SnapOptions snapUserId={userId} snapId={id} closeMenu={closeMenu}/> : null}
+            {menuOpen ? <SnapOptions position={menuPosition} snapUserId={userId} snapId={id} closeMenu={closeMenu}/> : null}
           </div>
           {text ? <TextareaAutosize readOnly className="sb-text-area" value={text}/> : null}
           <div className="sb-image-wrapper">

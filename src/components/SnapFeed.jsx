@@ -1,19 +1,22 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import { SnapFeedItem } from './SnapFeedItem'
 import { getNewKey } from '../utils/generateKey'
 import { useFeedInterval } from '../hooks/useFeedInterval'
 import { EmptyFeed } from './EmptyFeed'
 import { returnFeedMessage } from '../utils/returnFeedMessage'
+import { UserContext } from '../contexts/UserContext'
 
 export const SnapFeed = ({ feedName, feedData }) => {
+  const { user } = useContext(UserContext)
+
   useFeedInterval()
 
   return (
     <section className="feed">
       {feedData.length === 0 ? <EmptyFeed message={returnFeedMessage(feedName)}/> : null}
-      {feedData.map((item) =>
-          <SnapFeedItem
+      {feedData.map((item) => user.hiddenSnaps.includes(item.id)
+        ? <SnapFeedItem
           key={getNewKey.next().value}
           id={item.id}
           userId={item.userId}
@@ -23,6 +26,7 @@ export const SnapFeed = ({ feedName, feedData }) => {
           image={item.image}
           text={item.text}
           likedBy={item.likedBy} />
+        : null
       )}
     </section>
   )

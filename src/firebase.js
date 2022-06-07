@@ -52,6 +52,7 @@ export const createUser = () => {
     location: '',
     joinedOn: new Date(),
     followedBy: [],
+    hiddenSnaps: [],
     setup: false
   })
 }
@@ -151,6 +152,12 @@ export const postSnap = async (docRef, username, profilePicture, image, text) =>
 
 export const deleteSnap = (snapId) => {
   deleteDoc(doc(db, 'snaps', snapId))
+}
+
+export const hideSnap = (snapId) => {
+  updateDoc(doc(db, 'users', auth.currentUser.uid), {
+    hiddenSnaps: arrayUnion(snapId)
+  })
 }
 
 export const likeSnap = async (snapId, userId) => {
