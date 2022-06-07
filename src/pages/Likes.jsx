@@ -1,11 +1,14 @@
-import React, { useContext } from 'react'
+import React, { useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { SnapFeed } from '../components/SnapFeed'
 import { UserContext } from '../contexts/UserContext'
 
-export const Likes = ({ feedData }) => {
+export const Likes = ({ feedData, sync }) => {
   const { user } = useContext(UserContext)
 
+  useEffect(() => {
+    sync()
+  }, [])
   return (
     <section className="page">
       <div className="page-heading-wrapper">
@@ -17,5 +20,6 @@ export const Likes = ({ feedData }) => {
 }
 
 Likes.propTypes = {
-  feedData: PropTypes.array
+  feedData: PropTypes.array,
+  sync: PropTypes.func
 }

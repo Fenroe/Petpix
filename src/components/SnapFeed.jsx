@@ -15,7 +15,7 @@ export const SnapFeed = ({ feedName, feedData }) => {
   return (
     <section className="feed">
       {feedData.length === 0 ? <EmptyFeed message={returnFeedMessage(feedName)}/> : null}
-      {feedData.map((item) => user.hiddenSnaps.includes(item.id)
+      {feedData.map((item) => !user.hiddenSnaps.includes(item.id)
         ? <SnapFeedItem
           key={getNewKey.next().value}
           id={item.id}

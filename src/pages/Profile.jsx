@@ -13,7 +13,7 @@ import { useUpdate } from '../hooks/useUpdate'
 import { getProfileData } from '../firebase'
 import { CoverPicture } from '../components/CoverPicture'
 
-export const Profile = ({ snapFeedData }) => {
+export const Profile = ({ snapFeedData, sync }) => {
   const [viewing, setViewing] = useState('snaps')
 
   const [viewEditProfile, setViewEditProfile] = useState(false)
@@ -46,6 +46,10 @@ export const Profile = ({ snapFeedData }) => {
   const viewAlbums = () => {
     setViewing('albums')
   }
+
+  useEffect(() => {
+    sync()
+  }, [])
 
   useEffect(() => {
     if (id === user.userId) {
@@ -141,5 +145,6 @@ export const Profile = ({ snapFeedData }) => {
 }
 
 Profile.propTypes = {
-  snapFeedData: PropTypes.array
+  snapFeedData: PropTypes.array,
+  sync: PropTypes.func
 }

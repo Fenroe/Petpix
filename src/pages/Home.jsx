@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { CreateSnap } from '../components/CreateSnap'
 import { SnapFeed } from '../components/SnapFeed'
 
-export const Home = ({ feedData }) => {
+export const Home = ({ feedData, sync }) => {
   const [sortBy, setSortBy] = useState('newest')
 
   const sortFeedData = (method) => {
@@ -20,6 +20,10 @@ export const Home = ({ feedData }) => {
     }
     return sortedFeed
   }
+
+  useEffect(() => {
+    sync()
+  }, [])
 
   return (
     <section className="page">
@@ -40,5 +44,6 @@ export const Home = ({ feedData }) => {
 }
 
 Home.propTypes = {
-  feedData: PropTypes.array
+  feedData: PropTypes.array,
+  sync: PropTypes.func
 }

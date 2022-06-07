@@ -9,9 +9,12 @@ import { BsThreeDots } from 'react-icons/bs'
 import { SnapOptions } from './SnapOptions'
 import { UserContext } from '../contexts/UserContext'
 import { likeSnap, unlikeSnap } from '../firebase'
+import { AddToAlbum } from './AddToAlbum'
 
 export const SnapFeedItem = ({ id, userId, username, profilePicture, posted, image, text, likedBy }) => {
   const [menuOpen, setMenuOpen] = useState(false)
+
+  const [addToAlbumOpen, setAddToAlbumOpen] = useState(false)
 
   const [menuPosition, setMenuPosition] = useState({
     x: null,
@@ -34,6 +37,14 @@ export const SnapFeedItem = ({ id, userId, username, profilePicture, posted, ima
       y: evt.clientY
     })
     setMenuOpen(true)
+  }
+
+  const openAddToAlbum = () => {
+    setAddToAlbumOpen(true)
+  }
+
+  const closeAddToAlbum = () => {
+    setAddToAlbumOpen(false)
   }
 
   const handleLike = () => {
@@ -59,50 +70,53 @@ export const SnapFeedItem = ({ id, userId, username, profilePicture, posted, ima
   }, [])
 
   return (
-    <div className="story-box">
-      <div className="sb-profile-picture-wrapper">
-        <a href={`/#/profile/${userId}`}>
-          <ProfilePicture url={profilePicture} size="small" />
-        </a>
-      </div>
-      <div className="w-full">
-        <div className="sb-content-wrapper">
-          <div className="text-xl flex items-center justify-between w-full relative">
-            <div className="flex items-center gap-3">
-              <span className="font-bold">{username}</span>
-              <span> {renderTimeDifference(posted)}</span>
+    <>
+      {addToAlbumOpen ? <AddToAlbum /> : null}
+      <div className="story-box">
+        <div className="sb-profile-picture-wrapper">
+          <a href={`/#/profile/${userId}`}>
+            <ProfilePicture url={profilePicture} size="small" />
+          </a>
+        </div>
+        <div className="w-full">
+          <div className="sb-content-wrapper">
+            <div className="text-xl flex items-center justify-between w-full relative">
+              <div className="flex items-center gap-3">
+                <span className="font-bold">{username}</span>
+                <span> {renderTimeDifference(posted)}</span>
+              </div>
+              <button onClick={openMenu}>
+                <BsThreeDots />
+              </button>
+              {menuOpen ? <SnapOptions position={menuPosition} snapUserId={userId} snapId={id} closeMenu={closeMenu}/> : null}
             </div>
-            <button onClick={openMenu}>
-              <BsThreeDots />
-            </button>
-            {menuOpen ? <SnapOptions position={menuPosition} snapUserId={userId} snapId={id} closeMenu={closeMenu}/> : null}
-          </div>
-          {text ? <TextareaAutosize readOnly className="sb-text-area" value={text}/> : null}
-          <div className="sb-image-wrapper">
-            <img src={image} className="sb-image" />
-          </div>
-          <div className="flex items-center justify-around">
-            {liked
-              ? (
-              <button className="flex gap-3 items-center text-blue-500 font-bold" onClick={handleUnlike}>
-                <GrLike />
-                <span>{likedBy.length}</span>
-              </button>
-                )
-              : (
-              <button className="flex gap-3 items-center" onClick={handleLike}>
-                <GrLike />
-                <span>{likedBy.length}</span>
-              </button>
-                )}
+            {text ? <TextareaAutosize readOnly className="sb-text-area" value={text}/> : null}
+            <div className="sb-image-wrapper">
+              <img src={image} className="sb-image" />
+            </div>
+            <div className="flex items-center justify-around">
+              {liked
+                ? (
+                <button className="flex gap-3 items-center text-blue-500 font-bold" onClick={handleUnlike}>
+                  <GrLike />
+                  <span>{likedBy.length}</span>
+                </button>
+                  )
+                : (
+                <button className="flex gap-3 items-center" onClick={handleLike}>
+                  <GrLike />
+                  <span>{likedBy.length}</span>
+                </button>
+                  )}
 
-            <button>
-              <BiPhotoAlbum />
-            </button>
+              <button onClick={openAddToAlbum}>
+                <BiPhotoAlbum close={closeAddToAlbum}/>
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
