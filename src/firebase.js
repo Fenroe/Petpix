@@ -172,6 +172,36 @@ export const unlikeSnap = async (snapId, userId) => {
   })
 }
 
+export const getUserAlbums = async (callback) => {
+  const albumQuery = query(albumCollection, where('userId', '==', auth.currentUser.uid))
+  const albumSnapshot = await getDocs(albumQuery)
+  const albums = []
+  albumSnapshot.forEach((doc) => {
+    const album = {
+      ...doc.data(),
+      posted: doc.data().posted.toDate(),
+      updated: doc.data().updated.toDate()
+    }
+    albums.push(album)
+  })
+  callback(albums)
+}
+
+export const getPinnedAlbums = async (callback) => {
+  const albumQuery = query(albumCollection, where('pinnedBy', 'array-contains', auth.currentUser.uid))
+  const albumSnapshot = await getDocs(albumQuery)
+  const albums = []
+  albumSnapshot.forEach((doc) => {
+    const album = {
+      ...doc.data(),
+      posted: doc.data().posted.toDate(),
+      updated: doc.data().updated.toDate()
+    }
+    albums.push(album)
+  })
+  callback(albums)
+}
+
 export const fetchAlbum = async (id, callback) => {
   const docRef = doc(db, 'albums', id)
   const albumData = await getDoc(docRef)
@@ -198,8 +228,12 @@ export const fetchAlbums = async (callback) => {
   callback(albums)
 }
 
-export const createAlbum = async (title, albumCover, userId, username, profilePicture) => {
+export const addAlbum = async () => {
   const docRef = await addDoc(albumCollection, {})
+  return docRef
+}
+
+export const createAlbum = async (title, albumCover, userId, username, profilePicture, docRef) => {
   await updateDoc(docRef, {
     id: docRef.id,
     title,

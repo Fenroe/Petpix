@@ -5,7 +5,7 @@ import { UserContext } from '../contexts/UserContext'
 import { deleteSnap, hideSnap } from '../firebase'
 
 export const SnapOptions = ({ position, snapUserId, snapId, closeMenu }) => {
-  const { user, setUser } = useContext(UserContext)
+  const { user, setUser, localDeletedSnaps, setLocalDeletedSnaps } = useContext(UserContext)
 
   const menuRef = useRef(null)
 
@@ -20,6 +20,7 @@ export const SnapOptions = ({ position, snapUserId, snapId, closeMenu }) => {
 
   const handleDelete = () => {
     closeMenu()
+    setLocalDeletedSnaps([...localDeletedSnaps, snapId])
     deleteSnap(snapId)
   }
 

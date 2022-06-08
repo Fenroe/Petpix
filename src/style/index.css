@@ -182,7 +182,7 @@
   }
 
   .sb-image {
-    @apply rounded-xl max-w-full;
+    @apply rounded-xl w-full aspect-[4/5] object-cover;
   }
 
   .page {

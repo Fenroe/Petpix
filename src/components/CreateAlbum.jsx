@@ -2,7 +2,7 @@ import React, { useState, useRef, useContext } from 'react'
 import ReactDOM from 'react-dom'
 import { MdOutlineClose } from 'react-icons/md'
 import PropTypes from 'prop-types'
-import { createAlbum, getURL, uploadAlbumCover } from '../firebase'
+import { addAlbum, createAlbum, getURL, uploadAlbumCover } from '../firebase'
 import { UserContext } from '../contexts/UserContext'
 
 export const CreateAlbum = ({ closeModal }) => {
@@ -15,7 +15,7 @@ export const CreateAlbum = ({ closeModal }) => {
 
   const inputRef = useRef(null)
 
-  const { user } = useContext(UserContext)
+  const { user, userAlbums, setUserAlbums } = useContext(UserContext)
 
   const updateTitle = () => {
     setTitle(inputRef.current.value)
@@ -35,15 +35,28 @@ export const CreateAlbum = ({ closeModal }) => {
 
   const handleSubmit = async () => {
     if (inputRef.current.value === '') return
+    const docRef = await addAlbum()
     const title = inputRef.current.value
     const file = coverImage.file
+    setUserAlbums([...userAlbums, {
+      id: docRef.id,
+      title,
+      userId: user.userId,
+      username: user.username,
+      profilePicture: user.profilePicture,
+      albumCover: coverImage.preview,
+      posted: new Date(),
+      updated: new Date(),
+      pinnedBy: [],
+      contents: []
+    }])
     let imageURL = ''
     closeModal()
     if (file !== null) {
       const imageRef = await uploadAlbumCover(file)
       imageURL = await getURL(imageRef)
     }
-    await createAlbum(title, imageURL, user.userId, user.username, user.profilePicture)
+    await createAlbum(title, imageURL, user.userId, user.username, user.profilePicture, docRef)
   }
 
   return ReactDOM.createPortal(

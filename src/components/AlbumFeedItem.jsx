@@ -5,9 +5,10 @@ import defaultAlbumCover from '../assets/defaults/album.jpg'
 import { pinAlbum, unpinAlbum, deleteAlbum } from '../firebase'
 
 export const AlbumFeedItem = ({ id, albumCover, title, userId, username, profilePicture, updated, posted, pinnedBy }) => {
-  const { user } = useContext(UserContext)
+  const { user, userAlbums, setUserAlbums, pinnedAlbums, setPinnedAlbums } = useContext(UserContext)
 
   const handleDelete = () => {
+    setUserAlbums(userAlbums.filter((album) => album.id !== id ? album : null))
     deleteAlbum(id)
   }
 
@@ -17,10 +18,22 @@ export const AlbumFeedItem = ({ id, albumCover, title, userId, username, profile
   }
 
   const handlePin = () => {
+    setPinnedAlbums([...pinnedAlbums, {
+      id,
+      albumCover,
+      title,
+      userId,
+      username,
+      profilePicture,
+      updated,
+      posted,
+      pinnedBy
+    }])
     pinAlbum(id, user.userId)
   }
 
   const handleUnpin = () => {
+    setPinnedAlbums(pinnedAlbums.filter((album) => album.id !== id ? album : null))
     unpinAlbum(id, user.userId)
   }
 

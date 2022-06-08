@@ -1,22 +1,17 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { MyAlbums } from '../components/MyAlbums'
 import { ExploreAlbums } from '../components/ExploreAlbums'
-import { UserContext } from '../contexts/UserContext'
+import { fetchAlbums } from '../firebase'
 
-export const Albums = ({ feedData }) => {
+export const Albums = ({ userAlbums, pinnedAlbums }) => {
   const [viewing, setViewing] = useState('my albums')
 
-  const [myAlbums, setMyAlbums] = useState([])
-
-  const [pinnedAlbums, setPinnedAlbums] = useState([])
-
-  const { user } = useContext(UserContext)
+  const [exploreAlbumsData, setExploreAlbumsData] = useState([])
 
   useEffect(() => {
-    setMyAlbums(feedData.filter((album) => album.userId === user.userId ? album : null))
-    setPinnedAlbums(feedData.filter((album) => album.pinnedBy.includes(user.userId) ? album : null))
-  }, [feedData])
+    fetchAlbums(setExploreAlbumsData)
+  }, [])
 
   return (
     <section>
@@ -31,12 +26,13 @@ export const Albums = ({ feedData }) => {
           <h2 className="view-btn-text">Explore Albums</h2>
         </button>
       </div>
-      { viewing === 'my albums' ? <MyAlbums myAlbums={myAlbums} pinnedAlbums={pinnedAlbums} /> : null}
-      { viewing === 'explore' ? <ExploreAlbums feedData={feedData} /> : null}
+      { viewing === 'my albums' ? <MyAlbums myAlbums={userAlbums} pinnedAlbums={pinnedAlbums} /> : null}
+      { viewing === 'explore' ? <ExploreAlbums feedData={exploreAlbumsData} /> : null}
     </section>
   )
 }
 
 Albums.propTypes = {
-  feedData: PropTypes.array
+  userAlbums: PropTypes.array,
+  pinnedAlbums: PropTypes.array
 }

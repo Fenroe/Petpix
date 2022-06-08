@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, memo } from 'react'
 import PropTypes from 'prop-types'
 import { ProfilePicture } from './ProfilePicture'
 import TextareaAutosize from 'react-textarea-autosize'
@@ -11,7 +11,7 @@ import { UserContext } from '../contexts/UserContext'
 import { likeSnap, unlikeSnap } from '../firebase'
 import { AddToAlbum } from './AddToAlbum'
 
-export const SnapFeedItem = ({ id, userId, username, profilePicture, posted, image, text, likedBy }) => {
+const SnapFeedItem = ({ id, userId, username, profilePicture, posted, image, text, likedBy }) => {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const [addToAlbumOpen, setAddToAlbumOpen] = useState(false)
@@ -33,8 +33,8 @@ export const SnapFeedItem = ({ id, userId, username, profilePicture, posted, ima
 
   const openMenu = (evt) => {
     setMenuPosition({
-      x: evt.clientX,
-      y: evt.clientY
+      x: evt.pageX,
+      y: evt.pageY
     })
     setMenuOpen(true)
   }
@@ -71,7 +71,7 @@ export const SnapFeedItem = ({ id, userId, username, profilePicture, posted, ima
 
   return (
     <>
-      {addToAlbumOpen ? <AddToAlbum /> : null}
+      {addToAlbumOpen ? <AddToAlbum close={closeAddToAlbum} snapPicture={image}/> : null}
       <div className="story-box">
         <div className="sb-profile-picture-wrapper">
           <a href={`/#/profile/${userId}`}>
@@ -110,7 +110,7 @@ export const SnapFeedItem = ({ id, userId, username, profilePicture, posted, ima
                   )}
 
               <button onClick={openAddToAlbum}>
-                <BiPhotoAlbum close={closeAddToAlbum}/>
+                <BiPhotoAlbum />
               </button>
             </div>
           </div>
@@ -130,3 +130,5 @@ SnapFeedItem.propTypes = {
   text: PropTypes.string,
   likedBy: PropTypes.array
 }
+
+export default memo(SnapFeedItem)
