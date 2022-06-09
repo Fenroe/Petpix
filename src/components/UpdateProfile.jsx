@@ -30,6 +30,10 @@ export const UpdateProfile = ({ closeModal }) => {
     location: ''
   })
 
+  const [bio, setBio] = useState('')
+
+  const [location, setLocation] = useState('')
+
   const bioRef = useRef()
 
   const locationRef = useRef()
@@ -98,6 +102,16 @@ export const UpdateProfile = ({ closeModal }) => {
     reader.readAsDataURL(evt.target.files[0])
   }
 
+  const updateBio = () => {
+    validateBio()
+    setBio(bioRef.current.value)
+  }
+
+  const updateLocation = () => {
+    validateLocation()
+    setLocation(locationRef.current.value)
+  }
+
   const handleSave = async () => {
     if (!validateAll()) return
     const bio = bioRef.current.value
@@ -148,6 +162,19 @@ export const UpdateProfile = ({ closeModal }) => {
       preview: user.profilePicture,
       file: null
     })
+    setBio(user.bio)
+    setLocation(user.location)
+  }, [])
+
+  useEffect(() => {
+    const closeOnEscape = (evt) => {
+      if (evt.key === 'Escape') {
+        closeModal()
+      }
+    }
+    document.addEventListener('keydown', (evt) => closeOnEscape(evt))
+
+    return () => document.removeEventListener('keydown', (evt) => closeOnEscape(evt))
   }, [])
 
   return ReactDOM.createPortal(
@@ -175,14 +202,14 @@ export const UpdateProfile = ({ closeModal }) => {
         </div>
         <form className="flex flex-col" noValidate action="">
           <div className="relative border-2 border-slate-400 mt-8 focus-within:border-blue-500">
-            <TextareaAutosize ref={bioRef} onChange={validateBio} required className="w-full px-3 pt-7 min-h-[64px] text-lg outline-none bg-none peer resize-none" value={user.bio}/>
+            <TextareaAutosize ref={bioRef} onChange={updateBio} required className="w-full px-3 pt-7 min-h-[64px] text-lg outline-none bg-none peer resize-none" value={bio}/>
             <label className="ml-2 text-slate-400 absolute top-1/2 left-1 -translate-y-1/2 text-lg pointer-events-none duration-300 peer-valid:top-4 peer-valid:text-sm peer-focus:top-4 peer-focus:text-sm">Bio</label>
           </div>
           <div className="text-red-400 p-2 opacity-100 transition-opacity">
             <span>{errors.bio}</span>
           </div>
           <div className="relative border-2 border-slate-400 mt-8 focus-within:border-blue-500">
-            <input ref={locationRef} onChange={validateLocation} required type="text" className="w-full px-3 pt-5 min-h-[64px] text-lg outline-none bg-none peer" value={user.location} />
+            <input ref={locationRef} onChange={updateLocation} required type="text" className="w-full px-3 pt-5 min-h-[64px] text-lg outline-none bg-none peer" value={location} />
             <label className="ml-2 text-slate-400 absolute top-1/2 left-1 -translate-y-1/2 text-lg pointer-events-none duration-300 peer-valid:top-4 peer-valid:text-sm peer-focus:top-4 peer-focus:text-sm">Location</label>
           </div>
           <div className="text-red-400 p-2 opacity-100 transition-opacity">

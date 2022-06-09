@@ -13,12 +13,12 @@ import { useUpdate } from '../hooks/useUpdate'
 import { getProfileData } from '../firebase'
 import { CoverPicture } from '../components/CoverPicture'
 
-export const Profile = ({ snapFeedData, sync }) => {
+export const Profile = ({ snapFeedData, albumFeedData, sync }) => {
   const [viewing, setViewing] = useState('snaps')
 
   const [viewEditProfile, setViewEditProfile] = useState(false)
 
-  const [profileInfo, setProfileInfo] = useState()
+  const [profileInfo, setProfileInfo] = useState(null)
 
   const { user, setUser } = useContext(UserContext)
 
@@ -39,6 +39,22 @@ export const Profile = ({ snapFeedData, sync }) => {
     return 'Followers'
   }
 
+  const handleFollow = () => {
+    const pushedFollowedBy = [...profileInfo.followedBy, user.userId]
+    setProfileInfo((prevState) => ({
+      ...prevState,
+      followedBy: pushedFollowedBy
+    }))
+  }
+
+  const handleUnfollow = () => {
+    const filteredFollowedBy = profileInfo.followedBy.filter((userId) => userId !== user.userId ? userId : null)
+    setProfileInfo((prevState) => ({
+      ...prevState,
+      followedBy: filteredFollowedBy
+    }))
+  }
+
   const viewSnaps = () => {
     setViewing('snaps')
   }
@@ -57,7 +73,7 @@ export const Profile = ({ snapFeedData, sync }) => {
     } else {
       getProfileData(id).then((result) => setProfileInfo(result))
     }
-  }, [user, id])
+  }, [])
 
   // if there is no profileInfo set the page loads
   // if this is the user's profile they see an edit profile button
@@ -88,7 +104,7 @@ export const Profile = ({ snapFeedData, sync }) => {
                   {profileInfo.userId !== user.userId && profileInfo.followedBy.includes(user.userId)
                     ? (
                     <div className="p-3">
-                      <button onClick={openEditProfile} className="follow-button">Unfollow</button>
+                      <button onClick={handleUnfollow} className="follow-button">Unfollow</button>
                     </div>
                       )
                     : (
@@ -97,7 +113,7 @@ export const Profile = ({ snapFeedData, sync }) => {
                   {profileInfo.userId !== user.userId && !profileInfo.followedBy.includes(user.userId)
                     ? (
                     <div className="p-3">
-                      <button onClick={openEditProfile} className="follow-button">Follow</button>
+                      <button onClick={handleFollow} className="follow-button">Follow</button>
                     </div>
                       )
                     : (
@@ -111,10 +127,12 @@ export const Profile = ({ snapFeedData, sync }) => {
                   <p>{profileInfo.bio}</p>
                 </div>
                 <div className="h-10 p-3 flex gap-3">
-                  <div className="flex gap-1">
+                  {profileInfo.location !== ''
+                    ? <div className="flex gap-1">
                     <ImLocation2 />
                     <span>{profileInfo.location}</span>
                   </div>
+                    : null }
                   <div className="flex gap-1">
                     <BsCalendar3 />
                     <span>Joined {returnMonthAndYear(profileInfo.joinedOn.toDate())}</span>
@@ -133,7 +151,7 @@ export const Profile = ({ snapFeedData, sync }) => {
                   <h2 className="view-btn-text">Albums</h2>
                 </button>
               </div>
-              { viewing === 'snaps' ? <ProfileSnaps feedData={snapFeedData} userId={profileInfo.userId}/> : <ProfileAlbums />}
+              { viewing === 'snaps' ? <ProfileSnaps feedData={snapFeedData} userId={profileInfo.userId}/> : <ProfileAlbums feedData={albumFeedData}/>}
               {viewEditProfile ? <UpdateProfile closeModal={closeEditProfile} setRecentlyUpdated={update} /> : null}
             </div>
           )
@@ -146,5 +164,6 @@ export const Profile = ({ snapFeedData, sync }) => {
 
 Profile.propTypes = {
   snapFeedData: PropTypes.array,
+  albumFeedData: PropTypes.array,
   sync: PropTypes.func
 }

@@ -10,7 +10,5 @@ export const IconWrapper = ({ icon }) => {
 }
 
 IconWrapper.propTypes = {
-  icon: PropTypes.element,
-  url: PropTypes.string,
-  text: PropTypes.string
+  icon: PropTypes.element
 }

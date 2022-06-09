@@ -26,6 +26,17 @@ export const AccountMenu = ({ image, username, setMenuIsVisible }) => {
     }
   }, [])
 
+  useEffect(() => {
+    const closeOnEscape = (evt) => {
+      if (evt.key === 'Escape') {
+        setMenuIsVisible(false)
+      }
+    }
+    document.addEventListener('keydown', (evt) => closeOnEscape(evt))
+
+    return () => document.removeEventListener('keydown', (evt) => closeOnEscape(evt))
+  }, [])
+
   return ReactDOM.createPortal(
     <>
       <div className="menu-underlay" />
@@ -34,9 +45,6 @@ export const AccountMenu = ({ image, username, setMenuIsVisible }) => {
           <ProfilePicture url={image} size="small" />
           <span className="account-menu-info-text">{username}</span>
         </div>
-        <button onClick={() => setMenuIsVisible(false)} className="account-menu-item">
-          <span className="account-menu-item-text">Settings</span>
-        </button>
         <button onClick={handleSignOut} className="account-menu-item">
           <span className="account-menu-item-text">Log out</span>
         </button>

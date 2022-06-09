@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 export const HeaderSnapButton = ({ icon, openModal }) => {
   return (
-    <button onClick={openModal} className="flex justify-center items-center bg-red-500 w-16 h-16 rounded-full text-4xl text-white lg:w-56 hover:brightness-125">
+    <button onClick={openModal} className="flex justify-center items-center bg-red-500 w-16 h-16 rounded-full text-4xl text-white outline-none lg:w-56 hover:brightness-125">
       <div className="lg:hidden">
         {icon}
       </div>

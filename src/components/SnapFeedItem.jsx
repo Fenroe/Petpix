@@ -71,7 +71,7 @@ const SnapFeedItem = ({ id, userId, username, profilePicture, posted, image, tex
 
   return (
     <>
-      {addToAlbumOpen ? <AddToAlbum close={closeAddToAlbum} snapPicture={image}/> : null}
+      {addToAlbumOpen ? <AddToAlbum close={closeAddToAlbum} snapPicture={image} snapId={id}/> : null}
       <div className="story-box">
         <div className="sb-profile-picture-wrapper">
           <a href={`/#/profile/${userId}`}>
@@ -82,10 +82,10 @@ const SnapFeedItem = ({ id, userId, username, profilePicture, posted, image, tex
           <div className="sb-content-wrapper">
             <div className="text-xl flex items-center justify-between w-full relative">
               <div className="flex items-center gap-3">
-                <span className="font-bold">{username}</span>
+                <a href={`/#/profile/${userId}`} className="font-bold hover:cursor-pointer hover:underline">{username}</a>
                 <span> {renderTimeDifference(posted)}</span>
               </div>
-              <button onClick={openMenu}>
+              <button onClick={openMenu} className="outline-none">
                 <BsThreeDots />
               </button>
               {menuOpen ? <SnapOptions position={menuPosition} snapUserId={userId} snapId={id} closeMenu={closeMenu}/> : null}

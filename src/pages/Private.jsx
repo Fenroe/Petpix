@@ -1,33 +1,22 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { Navigate } from 'react-router-dom'
-import { AuthContext } from '../contexts/AuthContext'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { auth } from '../firebase'
+import { Loading } from './Loading'
 
 export const Private = ({ children }) => {
-  const [loaded, setLoaded] = useState(false)
+  const [user, loading] = useAuthState(auth)
 
-  const { currentUser } = useContext(AuthContext)
-
-  useEffect(() => {
-    const loading = setTimeout(() => {
-      setLoaded(true)
-      if (loaded === true) {
-        clearTimeout(loading)
-      }
-    }, 500)
-  }, [])
-
-  if (loaded === false) {
-    return <h1>Loading</h1>
+  if (loading) {
+    return <Loading />
   }
 
-  if (loaded === true && currentUser === null) {
-    return <Navigate to="signup" />
-  }
-
-  if (loaded === true && currentUser !== null) {
+  if (user) {
     return children
   }
+
+  return <Navigate to="signup" />
 }
 
 Private.propTypes = {

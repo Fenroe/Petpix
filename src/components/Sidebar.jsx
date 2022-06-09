@@ -33,7 +33,7 @@ export const Sidebar = () => {
     <header className="sidebar-wrapper">
       <div className="y-wrapper sidebar">
         <div className="y-wrapper">
-          <IconWrapper icon={<GiTurtleShell />} />
+          <IconWrapper icon={<GiTurtleShell />} url="/#/" />
           <nav>
             <HeaderLink icon={<RiHome7Fill />} url ="/#/" text="Home" />
             <HeaderLink icon={<GrLike />} url="/#/likes" text="Likes" />

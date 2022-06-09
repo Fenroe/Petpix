@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { GiTurtleShell } from 'react-icons/gi'
 import backgroundImage from '../assets/background.jpg'
-import { emailSignup, createUser, addEmail } from '../firebase'
+import { continueWithGoogle, checkIfUserExists, emailSignup, createUser, addEmail } from '../firebase'
 
 export const Signup = () => {
   const emailRef = useRef()
@@ -47,18 +47,32 @@ export const Signup = () => {
     return true
   }
 
+  const handleGoogleAuth = async (evt) => {
+    evt.preventDefault()
+    try {
+      const userCredential = await continueWithGoogle()
+      if (userCredential !== null) {
+        checkIfUserExists().then(() => navigate('/'))
+      }
+    } catch (error) {
+      handleErrors('Couldn\'t authenticate using Google')
+    }
+  }
+
   const handleSubmit = async (evt) => {
     evt.preventDefault()
     try {
       if (validateEmail() !== true) return
       if (validatePassword() !== true) return
       if (validateConfirmPassword() !== true) return
-      const userCredential = await emailSignup(emailRef.current.value, passwordRef.current.value, handleErrors)
-      if (userCredential !== null) {
-        createUser()
-        addEmail(emailRef.current.value)
-        navigate('/')
-      }
+      emailSignup(emailRef.current.value, passwordRef.current.value)
+        .then((result) => {
+          if (result !== null) {
+            createUser()
+          }
+        })
+        .then(() => addEmail(emailRef.current.value))
+        .then(() => navigate('/'))
     } catch (error) {
       handleErrors(error.message)
     }
@@ -77,7 +91,7 @@ export const Signup = () => {
           </div>
           <form className="flex flex-col items-center mt-12" noValidate action="">
             <div className="w-80 mt-8">
-              <button className="h-16 border-2 border-black rounded-full w-full text-xl bg-white hover:brightness-95">Continue with Google</button>
+              <button onClick={handleGoogleAuth} className="h-16 border-2 border-black rounded-full w-full text-xl bg-white hover:brightness-95">Continue with Google</button>
             </div>
             <div className="mt-8">
               <span>OR</span>

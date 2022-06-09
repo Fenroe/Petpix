@@ -13,11 +13,14 @@ export const CreateSnap = () => {
     file: null
   })
 
+  const [error, setError] = useState('')
+
   const textareaRef = useRef(null)
 
   const { user, localWrittenSnaps, setLocalWrittenSnaps } = useContext(UserContext)
 
   const handleImageUpload = (evt) => {
+    setError('')
     const reader = new FileReader()
     reader.onload = () => {
       if (reader.readyState !== 2) return
@@ -29,9 +32,17 @@ export const CreateSnap = () => {
     reader.readAsDataURL(evt.target.files[0])
   }
 
+  const handleErrors = (message) => setError(message)
+
+  const validateText = () => {
+    if (textareaRef.current.value.length > 150) return handleErrors('Your description has to be 150 characters or shorter')
+    return handleErrors('')
+  }
+
   const handleSubmit = async (evt) => {
     evt.preventDefault()
-    if (uploadedImage.file === null) return
+    if (uploadedImage.file === null) return handleErrors('Upload an image to share')
+    if (textareaRef.current.value.length > 150) return
     const docRef = await addDoc(collection(db, 'snaps'), {})
     const file = uploadedImage.file
     const snapText = textareaRef.current.value
@@ -71,12 +82,12 @@ export const CreateSnap = () => {
             )
           : (
             <div className="sb-content-wrapper>">
-              <TextareaAutosize ref={textareaRef} className="sb-text-area" placeholder="Text goes here" />
+              <TextareaAutosize onChange={validateText} ref={textareaRef} className="sb-text-area" placeholder="Text goes here" />
               <div className="relative text-3xl rounded">
                 <button className="absolute top-3 left-3 rounded-full hover:cursor-pointer text-white bg-black" onClick={() => setUploadedImage({ preview: '', file: null })}>
                   <MdOutlineClose />
                 </button>
-                <img src={uploadedImage.preview} className="rounded-xl" />
+                <img src={uploadedImage.preview} className="sb-image" />
               </div>
             </div>
             )}
@@ -84,6 +95,9 @@ export const CreateSnap = () => {
               <button className="min-h-[36px] border-2 bg-red-500 rounded-full px-4 text-white text-lg font-bold" onClick={(e) => handleSubmit(e)}>
                 Snap
               </button>
+            </div>
+            <div className="w-full text-red-500 text-center">
+              {error}
             </div>
       </div>
     </div>

@@ -27,11 +27,20 @@ export const snapCollection = collection(db, 'snaps')
 
 export const albumCollection = collection(db, 'albums')
 
-export const continueWithGoogle = () => {
-  signInWithPopup(auth, googleProvider)
+export const continueWithGoogle = async () => {
+  const userCredential = await signInWithPopup(auth, googleProvider)
+  return userCredential
 }
 
-export const emailSignup = async (email, password, errorHandler) => {
+export const checkIfUserExists = async () => {
+  const userRef = doc(db, 'users', auth.currentUser.uid)
+  const userDoc = await getDoc(userRef)
+  if (!userDoc.exists()) {
+    createUser()
+  }
+}
+
+export const emailSignup = async (email, password) => {
   const userCredential = await createUserWithEmailAndPassword(auth, email, password)
   return userCredential
 }
@@ -260,6 +269,32 @@ export const unpinAlbum = async (albumId, userId) => {
   })
 }
 
+export const addPictureToAlbum = async (albumId, snapId) => {
+  const snapRef = doc(db, 'snaps', snapId)
+  const snapData = await getDoc(snapRef)
+  const snapPicture = snapData.data().image
+  const albumRef = doc(db, 'albums', albumId)
+  await updateDoc(albumRef, {
+    contents: arrayUnion(snapPicture)
+  })
+}
+
+export const removePictureFromAlbum = async (albumId, snapId) => {
+  const snapRef = doc(db, 'snaps', snapId)
+  const snapData = await getDoc(snapRef)
+  const snapPicture = snapData.data().image
+  const albumRef = doc(db, 'albums', albumId)
+  await updateDoc(albumRef, {
+    contents: arrayRemove(snapPicture)
+  })
+}
+
 export const deleteAlbum = (id) => {
   deleteDoc(doc(db, 'albums', id))
 }
+
+export const getUserDocRef = (id) => doc(db, 'users', id)
+
+export const getSnapDocRef = (id) => doc(db, 'snaps', id)
+
+export const getAlbumDocRef = (id) => doc(db, 'albums', id)

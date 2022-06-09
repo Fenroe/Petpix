@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { UserContext } from '../contexts/UserContext'
 import defaultAlbumCover from '../assets/defaults/album.jpg'
@@ -6,6 +6,8 @@ import { pinAlbum, unpinAlbum, deleteAlbum } from '../firebase'
 
 export const AlbumFeedItem = ({ id, albumCover, title, userId, username, profilePicture, updated, posted, pinnedBy }) => {
   const { user, userAlbums, setUserAlbums, pinnedAlbums, setPinnedAlbums } = useContext(UserContext)
+
+  const [isPinned, setIsPinnsed] = useState(false)
 
   const handleDelete = () => {
     setUserAlbums(userAlbums.filter((album) => album.id !== id ? album : null))
@@ -29,13 +31,21 @@ export const AlbumFeedItem = ({ id, albumCover, title, userId, username, profile
       posted,
       pinnedBy
     }])
+    setIsPinnsed(true)
+    pinnedBy.push(user.userId)
     pinAlbum(id, user.userId)
   }
 
   const handleUnpin = () => {
     setPinnedAlbums(pinnedAlbums.filter((album) => album.id !== id ? album : null))
+    setIsPinnsed(false)
+    pinnedBy.pop()
     unpinAlbum(id, user.userId)
   }
+
+  useEffect(() => {
+    if (pinnedAlbums.some((album) => album.id === id)) setIsPinnsed(true)
+  }, [])
 
   return (
     <div className="justify-between flex items-center gap-3 bg-white hover:brightness-95">
@@ -53,21 +63,21 @@ export const AlbumFeedItem = ({ id, albumCover, title, userId, username, profile
       </div>
       {userId === user.userId
         ? (
-        <button className="follow-button z-50" onClick={handleDelete}>Delete</button>
+        <button className="follow-button" onClick={handleDelete}>Delete</button>
           )
         : (
             null
           )}
-      {userId !== user.userId && pinnedBy.includes(user.userId)
+      {userId !== user.userId && isPinned
         ? (
-        <button className="follow-button z-50" onClick={handleUnpin}>Unpin</button>
+        <button className="follow-button" onClick={handleUnpin}>Unpin</button>
           )
         : (
             null
           )}
-      {userId !== user.userId && !pinnedBy.includes(user.userId)
+      {userId !== user.userId && !isPinned
         ? (
-        <button className="follow-button z-50" onClick={handlePin}>Pin</button>
+        <button className="follow-button" onClick={handlePin}>Pin</button>
           )
         : (
             null

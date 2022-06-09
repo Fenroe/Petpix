@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { GiTurtleShell } from 'react-icons/gi'
 import backgroundImage from '../assets/background.jpg'
-import { emailLogin } from '../firebase'
+import { continueWithGoogle, checkIfUserExists, emailLogin } from '../firebase'
 
 export const Login = () => {
   const emailRef = useRef()
@@ -36,6 +36,18 @@ export const Login = () => {
     if (passwordRef.current.value === '') return handleErrors('Please enter your password')
     resetErrorMessage()
     return true
+  }
+
+  const handleGoogleAuth = async (evt) => {
+    evt.preventDefault()
+    try {
+      const userCredential = await continueWithGoogle()
+      if (userCredential !== null) {
+        checkIfUserExists().then(() => navigate('/'))
+      }
+    } catch (error) {
+      handleErrors('Couldn\'t authenticate using Google')
+    }
   }
 
   const handleSubmit = async (evt) => {
@@ -81,7 +93,7 @@ export const Login = () => {
           </div>
           <form className="flex flex-col items-center mt-12" noValidate>
             <div className="w-80 mt-8">
-              <button className="h-16 border-2 border-black rounded-full w-full text-xl bg-white hover:brightness-95">Continue with Google</button>
+              <button onClick={handleGoogleAuth} className="h-16 border-2 border-black rounded-full w-full text-xl bg-white hover:brightness-95">Continue with Google</button>
             </div>
             <div className="mt-8">
               <span>OR</span>

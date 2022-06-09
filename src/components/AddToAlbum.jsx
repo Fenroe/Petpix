@@ -1,21 +1,46 @@
-import React, { useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import { UserContext } from '../contexts/UserContext'
 import { MdOutlineClose } from 'react-icons/md'
+import { AddToAlbumItem } from './AddToAlbumItem'
+import { addPictureToAlbum, removePictureFromAlbum } from '../firebase'
 
-export const AddToAlbum = ({ close, snapPicture }) => {
+export const AddToAlbum = ({ close, snapPicture, snapId }) => {
   const { userAlbums, setUserAlbums } = useContext(UserContext)
 
-  const handleAdd = (id) => {
-    const mappedUserAlbums = userAlbums
-    mappedUserAlbums.forEach((album) => {
-      if (album.id === id) {
-        album.contents.push(snapPicture)
-      }
-    })
-    setUserAlbums(mappedUserAlbums)
+  const [sortedUserAlbums, setSortedUserAlbums] = useState([])
+
+  const handleAdd = (albumInfo, callback) => {
+    const filteredUserAlbums = userAlbums.filter((album) => album.id !== albumInfo.id ? album : null)
+    albumInfo.contents.push(snapPicture)
+    setUserAlbums([...filteredUserAlbums, albumInfo])
+    callback()
+    addPictureToAlbum(albumInfo.id, snapId)
   }
+
+  const handleRemove = (albumInfo, callback) => {
+    const filteredUserAlbums = userAlbums.filter((album) => album.id !== albumInfo.id ? album : null)
+    albumInfo.contents = albumInfo.contents.filter((picture) => picture !== snapPicture ? picture : null)
+    setUserAlbums([...filteredUserAlbums, albumInfo])
+    callback()
+    removePictureFromAlbum(albumInfo.id, snapId)
+  }
+
+  useEffect(() => {
+    setSortedUserAlbums(userAlbums.sort((a, b) => b.posted - a.posted))
+  }, [])
+
+  useEffect(() => {
+    const closeOnEscape = (evt) => {
+      if (evt.key === 'Escape') {
+        close()
+      }
+    }
+    document.addEventListener('keydown', (evt) => closeOnEscape(evt))
+
+    return () => document.removeEventListener('keydown', (evt) => closeOnEscape(evt))
+  }, [])
 
   return ReactDOM.createPortal(
     <>
@@ -30,11 +55,22 @@ export const AddToAlbum = ({ close, snapPicture }) => {
           <h1 className="text-lg">You don&apos;t have any albums yet</h1>
         </div>
           : null}
-        {userAlbums.map((album) =>
-        <div className="w-full p-3 flex justify-between items-center" key={album.id}>
-          <h1 className="text-lg font-bold">{album.title}</h1>
-          {album.contents.includes(snapPicture) ? <button className="follow-button w-20">Remove</button> : <button onClick={() => handleAdd(album.id)} className="follow-button w-20">Add</button>}
-        </div>)}
+          {sortedUserAlbums.map((album) =>
+          <AddToAlbumItem
+          key={album.id}
+          albumCover={album.albumCover}
+          contents={album.contents}
+          id={album.id}
+          pinnedBy={album.pinnedBy}
+          profilePicture={album.profilePicture}
+          title={album.title}
+          updated={album.updated}
+          userId={album.userId}
+          username={album.username}
+          snapPicture={snapPicture}
+          handleAdd={handleAdd}
+          handleRemove={handleRemove}
+          />)}
       </div>
     </>, document.getElementById('modal')
   )
@@ -42,5 +78,6 @@ export const AddToAlbum = ({ close, snapPicture }) => {
 
 AddToAlbum.propTypes = {
   close: PropTypes.func,
-  snapPicture: PropTypes.string
+  snapPicture: PropTypes.string,
+  snapId: PropTypes.string
 }

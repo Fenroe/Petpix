@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { CreateSnap } from '../components/CreateSnap'
 import { SnapFeed } from '../components/SnapFeed'
 
-export const Home = ({ feedData, sync }) => {
+export const Home = ({ feedData, pendingData, sync }) => {
   const [sortBy, setSortBy] = useState('newest')
 
   const sortFeedData = (method) => {
@@ -38,6 +38,9 @@ export const Home = ({ feedData, sync }) => {
       <div className="page-heading-wrapper">
         <h1 className="page-heading">See what&apos;s new</h1>
       </div>
+      <div>
+        {pendingData.length > 0 ? <button onClick={sync} className="text-lg cursor-pointer hover:text-red-500">Update Feed</button> : null}
+      </div>
       <SnapFeed feedName="home" feedData={sortFeedData(sortBy)} />
     </section>
   )
@@ -45,5 +48,6 @@ export const Home = ({ feedData, sync }) => {
 
 Home.propTypes = {
   feedData: PropTypes.array,
+  pendingData: PropTypes.array,
   sync: PropTypes.func
 }

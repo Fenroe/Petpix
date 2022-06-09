@@ -30,7 +30,6 @@ export const ExploreAlbums = ({ feedData }) => {
         <select onChange={(e) => setSortBy(e.target.value)}name="" id="" className="sort-input">
           <option value="new">New</option>
           <option value="most pinned">Most pinned</option>
-          <option value="recently updated">Recently Updated</option>
         </select>
       </div>
       <AlbumFeed feedName='explore albums' feedData={sortFeedData(sortBy)} />

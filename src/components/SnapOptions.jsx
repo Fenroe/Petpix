@@ -38,6 +38,17 @@ export const SnapOptions = ({ position, snapUserId, snapId, closeMenu }) => {
     }
   }, [])
 
+  useEffect(() => {
+    const closeOnEscape = (evt) => {
+      if (evt.key === 'Escape') {
+        closeMenu()
+      }
+    }
+    document.addEventListener('keydown', (evt) => closeOnEscape(evt))
+
+    return () => document.removeEventListener('keydown', (evt) => closeOnEscape(evt))
+  }, [])
+
   return ReactDOM.createPortal(
     <>
       <div className="menu-underlay" />

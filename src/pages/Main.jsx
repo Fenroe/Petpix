@@ -12,11 +12,24 @@ import { ProfileSetup } from '../components/ProfileSetup'
 import { UserContext } from '../contexts/UserContext'
 
 export const Main = () => {
-  const [user, setUser] = useState({})
+  const [user, setUser] = useState({
+    bio: '',
+    coverPicture: '',
+    followedBy: [],
+    hiddenSnaps: [],
+    joinedOn: new Date(),
+    location: '',
+    profilePicture: '',
+    setup: true,
+    userId: '',
+    username: ''
+  })
 
   const [snaps, setSnaps] = useState([])
 
   const [snapsToLoad, setSnapsToLoad] = useState([])
+
+  const [snapsModified, setSnapsModified] = useState([])
 
   const [snapsToRemove, setSnapsToRemove] = useState([])
 
@@ -30,9 +43,10 @@ export const Main = () => {
 
   const updateSnaps = () => {
     const filteredSnaps = snaps.filter((snap) => !snapsToRemove.includes(snap.id) ? snap : null)
-    setSnaps([...filteredSnaps, ...snapsToLoad])
+    setSnaps([...filteredSnaps, ...snapsToLoad, ...snapsModified])
     setSnapsToLoad([])
     setSnapsToRemove([])
+    setSnapsModified([])
   }
 
   useEffect(() => {
@@ -49,10 +63,9 @@ export const Main = () => {
 
   useEffect(() => {
     let hasLoaded = false
-    let filteredSnapsToLoad = snapsToLoad
-    const modifiedSnapIds = new Set()
     const unsub = onSnapshot(snapCollection, (snapshot) => {
       let newSnaps = []
+      let modifiedSnaps = snapsModified
       const deletedSnapIds = []
       snapshot.docChanges().forEach((change) => {
         if (change.type === 'added') {
@@ -64,15 +77,13 @@ export const Main = () => {
           newSnaps.push(snap)
         }
         if (change.type === 'modified') {
-          if (modifiedSnapIds.has(change.doc.data().id)) {
-            filteredSnapsToLoad = filteredSnapsToLoad.filter((snap) => snap.id !== change.doc.data().id ? snap : null)
-          }
           const snap = {
             ...change.doc.data(),
             posted: change.doc.data().posted.toDate()
           }
-          newSnaps.push(snap)
-          deletedSnapIds.push(change.doc.data().id)
+          modifiedSnaps = modifiedSnaps.filter((modifiedSnap) => modifiedSnap.id !== snap.id ? modifiedSnap : null)
+          modifiedSnaps.push(snap)
+          deletedSnapIds.push(snap.id)
         }
         if (change.type === 'removed') {
           deletedSnapIds.push(change.doc.data().id)
@@ -83,7 +94,8 @@ export const Main = () => {
         setSnaps(newSnaps)
         newSnaps = []
       }
-      setSnapsToLoad([...filteredSnapsToLoad, ...newSnaps])
+      setSnapsToLoad([...snapsToLoad, ...newSnaps])
+      setSnapsModified(modifiedSnaps)
       setSnapsToRemove([...snapsToRemove, ...deletedSnapIds])
     })
 
@@ -100,13 +112,15 @@ export const Main = () => {
       localDeletedSnaps,
       setLocalDeletedSnaps,
       userAlbums,
-      setUserAlbums
+      setUserAlbums,
+      pinnedAlbums,
+      setPinnedAlbums
     }}>
       {user.setup === false ? <ProfileSetup /> : null}
       <Sidebar />
       <main className="main">
           <Routes>
-            <Route exact path="/" element={<Home feedData={snaps} sync={updateSnaps}/>} />
+            <Route exact path="/" element={<Home feedData={snaps} pendingData={snapsToLoad} sync={updateSnaps}/>} />
             <Route exact path="/likes" element={<Likes feedData={snaps} sync={updateSnaps}/>} />
             <Route exact path="/profile/:id" element={<Profile snapFeedData={snaps} albumFeedData={userAlbums} sync={updateSnaps} />} />
             <Route exact path="/albums/" element={<Albums userAlbums={userAlbums} pinnedAlbums={pinnedAlbums} />} />
