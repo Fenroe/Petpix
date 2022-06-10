@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/Fenroe/Snapshot/static/css/main.3b24a95e.css",
+    "main.js": "/Fenroe/Snapshot/static/js/main.aa09cd3c.js",
+    "static/media/background.jpg": "/Fenroe/Snapshot/static/media/background.39b1bc19885612c57b05.jpg",
+    "static/media/cover.png": "/Fenroe/Snapshot/static/media/cover.1451444bc6c035c7e22b.png",
+    "static/media/album.jpg": "/Fenroe/Snapshot/static/media/album.1a0ee05be2491a969dde.jpg",
+    "static/media/profile.jpg": "/Fenroe/Snapshot/static/media/profile.43ebe3233b34365dc7a5.jpg",
+    "index.html": "/Fenroe/Snapshot/index.html",
+    "main.3b24a95e.css.map": "/Fenroe/Snapshot/static/css/main.3b24a95e.css.map",
+    "main.aa09cd3c.js.map": "/Fenroe/Snapshot/static/js/main.aa09cd3c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3b24a95e.css",
+    "static/js/main.aa09cd3c.js"
+  ]
+}
