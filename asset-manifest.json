@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "https://fenroe.github.io/Snapshot/static/css/main.3b24a95e.css",
-    "main.js": "https://fenroe.github.io/Snapshot/static/js/main.6c719e83.js",
-    "static/media/background.jpg": "https://fenroe.github.io/Snapshot/static/media/background.39b1bc19885612c57b05.jpg",
-    "static/media/cover.png": "https://fenroe.github.io/Snapshot/static/media/cover.1451444bc6c035c7e22b.png",
-    "static/media/album.jpg": "https://fenroe.github.io/Snapshot/static/media/album.1a0ee05be2491a969dde.jpg",
-    "static/media/profile.jpg": "https://fenroe.github.io/Snapshot/static/media/profile.43ebe3233b34365dc7a5.jpg",
-    "index.html": "https://fenroe.github.io/Snapshot/index.html",
-    "main.3b24a95e.css.map": "https://fenroe.github.io/Snapshot/static/css/main.3b24a95e.css.map",
-    "main.6c719e83.js.map": "https://fenroe.github.io/Snapshot/static/js/main.6c719e83.js.map"
+    "main.css": "https://fenroe.github.io/Snapshot/#/static/css/main.3b24a95e.css",
+    "main.js": "https://fenroe.github.io/Snapshot/#/static/js/main.6f9d7779.js",
+    "static/media/background.jpg": "https://fenroe.github.io/Snapshot/#/static/media/background.39b1bc19885612c57b05.jpg",
+    "static/media/cover.png": "https://fenroe.github.io/Snapshot/#/static/media/cover.1451444bc6c035c7e22b.png",
+    "static/media/album.jpg": "https://fenroe.github.io/Snapshot/#/static/media/album.1a0ee05be2491a969dde.jpg",
+    "static/media/profile.jpg": "https://fenroe.github.io/Snapshot/#/static/media/profile.43ebe3233b34365dc7a5.jpg",
+    "index.html": "https://fenroe.github.io/Snapshot/#/index.html",
+    "main.3b24a95e.css.map": "https://fenroe.github.io/Snapshot/#/static/css/main.3b24a95e.css.map",
+    "main.6f9d7779.js.map": "https://fenroe.github.io/Snapshot/#/static/js/main.6f9d7779.js.map"
   },
   "entrypoints": [
     "static/css/main.3b24a95e.css",
-    "static/js/main.6c719e83.js"
+    "static/js/main.6f9d7779.js"
   ]
 }
