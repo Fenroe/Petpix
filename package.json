@@ -1,7 +1,7 @@
 {
   "name": "snapshot",
   "version": "1.0.0",
-  "homepage": "https://github.com/Fenroe/Snapshot",
+  "homepage": "https://fenroe.github.io/Snapshot",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
