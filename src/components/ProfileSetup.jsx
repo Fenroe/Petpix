@@ -4,12 +4,12 @@ import { ProfilePicture } from './ProfilePicture'
 import TextareaAutosize from 'react-textarea-autosize'
 import { AiOutlinePicture } from 'react-icons/ai'
 import { UserContext } from '../contexts/UserContext'
-import { db, uploadProfilePicture, uploadCoverPicture, getURL } from '../firebase'
+import { db, uploadProfilePicture, uploadCoverPicture, getURL, checkUsernameAvailability, addUsername } from '../firebase'
 import { doc, setDoc } from 'firebase/firestore'
 import { CoverPicture } from './CoverPicture'
 
 export const ProfileSetup = () => {
-  const { user, setUser } = useContext(UserContext)
+  const { user, setUser, loading, setLoading } = useContext(UserContext)
 
   const [cover, setCover] = useState({
     reference: null,
@@ -72,10 +72,14 @@ export const ProfileSetup = () => {
     return true
   }
 
-  const validateUsername = () => {
+  const validateUsername = async () => {
     let error = ''
     if (usernameRef.current.value.length > 20) error = 'Username must be between 4 and 20 characters long and can\'t be left blank'
     if (usernameRef.current.value.length < 4) error = 'Username must be between 4 and 20 characters long and can\'t be left blank'
+    if (error === '') {
+      const usernameIsUnavailable = await checkUsernameAvailability(usernameRef.current.value)
+      if (usernameIsUnavailable) error = 'That username is already taken'
+    }
     handleErrors('username', error)
     if (error !== '') return false
     return true
@@ -116,6 +120,7 @@ export const ProfileSetup = () => {
   }
 
   const handleSave = async () => {
+    if (loading) return
     if (!validateAll()) return
     const username = usernameRef.current.value
     const bio = bioRef.current.value
@@ -129,6 +134,7 @@ export const ProfileSetup = () => {
       location,
       setup: true
     }))
+    setLoading(true)
     const userRef = doc(db, 'users', user.userId)
     if (cover.preview !== cover.reference) {
       const ref = await uploadCoverPicture(cover.file)
@@ -156,6 +162,8 @@ export const ProfileSetup = () => {
     }, {
       merge: true
     })
+    await addUsername(username)
+    setLoading(false)
   }
 
   useEffect(() => {

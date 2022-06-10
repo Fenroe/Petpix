@@ -14,7 +14,7 @@ export const Home = ({ feedData, pendingData, sync }) => {
         break
       }
       case 'most liked': {
-        sortedFeed = feedData.sort((a, b) => b.likes - a.likes)
+        sortedFeed = feedData.sort((a, b) => b.likedBy.length - a.likedBy.length)
         break
       }
     }

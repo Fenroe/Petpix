@@ -10,7 +10,7 @@ import { MdOutlineClose } from 'react-icons/md'
 import { CoverPicture } from './CoverPicture'
 
 export const UpdateProfile = ({ closeModal }) => {
-  const { user, setUser } = useContext(UserContext)
+  const { user, setUser, loading, setLoading } = useContext(UserContext)
 
   const [cover, setCover] = useState({
     reference: null,
@@ -113,6 +113,7 @@ export const UpdateProfile = ({ closeModal }) => {
   }
 
   const handleSave = async () => {
+    if (loading) return
     if (!validateAll()) return
     const bio = bioRef.current.value
     const location = locationRef.current.value
@@ -124,6 +125,7 @@ export const UpdateProfile = ({ closeModal }) => {
       location
     }))
     closeModal()
+    setLoading(true)
     const userRef = doc(db, 'users', user.userId)
     if (cover.preview !== cover.reference) {
       const ref = await uploadCoverPicture(cover.file)
@@ -149,6 +151,7 @@ export const UpdateProfile = ({ closeModal }) => {
     }, {
       merge: true
     })
+    setLoading(false)
   }
 
   useEffect(() => {

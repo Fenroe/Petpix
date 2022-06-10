@@ -6,6 +6,14 @@ export const returnFeedMessage = (feedName) => {
       message = 'You haven\'t posted any Snaps yet.'
       break
     }
+    case 'my profile': {
+      message = 'You haven\'t posted any Snaps yet.'
+      break
+    }
+    case 'other profile': {
+      message = 'This user hasn\'t posted any Snaps yet'
+      break
+    }
     case 'home': {
       message = 'No Snaps to show. Something might have gone wrong.'
       break
@@ -16,6 +24,10 @@ export const returnFeedMessage = (feedName) => {
     }
     case 'my albums': {
       message = 'You haven\'t created any albums yet.'
+      break
+    }
+    case 'other albums': {
+      message = 'This user hasn\'t created any albums yet.'
       break
     }
     case 'pinned albums': {

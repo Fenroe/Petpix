@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { fetchAlbum, pinAlbum, unpinAlbum, deleteAlbum } from '../firebase'
 import { AlbumCover } from '../components/AlbumCover'
 import { UserContext } from '../contexts/UserContext'
@@ -12,7 +12,11 @@ export const Album = () => {
     pinnedBy: []
   })
 
+  const [isPinned, setIsPinned] = useState(false)
+
   const { user, userAlbums, setUserAlbums, pinnedAlbums, setPinnedAlbums } = useContext(UserContext)
+
+  const navigate = useNavigate()
 
   const { id } = useParams()
 
@@ -28,22 +32,31 @@ export const Album = () => {
       posted: albumInfo.posted,
       pinnedBy: albumInfo.pinnedBy
     }])
+    setIsPinned(true)
     pinAlbum(id, user.userId)
   }
 
   const handleUnpin = () => {
     setPinnedAlbums(pinnedAlbums.filter((album) => album.id !== id ? album : null))
+    setIsPinned(false)
     unpinAlbum(id, user.userId)
   }
 
   const handleDelete = () => {
     setUserAlbums(userAlbums.filter((album) => album.id !== id ? album : null))
     deleteAlbum(id)
+    navigate('/albums')
   }
 
   useEffect(() => {
     fetchAlbum(id, setAlbumInfo).then(() => setLoading(false))
   }, [])
+
+  useEffect(() => {
+    if (albumInfo.pinnedBy.includes(user.userId)) {
+      setIsPinned(true)
+    }
+  }, [albumInfo])
 
   return (
     <div>
@@ -68,14 +81,14 @@ export const Album = () => {
             : (
                 null
               )}
-      {albumInfo.userId !== user.userId && albumInfo.pinnedBy.includes(user.userId)
+      {albumInfo.userId !== user.userId && isPinned
         ? (
         <button className="follow-button" onClick={handleUnpin}>Unpin</button>
           )
         : (
             null
           )}
-      {albumInfo.userId !== user.userId && !albumInfo.pinnedBy.includes(user.userId)
+      {albumInfo.userId !== user.userId && !isPinned
         ? (
         <button className="follow-button" onClick={handlePin}>Pin</button>
           )

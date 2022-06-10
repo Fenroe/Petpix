@@ -10,6 +10,8 @@ import { getUserData, getUserAlbums, getPinnedAlbums, snapCollection } from '../
 import { Sidebar } from '../components/Sidebar'
 import { ProfileSetup } from '../components/ProfileSetup'
 import { UserContext } from '../contexts/UserContext'
+import { LoadingModal } from '../components/LoadingModal'
+import { WriteErrorModal } from '../components/WriteErrorModal'
 
 export const Main = () => {
   const [user, setUser] = useState({
@@ -24,6 +26,12 @@ export const Main = () => {
     userId: '',
     username: ''
   })
+
+  const [loading, setLoading] = useState(false)
+
+  const [writeError, setWriteError] = useState(false)
+
+  const dismissError = () => setWriteError(false)
 
   const [snaps, setSnaps] = useState([])
 
@@ -105,6 +113,10 @@ export const Main = () => {
   return (
     <UserContext.Provider
     value={{
+      loading,
+      setLoading,
+      writeError,
+      setWriteError,
       user,
       setUser,
       localWrittenSnaps,
@@ -117,6 +129,8 @@ export const Main = () => {
       setPinnedAlbums
     }}>
       {user.setup === false ? <ProfileSetup /> : null}
+      {loading === true ? <LoadingModal /> : null}
+      {writeError === true ? <WriteErrorModal close={dismissError} /> : null}
       <Sidebar />
       <main className="main">
           <Routes>

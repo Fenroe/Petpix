@@ -18,6 +18,9 @@ export const SnapFeed = ({ feedName, feedData }) => {
       case 'likes': {
         return feedData
       }
+      case 'other profile': {
+        return feedData
+      }
       default: {
         return [...filteredWrittenSnaps, ...feedData]
       }
@@ -48,6 +51,6 @@ export const SnapFeed = ({ feedName, feedData }) => {
 
 SnapFeed.propTypes = {
   feedData: PropTypes.array,
-  feedName: PropTypes.oneOf(['home', 'profile', 'likes']),
+  feedName: PropTypes.oneOf(['home', 'profile', 'likes', 'my profile', 'other profile']),
   sync: PropTypes.func
 }

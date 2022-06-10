@@ -13,6 +13,10 @@ export const Albums = ({ userAlbums, pinnedAlbums }) => {
     fetchAlbums(setExploreAlbumsData)
   }, [])
 
+  useEffect(() => {
+    fetchAlbums(setExploreAlbumsData)
+  }, [userAlbums])
+
   return (
     <section>
       <div className="page-heading-wrapper">

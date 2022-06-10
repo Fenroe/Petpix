@@ -295,6 +295,50 @@ export const deleteAlbum = (id) => {
 
 export const getUserDocRef = (id) => doc(db, 'users', id)
 
+export const getUsernameDocRef = (id) => doc(db, 'usernames', id)
+
 export const getSnapDocRef = (id) => doc(db, 'snaps', id)
 
 export const getAlbumDocRef = (id) => doc(db, 'albums', id)
+
+export const followUser = (id) => {
+  const userRef = getUserDocRef(id)
+  updateDoc(userRef, {
+    followedBy: arrayUnion(auth.currentUser.uid)
+  })
+}
+
+export const unfollowUser = (id) => {
+  const userRef = getUserDocRef(id)
+  updateDoc(userRef, {
+    followedBy: arrayRemove(auth.currentUser.uid)
+  })
+}
+
+export const checkUsernameAvailability = async (username) => {
+  const usernameRef = getUsernameDocRef(username)
+  const usernameDoc = await getDoc(usernameRef)
+  if (usernameDoc.exists()) return true
+  return false
+}
+
+export const addUsername = (username) => {
+  setDoc(getUsernameDocRef(username), {
+    userId: auth.currentUser.uid
+  })
+}
+
+export const getProfileAlbums = async (id) => {
+  const albumQuery = query(albumCollection, where('userId', '==', id))
+  const querySnapshot = await getDocs(albumQuery)
+  const albums = []
+  querySnapshot.forEach((doc) => {
+    const album = {
+      ...doc.data(),
+      posted: doc.data().posted.toDate(),
+      updated: doc.data().updated.toDate()
+    }
+    albums.push(album)
+  })
+  return albums
+}

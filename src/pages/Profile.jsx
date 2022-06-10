@@ -10,7 +10,7 @@ import { ProfileSnaps } from '../components/ProfileSnaps'
 import { ProfileAlbums } from '../components/ProfileAlbums'
 import { UpdateProfile } from '../components/UpdateProfile'
 import { useUpdate } from '../hooks/useUpdate'
-import { getProfileData } from '../firebase'
+import { getProfileData, followUser, unfollowUser, getProfileAlbums } from '../firebase'
 import { CoverPicture } from '../components/CoverPicture'
 
 export const Profile = ({ snapFeedData, albumFeedData, sync }) => {
@@ -19,6 +19,8 @@ export const Profile = ({ snapFeedData, albumFeedData, sync }) => {
   const [viewEditProfile, setViewEditProfile] = useState(false)
 
   const [profileInfo, setProfileInfo] = useState(null)
+
+  const [profileAlbums, setProfileAlbums] = useState([])
 
   const { user, setUser } = useContext(UserContext)
 
@@ -45,6 +47,7 @@ export const Profile = ({ snapFeedData, albumFeedData, sync }) => {
       ...prevState,
       followedBy: pushedFollowedBy
     }))
+    followUser(profileInfo.userId)
   }
 
   const handleUnfollow = () => {
@@ -53,6 +56,7 @@ export const Profile = ({ snapFeedData, albumFeedData, sync }) => {
       ...prevState,
       followedBy: filteredFollowedBy
     }))
+    unfollowUser(profileInfo.userId)
   }
 
   const viewSnaps = () => {
@@ -74,6 +78,14 @@ export const Profile = ({ snapFeedData, albumFeedData, sync }) => {
       getProfileData(id).then((result) => setProfileInfo(result))
     }
   }, [])
+
+  useEffect(() => {
+    if (id === user.userId) {
+      setProfileAlbums(albumFeedData)
+    } else {
+      getProfileAlbums(id).then((result) => setProfileAlbums(result))
+    }
+  })
 
   // if there is no profileInfo set the page loads
   // if this is the user's profile they see an edit profile button
@@ -151,7 +163,7 @@ export const Profile = ({ snapFeedData, albumFeedData, sync }) => {
                   <h2 className="view-btn-text">Albums</h2>
                 </button>
               </div>
-              { viewing === 'snaps' ? <ProfileSnaps feedData={snapFeedData} userId={profileInfo.userId}/> : <ProfileAlbums feedData={albumFeedData}/>}
+              { viewing === 'snaps' ? <ProfileSnaps feedData={snapFeedData} userId={profileInfo.userId} username={profileInfo.username}/> : <ProfileAlbums feedData={profileAlbums} userId={profileInfo.userId} username={profileInfo.username}/>}
               {viewEditProfile ? <UpdateProfile closeModal={closeEditProfile} setRecentlyUpdated={update} /> : null}
             </div>
           )
