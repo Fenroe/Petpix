@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { GiTurtleShell } from 'react-icons/gi'
 import backgroundImage from '../assets/background.jpg'
 import { continueWithGoogle, checkIfUserExists, emailLogin } from '../firebase'
@@ -111,7 +111,7 @@ export const Login = () => {
               <span>{errorMessage}</span>
             </div>
           </form>
-          <span className="text-lg mt-3 mb-3">Don&apos;t have an account? <a className="text-red-500" href="/#/signup">Sign up</a></span>
+          <span className="text-lg mt-3 mb-3">Don&apos;t have an account? <Link to={'/signup'}><span className="text-red-500 cursor-pointer">Sign up</span></Link></span>
         </div>
       </main>
     </div>
