@@ -35,10 +35,10 @@ export const Sidebar = () => {
         <div className="y-wrapper">
           <IconWrapper icon={<GiTurtleShell />} url="/#/" />
           <nav>
-            <HeaderLink icon={<RiHome7Fill />} url ="/#/" text="Home" />
-            <HeaderLink icon={<GrLike />} url="/#/likes" text="Likes" />
-            <HeaderLink icon={<BiPhotoAlbum />} url="/#/albums" text="Albums" />
-            <HeaderLink icon={<FiUser />} url={`/#/profile/${user.userId}`} text="Profile" />
+            <HeaderLink icon={<RiHome7Fill />} url ="/" text="Home" />
+            <HeaderLink icon={<GrLike />} url="/likes" text="Likes" />
+            <HeaderLink icon={<BiPhotoAlbum />} url="/albums" text="Albums" />
+            <HeaderLink icon={<FiUser />} url={`/profile/${user.userId}`} text="Profile" />
           </nav>
           <HeaderSnapButton icon={<AiOutlinePlus />} openModal={openSnapModal} />
         </div>

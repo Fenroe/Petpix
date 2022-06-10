@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect, memo } from 'react'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { ProfilePicture } from './ProfilePicture'
 import TextareaAutosize from 'react-textarea-autosize'
@@ -74,15 +75,15 @@ const SnapFeedItem = ({ id, userId, username, profilePicture, posted, image, tex
       {addToAlbumOpen ? <AddToAlbum close={closeAddToAlbum} snapPicture={image} snapId={id}/> : null}
       <div className="story-box">
         <div className="sb-profile-picture-wrapper">
-          <a href={`/#/profile/${userId}`}>
+          <Link to={`/profile/${userId}`}>
             <ProfilePicture url={profilePicture} size="small" />
-          </a>
+          </Link>
         </div>
         <div className="w-full">
           <div className="sb-content-wrapper">
             <div className="text-xl flex items-center justify-between w-full relative">
               <div className="flex items-center gap-3">
-                <a href={`/#/profile/${userId}`} className="font-bold hover:cursor-pointer hover:underline">{username}</a>
+                <Link to={`/profile/${userId}`} className="font-bold hover:cursor-pointer hover:underline">{username}</Link>
                 <span> {renderTimeDifference(posted)}</span>
               </div>
               <button onClick={openMenu} className="outline-none">

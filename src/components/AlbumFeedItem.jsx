@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { UserContext } from '../contexts/UserContext'
 import defaultAlbumCover from '../assets/defaults/album.jpg'
@@ -54,7 +55,7 @@ export const AlbumFeedItem = ({ id, albumCover, title, userId, username, profile
         <div className="flex flex-col justify-start items-start">
           <div className="flex flex-col">
             <div className="flex gap-3 items-center">
-              <a href={`/#/album/${id}`}className="font-bold text-lg">{title}</a>
+              <Link to={`/album/${id}`}className="font-bold text-lg">{title}</Link>
               <span className="text-sm">{username}</span>
             </div>
             <span>{`${pinnedBy.length} ${formatPinsText(pinnedBy.length)}`}</span>
