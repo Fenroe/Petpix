@@ -11,7 +11,7 @@ const App = () => {
   return (
     <div className="app">
       <AuthProvider>
-        <HashRouter basename={process.env.PUBLIC_URL}>
+        <HashRouter basename="https://fenroe.github.io/Snapshot/#">
           <Routes>
             <Route path="*" element={
             <Private>
