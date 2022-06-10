@@ -11,7 +11,7 @@ const App = () => {
   return (
     <div className="app">
       <AuthProvider>
-        <HashRouter>
+        <HashRouter basename="/">
           <Routes>
             <Route path="*" element={
             <Private>
