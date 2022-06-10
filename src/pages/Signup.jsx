@@ -113,7 +113,7 @@ export const Signup = () => {
               <span>{errorMessage}</span>
             </div>
           </form>
-          <span className="text-lg mt-3 mb-3">Already have an account? <a className="text-red-500" href="/#/login">Log in</a></span>
+          <span className="text-lg mt-3 mb-3">Already have an account? <a className="text-red-500" href="/login">Log in</a></span>
         </div>
       </main>
     </div>
