@@ -98,19 +98,19 @@ const SnapFeedItem = ({ id, userId, username, profilePicture, posted, image, tex
             <div className="flex items-center justify-around">
               {liked
                 ? (
-                <button className="flex gap-3 items-center text-blue-500 font-bold" onClick={handleUnlike}>
+                <button className="flex gap-3 text-[22px] items-center text-blue-500 font-bold" onClick={handleUnlike}>
                   <GrLike />
                   <span>{likedBy.length}</span>
                 </button>
                   )
                 : (
-                <button className="flex gap-3 items-center" onClick={handleLike}>
+                <button className="flex gap-3 text-[22px] items-center" onClick={handleLike}>
                   <GrLike />
                   <span>{likedBy.length}</span>
                 </button>
                   )}
 
-              <button onClick={openAddToAlbum}>
+              <button className="text-[22px]" onClick={openAddToAlbum}>
                 <BiPhotoAlbum />
               </button>
             </div>

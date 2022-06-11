@@ -24,9 +24,11 @@ export const MyAlbums = ({ myAlbums, pinnedAlbums }) => {
         <div className="page-heading-wrapper">
           <h1 className="page-heading">Your albums</h1>
         </div>
-        <button className="whitespace-nowrap text-black hover:text-red-500" onClick={openModal}>New Album</button>
       </div>
       <AlbumFeed feedName='my albums' feedData={myAlbums} />
+      <div className="flex justify-center items-center w-full">
+        <button className="whitespace-nowrap font-bold text-xl -text-black hover:text-red-500" onClick={openModal}>New Album</button>
+      </div>
       <div className="flex items-center justify-between">
         <div className="page-heading-wrapper">
           <h1 className="page-heading">Pinned Albums</h1>
