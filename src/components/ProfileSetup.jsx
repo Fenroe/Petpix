@@ -73,24 +73,18 @@ export const ProfileSetup = () => {
   }
 
   const validateUsername = async () => {
-    let error = ''
-    if (usernameRef.current.value.length > 20) error = 'Username must be between 4 and 20 characters'
-    if (usernameRef.current.value.length < 4) error = 'Username must be between 4 and 20 characters'
-    if (error === '') {
-      const usernameIsUnavailable = await checkUsernameAvailability(usernameRef.current.value)
-      if (usernameIsUnavailable) error = 'That username is already taken'
-    }
-    handleErrors('username', error)
-    if (error !== '') return false
+    if (usernameRef.current.value.length > 20) return handleErrors('username', 'Username must be between 4 and 20 characters')
+    if (usernameRef.current.value.length < 4) return handleErrors('username', 'Username must be between 4 and 20 characters')
+    const usernameIsUnavailable = await checkUsernameAvailability(usernameRef.current.value)
+    if (usernameIsUnavailable) return handleErrors('username', 'That username is already taken')
     return true
   }
 
   const validateAll = () => {
-    let validated = true
-    if (!validateBio()) validated = false
-    if (!validateLocation()) validated = false
-    if (!validateUsername()) validated = false
-    return validated
+    if (!validateBio()) return false
+    if (!validateLocation()) return false
+    if (!validateUsername()) return false
+    return true
   }
 
   const handleProfileChange = (evt) => {
@@ -120,12 +114,16 @@ export const ProfileSetup = () => {
   }
 
   const handleSave = async () => {
+    console.log(loading)
     if (loading) return
-    if (validateAll() === false) return
+    console.log('validating')
+    if (!validateAll()) return
+    console.log('usernaming')
     if (usernameRef.current.value === '') return
     const username = usernameRef.current.value
     const bio = bioRef.current.value
     const location = locationRef.current.value
+    const userRef = doc(db, 'users', user.userId)
     try {
       setUser((prevState) => ({
         ...prevState,
@@ -137,7 +135,6 @@ export const ProfileSetup = () => {
         setup: true
       }))
       setLoading(true)
-      const userRef = doc(db, 'users', user.userId)
       if (cover.preview !== cover.reference) {
         const ref = await uploadCoverPicture(cover.file)
         const coverURL = await getURL(ref)
@@ -167,10 +164,19 @@ export const ProfileSetup = () => {
       addUsername(username)
       setLoading(false)
     } catch (error) {
+      await setDoc(userRef, {
+        username,
+        bio,
+        location,
+        setup: false
+      }, {
+        merge: true
+      })
       setUser((prevState) => ({
         ...prevState,
         setup: false
       }))
+      setLoading(false)
     }
   }
 
@@ -190,9 +196,9 @@ export const ProfileSetup = () => {
   return ReactDOM.createPortal(
     <>
       <div className="bg-black bg-opacity-50 fixed inset-0 z-40"/>
-      <div className="          h-[650px] flex flex-col bg-white fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 p-3 w-[480px] rounded-lg overflow-auto pb-10">
+      <div className="h-[650px] flex flex-col bg-white fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 p-3 w-[480px] rounded-lg overflow-auto pb-10">
         <div className="flex gap-12 text-2xl mb-3">
-          <div className="flex justify-between items-center w-full">
+          <div className="flex justify-between items-center w-full top-0">
             <h1 className="font-bold text-lg">Setup your profile</h1>
             <button onClick={handleSave} className="text-lg">Save</button>
           </div>
@@ -205,7 +211,7 @@ export const ProfileSetup = () => {
         <div className="profile-top-wrapper">
           <div className="profile-top-left-wrapper relative">
             <div className="profile-top-left">
-          <label tabIndex="0" htmlFor="profile-picture" className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute border-2 bg-red-500 rounded-full p-3 text-white font-bold hover:cursor-pointer opacity-50 hover:opacity-100 focus:opacity-100"><AiOutlinePicture /></label>
+              <label tabIndex="0" htmlFor="profile-picture" className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute border-2 bg-red-500 rounded-full p-3 text-white font-bold hover:cursor-pointer opacity-50 hover:opacity-100 focus:opacity-100"><AiOutlinePicture /></label>
               <input type="file" name="profile-picture" id="profile-picture" accepts="image/*"className="hidden" onChange={(e) => handleProfileChange(e)}/>
               <ProfilePicture url={profile.preview} size="large" />
             </div>

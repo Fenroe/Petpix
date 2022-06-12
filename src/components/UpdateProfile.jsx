@@ -183,7 +183,7 @@ export const UpdateProfile = ({ closeModal }) => {
   return ReactDOM.createPortal(
     <>
       <div className="bg-black bg-opacity-50 fixed inset-0 z-40"/>
-      <div className="h-[800px] flex flex-col bg-white fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 p-3 w-[480px] rounded-lg overflow-auto pb-10">
+      <div className="h-[650px] flex flex-col bg-white fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 p-3 w-[480px] rounded-lg overflow-auto pb-10">
         <div className="flex gap-12 text-2xl mb-3">
           <div className="flex justify-between items-center w-full">
             <button onClick={closeModal}><MdOutlineClose /></button>
