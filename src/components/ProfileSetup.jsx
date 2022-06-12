@@ -181,6 +181,16 @@ export const ProfileSetup = () => {
   }
 
   useEffect(() => {
+    document.body.style.overflow = 'hidden'
+
+    const unsetOverflow = () => {
+      document.body.style.overflow = 'unset'
+    }
+
+    return () => unsetOverflow()
+  }, [])
+
+  useEffect(() => {
     setCover({
       reference: user.coverPicture,
       preview: user.coverPicture,

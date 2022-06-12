@@ -74,6 +74,16 @@ export const SidebarSnapModal = ({ closeModal }) => {
   }
 
   useEffect(() => {
+    document.body.style.overflow = 'hidden'
+
+    const unsetOverflow = () => {
+      document.body.style.overflow = 'unset'
+    }
+
+    return () => unsetOverflow()
+  }, [])
+
+  useEffect(() => {
     const closeOnEscape = (evt) => {
       if (evt.key === 'Escape') {
         closeModal()

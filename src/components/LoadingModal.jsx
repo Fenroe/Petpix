@@ -1,8 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import ClipLoader from 'react-spinners/ClipLoader'
 
 export const LoadingModal = () => {
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+
+    const unsetOverflow = () => {
+      document.body.style.overflow = 'unset'
+    }
+
+    return () => unsetOverflow()
+  }, [])
+
   return ReactDOM.createPortal(
     <>
       <div className="bg-black bg-opacity-50 fixed inset-0 z-40"/>

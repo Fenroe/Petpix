@@ -28,6 +28,16 @@ export const AddToAlbum = ({ close, snapPicture, snapId }) => {
   }
 
   useEffect(() => {
+    document.body.style.overflow = 'hidden'
+
+    const unsetOverflow = () => {
+      document.body.style.overflow = 'unset'
+    }
+
+    return () => unsetOverflow()
+  }, [])
+
+  useEffect(() => {
     setSortedUserAlbums(userAlbums.sort((a, b) => b.posted - a.posted))
   }, [])
 
@@ -44,7 +54,7 @@ export const AddToAlbum = ({ close, snapPicture, snapId }) => {
 
   return ReactDOM.createPortal(
     <>
-      <div className="bg-black bg-opacity-50 fixed inset-0 z-40"/>
+      <div className="bg-black bg-opacity-50 fixed inset-0 z-40 overflow-y-hidden"/>
       <div className="fixed w-96 h-96 p-3 bg-white left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 overflow-auto">
         <div className="flex gap-12 text-2xl mb-3">
           <button onClick={close}><MdOutlineClose /></button>
