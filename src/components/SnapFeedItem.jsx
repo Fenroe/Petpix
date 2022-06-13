@@ -86,7 +86,7 @@ const SnapFeedItem = ({ id, userId, username, profilePicture, posted, image, tex
                 <Link to={`/profile/${userId}`} className="font-bold hover:cursor-pointer hover:underline">{username}</Link>
                 <span> {renderTimeDifference(posted)}</span>
               </div>
-              <button onClick={openMenu} className="outline-none">
+              <button onClick={openMenu} className="transition-transform hover:scale-150 focus:scale-150">
                 <BsThreeDots />
               </button>
               {menuOpen ? <SnapOptions position={menuPosition} snapUserId={userId} snapId={id} closeMenu={closeMenu}/> : null}
@@ -98,19 +98,19 @@ const SnapFeedItem = ({ id, userId, username, profilePicture, posted, image, tex
             <div className="flex items-center justify-around">
               {liked
                 ? (
-                <button className="flex gap-3 text-[22px] items-center text-blue-500 font-bold" onClick={handleUnlike}>
+                <button className="flex gap-3 text-[22px] items-center text-blue-500 font-bold bg-white transition-transform hover:scale-125 focus:scale-125" onClick={handleUnlike}>
                   <GrLike />
                   <span>{likedBy.length}</span>
                 </button>
                   )
                 : (
-                <button className="flex gap-3 text-[22px] items-center" onClick={handleLike}>
+                <button className="flex gap-3 text-[22px] items-center bg-white transition-transform hover:scale-125 focus:scale-125" onClick={handleLike}>
                   <GrLike />
                   <span>{likedBy.length}</span>
                 </button>
                   )}
 
-              <button className="text-[22px]" onClick={openAddToAlbum}>
+              <button className="text-[22px] bg-white transition-transform hover:scale-125 focus:scale-125" onClick={openAddToAlbum}>
                 <BiPhotoAlbum />
               </button>
             </div>

@@ -5,11 +5,14 @@ import { UserContext } from '../contexts/UserContext'
 import { MdOutlineClose } from 'react-icons/md'
 import { AddToAlbumItem } from './AddToAlbumItem'
 import { addPictureToAlbum, removePictureFromAlbum } from '../firebase'
+import { useModalFocus } from '../hooks/useModalFocus'
 
 export const AddToAlbum = ({ close, snapPicture, snapId }) => {
   const { userAlbums, setUserAlbums } = useContext(UserContext)
 
   const [sortedUserAlbums, setSortedUserAlbums] = useState([])
+
+  const [modalRef, firstFocusRef] = useModalFocus()
 
   const handleAdd = (albumInfo, callback) => {
     const filteredUserAlbums = userAlbums.filter((album) => album.id !== albumInfo.id ? album : null)
@@ -55,9 +58,9 @@ export const AddToAlbum = ({ close, snapPicture, snapId }) => {
   return ReactDOM.createPortal(
     <>
       <div className="bg-black bg-opacity-50 fixed inset-0 z-40 overflow-y-hidden"/>
-      <div className="fixed w-96 h-96 p-3 bg-white left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 overflow-auto">
+      <div ref={modalRef} className="fixed w-96 h-96 p-3 bg-white left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 overflow-auto">
         <div className="flex gap-12 text-2xl mb-3">
-          <button onClick={close}><MdOutlineClose /></button>
+          <button ref={firstFocusRef} className="transition-transform hover:scale-125 focus:scale-125" onClick={close}><MdOutlineClose /></button>
           <h1 className="font-bold text-lg">Add to album</h1>
         </div>
         {userAlbums.length === 0

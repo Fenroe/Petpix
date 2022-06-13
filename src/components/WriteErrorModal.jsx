@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { MdOutlineClose } from 'react-icons/md'
+import { useModalFocus } from '../hooks/useModalFocus'
 
 export const WriteErrorModal = ({ close }) => {
+  const [modalRef, firstFocusRef] = useModalFocus()
+
   useEffect(() => {
     document.body.style.overflow = 'hidden'
 
@@ -16,9 +19,9 @@ export const WriteErrorModal = ({ close }) => {
   return ReactDOM.createPortal(
     <>
       <div className="bg-black bg-opacity-50 fixed inset-0 z-40"/>
-      <div className="rounded-lg w-96 h-36 bg-white fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 p-3">
+      <div ref={modalRef} className="rounded-lg w-96 h-36 bg-white fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 p-3">
         <div className="w-full h-3 flex justify-end">
-          <button className="text-xl cursor-pointer"onClick={close}>
+          <button ref={firstFocusRef} className="text-xl cursor-pointer transition-transform focus:scale-125 hover:scale-125"onClick={close}>
             <MdOutlineClose />
           </button>
         </div>

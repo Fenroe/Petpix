@@ -8,6 +8,7 @@ import { db, uploadProfilePicture, uploadCoverPicture, getURL } from '../firebas
 import { doc, setDoc } from 'firebase/firestore'
 import { MdOutlineClose } from 'react-icons/md'
 import { CoverPicture } from './CoverPicture'
+import { useModalFocus } from '../hooks/useModalFocus'
 
 export const UpdateProfile = ({ closeModal }) => {
   const { user, setUser, loading, setLoading } = useContext(UserContext)
@@ -37,6 +38,8 @@ export const UpdateProfile = ({ closeModal }) => {
   const bioRef = useRef()
 
   const locationRef = useRef()
+
+  const [modalRef, firstFocusRef] = useModalFocus()
 
   const handleErrors = (input, message) => {
     if (input === 'bio') {
@@ -193,22 +196,22 @@ export const UpdateProfile = ({ closeModal }) => {
   return ReactDOM.createPortal(
     <>
       <div className="bg-black bg-opacity-50 fixed inset-0 z-40"/>
-      <div className="h-[650px] flex flex-col bg-white fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 p-3 w-[480px] rounded-lg overflow-auto pb-10">
+      <div ref={modalRef} className="h-[650px] flex flex-col bg-white fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 p-3 w-[480px] rounded-lg overflow-auto pb-10">
         <div className="flex gap-12 text-2xl mb-3">
           <div className="flex justify-between items-center w-full">
             <button onClick={closeModal}><MdOutlineClose /></button>
-            <h1 className="font-bold text-lg">Setup your profile</h1>
+            <h1 className="font-bold text-lg">Update your profile</h1>
             <button onClick={handleSave} className="text-lg">Save</button>
           </div>
         </div>
         <div className="w-full h-80 bg-slate-500 relative">
           <CoverPicture url={cover.preview} />
-          <label htmlFor="cover-picture" className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute border-2 bg-red-500 rounded-full p-3 text-white font-bold hover:cursor-pointer opacity-50 hover:opacity-100"><AiOutlinePicture /></label>
+          <label ref={firstFocusRef} tabIndex="0" htmlFor="cover-picture" className="upload-image-label"><AiOutlinePicture /></label>
           <input type="file" name="cover-picture" id="cover-picture" accepts="image/*"className="hidden" onChange={(e) => handleCoverChange(e)}/>
         </div>
         <div className="flex h-16 justify-end items-start relative w-36">
           <div className="absolute left-3 bottom-0">
-            <label htmlFor="profile-picture" className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute border-2 bg-red-500 rounded-full p-3 text-white font-bold hover:cursor-pointer opacity-50 hover:opacity-100"><AiOutlinePicture /></label>
+            <label tabIndex="0" htmlFor="profile-picture" className="upload-image-label"><AiOutlinePicture /></label>
             <input type="file" name="profile-picture" id="profile-picture" accepts="image/*"className="hidden" onChange={(e) => handleProfileChange(e)}/>
             <ProfilePicture url={profile.preview} size="large" />
           </div>

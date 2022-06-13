@@ -30,7 +30,7 @@ export const AddToAlbumItem = ({ albumCover, contents, id, pinnedBy, profilePict
 
   return (
     <div className="w-full p-3 flex justify-between items-center">
-      <h1 className="text-lg font-bold">{title}</h1>
+      <h1 tabIndex="0" className="text-lg font-bold transition-transform focus:scale-125 outline-none">{title}</h1>
       {isIncluded ? <button onClick={() => handleRemove(albumInfo, markNotIncluded)} className="follow-button w-32">Remove</button> : <button onClick={() => handleAdd(albumInfo, markAsIncluded)} className="follow-button w-32">Add</button>}
     </div>
   )

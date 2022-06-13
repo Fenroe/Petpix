@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react'
+import FocusTrap from 'focus-trap-react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import { ProfilePicture } from './ProfilePicture'
@@ -40,15 +41,17 @@ export const AccountMenu = ({ image, username, setMenuIsVisible }) => {
   return ReactDOM.createPortal(
     <>
       <div className="menu-underlay" />
-      <div className="account-menu-wrapper" ref={menuRef}>
-        <div className="account-menu-info-wrapper">
-          <ProfilePicture url={image} size="small" />
-          <span className="account-menu-info-text">{username}</span>
+      <FocusTrap>
+        <div className="account-menu-wrapper" ref={menuRef}>
+          <div className="account-menu-info-wrapper">
+            <ProfilePicture url={image} size="small" />
+            <span className="account-menu-info-text">{username}</span>
+          </div>
+          <button onClick={handleSignOut} className="account-menu-item">
+            <span className="account-menu-item-text">Log out</span>
+          </button>
         </div>
-        <button onClick={handleSignOut} className="account-menu-item">
-          <span className="account-menu-item-text">Log out</span>
-        </button>
-      </div>
+      </FocusTrap>
     </>, document.getElementById('menu')
   )
 }
