@@ -219,13 +219,13 @@ export const ProfileSetup = () => {
         <div className="profile-cover-img relative">
           <CoverPicture url={cover.preview} />
           <label ref={firstFocusRef} tabIndex="0" htmlFor="cover-picture" className="upload-image-label"><AiOutlinePicture /></label>
-          <input type="file" name="cover-picture" id="cover-picture" accepts="image/*"className="hidden" onChange={(e) => handleCoverChange(e)}/>
+          <input type="file" name="cover-picture" id="cover-picture" accept="image/*"className="hidden" onChange={(e) => handleCoverChange(e)}/>
         </div>
         <div className="profile-top-wrapper">
           <div className="profile-top-left-wrapper relative">
             <div className="profile-top-left">
               <label tabIndex="0" htmlFor="profile-picture" className="upload-image-label"><AiOutlinePicture /></label>
-              <input type="file" name="profile-picture" id="profile-picture" accepts="image/*"className="hidden" onChange={(e) => handleProfileChange(e)}/>
+              <input type="file" name="profile-picture" id="profile-picture" accept="image/*"className="hidden" onChange={(e) => handleProfileChange(e)}/>
               <ProfilePicture url={profile.preview} size="large" />
             </div>
           </div>

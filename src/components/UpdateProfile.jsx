@@ -207,12 +207,12 @@ export const UpdateProfile = ({ closeModal }) => {
         <div className="w-full h-80 bg-slate-500 relative">
           <CoverPicture url={cover.preview} />
           <label ref={firstFocusRef} tabIndex="0" htmlFor="cover-picture" className="upload-image-label"><AiOutlinePicture /></label>
-          <input type="file" name="cover-picture" id="cover-picture" accepts="image/*"className="hidden" onChange={(e) => handleCoverChange(e)}/>
+          <input type="file" name="cover-picture" id="cover-picture" accept="image/*"className="hidden" onChange={(e) => handleCoverChange(e)}/>
         </div>
         <div className="flex h-16 justify-end items-start relative w-36">
           <div className="absolute left-3 bottom-0">
             <label tabIndex="0" htmlFor="profile-picture" className="upload-image-label"><AiOutlinePicture /></label>
-            <input type="file" name="profile-picture" id="profile-picture" accepts="image/*"className="hidden" onChange={(e) => handleProfileChange(e)}/>
+            <input type="file" name="profile-picture" id="profile-picture" accept="image/*"className="hidden" onChange={(e) => handleProfileChange(e)}/>
             <ProfilePicture url={profile.preview} size="large" />
           </div>
         </div>
