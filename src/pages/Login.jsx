@@ -80,6 +80,34 @@ export const Login = () => {
     }
   }
 
+  const handleTestAccountLogin = async (evt) => {
+    evt.preventDefault()
+    try {
+      const userCredential = await emailLogin(process.env.REACT_APP_TEST_EMAIL, process.env.REACT_APP_TEST_PASSWORD)
+      if (userCredential !== null) navigate('/')
+    } catch (err) {
+      switch (err.code) {
+        case 'auth/user-not-found': {
+          handleErrors('Wrong email or password')
+          break
+        }
+        case 'auth/wrong-password': {
+          handleErrors('Wrong email or password')
+          break
+        }
+        case 'auth/too-many-requests': {
+          handleErrors('Too many login attempts, try later')
+          break
+        }
+        default : {
+          handleErrors('Sorry, we couldn\'t verify your login details')
+          console.log(err.code)
+          break
+        }
+      }
+    }
+  }
+
   return (
     <div className="flex flex-col-reverse overflow-x-hidden md:flex-row">
       <div className="">
@@ -87,7 +115,7 @@ export const Login = () => {
       </div>
       <main className="min-w-[500px] max-w-[500px] h-screen min-h-screen bg-white flex flex-col justify-center">
         <div className="flex flex-col gap-3 items-center w-[90%] mx-auto max-h-[700px]">
-          <div className="flex flex-col justify-start w-full gap-3">
+          <div className="flex flex-col justify-start items-center w-full gap-3">
             <GiTurtleShell className="text-5xl"/>
             <h1 className="text-5xl font-bold font-serif text-center">Welcome back</h1>
           </div>
@@ -107,6 +135,7 @@ export const Login = () => {
               <label htmlFor="" className="ml-2 text-slate-400 absolute top-1/2 left-1 -translate-y-1/2 text-lg pointer-events-none duration-300 peer-valid:top-4 peer-valid:text-sm peer-focus:top-4 peer-focus:text-sm">Password</label>
             </div>
             <button onClick={(e) => handleSubmit(e)} className="transition-transform mt-3 h-10 w-48 px-3 rounded-full border-2 border-white text-xl font-bold text-white bg-red-500 hover:brightness-125 hover:scale-110 focus:brightness-125 focus:scale-110">Log in</button>
+            <button onClick={(e) => handleTestAccountLogin(e)} className="transition-transform mt-3 h-10 w-48 px-3 rounded-full border-2 border-white text-xl font-bold text-white bg-red-500 hover:brightness-125 hover:scale-110 focus:brightness-125 focus:scale-110">Use test account</button>
             <div className="text-red-400 p-2 max-w-full h-6">
               <span>{errorMessage}</span>
             </div>

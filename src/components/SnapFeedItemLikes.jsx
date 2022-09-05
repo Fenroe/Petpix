@@ -34,13 +34,13 @@ export const SnapFeedItemLikes = ({ id, handleUnlike, handleLike }) => {
     <>
       {isLiked
         ? (
-      <button className="flex gap-3 items-center text-blue-500 font-bold" onClick={handleUnlike}>
+      <button className="flex gap-3 items-center text-blue-500 font-bold dark:bg-black" onClick={handleUnlike}>
         <GrLike />
         <span>{likedBy.length}</span>
       </button>
           )
         : (
-      <button className="flex gap-3 items-center" onClick={handleLike}>
+      <button className="flex gap-3 items-center dark:bg-black dark:text-white" onClick={handleLike}>
         <GrLike />
         <span>{likedBy.length}</span>
       </button>

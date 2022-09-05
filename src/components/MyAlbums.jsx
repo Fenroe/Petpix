@@ -22,16 +22,16 @@ export const MyAlbums = ({ myAlbums, pinnedAlbums }) => {
       {viewModal ? <CreateAlbum closeModal={closeModal}/> : null}
       <div className="flex items-center justify-between pr-3">
         <div className="page-heading-wrapper">
-          <h1 className="page-heading">Your albums</h1>
+          <h1 className="page-heading text-center">Your albums</h1>
         </div>
       </div>
       <AlbumFeed feedName='my albums' feedData={myAlbums} />
       <div className="flex justify-center items-center w-full">
-        <button className="whitespace-nowrap font-bold text-xl -text-black hover:text-red-500" onClick={openModal}>New Album</button>
+        <button className="follow-button text-xl" onClick={openModal}>New Album</button>
       </div>
       <div className="flex items-center justify-between">
         <div className="page-heading-wrapper">
-          <h1 className="page-heading">Pinned Albums</h1>
+          <h1 className="page-heading text-center">Pinned Albums</h1>
         </div>
       </div>
       <AlbumFeed feedName="pinned albums" feedData={pinnedAlbums} />

@@ -195,13 +195,13 @@ export const UpdateProfile = ({ closeModal }) => {
 
   return ReactDOM.createPortal(
     <>
-      <div className="bg-black bg-opacity-50 fixed inset-0 z-40"/>
-      <div ref={modalRef} className="h-[650px] flex flex-col bg-white fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 p-3 w-[480px] rounded-lg overflow-auto pb-10">
+      <div className="bg-black bg-opacity-50 fixed inset-0 z-40 dark:bg-gray-400 dark:bg-opacity-20"/>
+      <div ref={modalRef} className="h-[650px] flex flex-col bg-white dark:bg-black fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 p-3 w-[480px] rounded-lg overflow-auto pb-10 dark:">
         <div className="flex gap-12 text-2xl mb-3">
           <div className="flex justify-between items-center w-full">
-            <button onClick={closeModal}><MdOutlineClose /></button>
-            <h1 className="font-bold text-lg">Update your profile</h1>
-            <button onClick={handleSave} className="text-lg">Save</button>
+            <button onClick={closeModal} className="dark:text-white"><MdOutlineClose /></button>
+            <h1 className="font-bold text-lg dark:text-white">Update your profile</h1>
+            <button onClick={handleSave} className="text-lg dark:text-white">Save</button>
           </div>
         </div>
         <div className="w-full h-80 bg-slate-500 relative">
@@ -218,14 +218,14 @@ export const UpdateProfile = ({ closeModal }) => {
         </div>
         <form className="flex flex-col" noValidate action="">
           <div className="relative border-2 border-slate-400 mt-8 focus-within:border-blue-500">
-            <TextareaAutosize ref={bioRef} onChange={updateBio} required className="w-full px-3 pt-7 min-h-[64px] text-lg outline-none bg-none peer resize-none" value={bio}/>
+            <TextareaAutosize ref={bioRef} onChange={updateBio} required className="w-full px-3 pt-7 min-h-[64px] text-lg outline-none bg-none peer resize-none dark:bg-black dark:text-white" value={bio}/>
             <label className="ml-2 text-slate-400 absolute top-1/2 left-1 -translate-y-1/2 text-lg pointer-events-none duration-300 peer-valid:top-4 peer-valid:text-sm peer-focus:top-4 peer-focus:text-sm">Bio</label>
           </div>
           <div className="text-red-400 p-2 opacity-100 transition-opacity">
             <span>{errors.bio}</span>
           </div>
           <div className="relative border-2 border-slate-400 mt-8 focus-within:border-blue-500">
-            <input ref={locationRef} onChange={updateLocation} required type="text" className="w-full px-3 pt-5 min-h-[64px] text-lg outline-none bg-none peer" value={location} />
+            <input ref={locationRef} onChange={updateLocation} required type="text" className="w-full px-3 pt-5 min-h-[64px] text-lg outline-none bg-none peer dark:bg-black dark:text-white" value={location} />
             <label className="ml-2 text-slate-400 absolute top-1/2 left-1 -translate-y-1/2 text-lg pointer-events-none duration-300 peer-valid:top-4 peer-valid:text-sm peer-focus:top-4 peer-focus:text-sm">Location</label>
           </div>
           <div className="text-red-400 p-2 opacity-100 transition-opacity">

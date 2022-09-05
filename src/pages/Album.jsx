@@ -67,7 +67,7 @@ export const Album = () => {
           <div className="p-3 w-full flex gap-6">
             <AlbumCover url={albumInfo.albumCover} />
             <div className="flex flex-col">
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-6 dark:text-white">
                 <h1 className="text-2xl font-bold">{albumInfo.title}</h1>
                 <h2 className="text-lg">{albumInfo.username}</h2>
               </div>
@@ -99,7 +99,7 @@ export const Album = () => {
         </div>
         {albumInfo.contents.length === 0
           ? <div className="mt-6 w-full flex items-center justify-center">
-          <h1 className="text-xl">There aren&apos;t any pictures in this album</h1>
+          <h1 className="text-xl dark:text-white">There aren&apos;t any pictures in this album</h1>
         </div>
           : null}
         <div className="w-full justify-items-center p-3 grid grid-cols-1 gap-3 xl:grid-cols-2">

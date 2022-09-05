@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react'
+import { Link } from 'react-router-dom'
 import { GiTurtleShell } from 'react-icons/gi'
 import { RiHome7Fill } from 'react-icons/ri'
 import { FiUser } from 'react-icons/fi'
-import { AiOutlinePlus } from 'react-icons/ai'
-import { GrLike } from 'react-icons/gr'
+import { AiOutlinePlus, AiOutlineLike as GrLike } from 'react-icons/ai'
 import { BiPhotoAlbum } from 'react-icons/bi'
 import { IconWrapper } from './IconWrapper'
 import { AccountMenu } from './AccountsMenu'
@@ -33,7 +33,9 @@ export const Sidebar = () => {
     <header className="sidebar-wrapper">
       <div className="y-wrapper sidebar">
         <div className="y-wrapper">
-          <IconWrapper icon={<GiTurtleShell />} url="/#/" />
+          <Link to="/">
+            <IconWrapper icon={<GiTurtleShell />} />
+          </Link>
           <nav>
             <HeaderLink icon={<RiHome7Fill />} url ="/" text="Home" />
             <HeaderLink icon={<GrLike />} url="/likes" text="Likes" />

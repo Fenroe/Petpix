@@ -133,26 +133,26 @@ export const Profile = ({ snapFeedData, albumFeedData, sync }) => {
                       )}
                 </div>
                 <div className="h-16 flex items-center p-3">
-                  <h1 className="text-2xl font-bold">{profileInfo.username}</h1>
+                  <h1 className="text-2xl font-bold dark:text-white">{profileInfo.username}</h1>
                 </div>
                 <div className="h-16 p-3">
-                  <p>{profileInfo.bio}</p>
+                  <p className="dark:text-white">{profileInfo.bio}</p>
                 </div>
                 <div className="h-10 p-3 flex gap-3">
                   {profileInfo.location !== ''
-                    ? <div className="flex gap-1">
+                    ? <div className="flex gap-1 dark:text-white">
                     <ImLocation2 />
-                    <span>{profileInfo.location}</span>
+                    <span className="dark:text-white">{profileInfo.location}</span>
                   </div>
                     : null }
-                  <div className="flex gap-1">
+                  <div className="flex gap-1 dark:text-white">
                     <BsCalendar3 />
-                    <span>Joined {returnMonthAndYear(profileInfo.joinedOn.toDate())}</span>
+                    <span className="dark:text-white">Joined {returnMonthAndYear(profileInfo.joinedOn.toDate())}</span>
                   </div>
                 </div>
                 <div className="h-8 p-3 flex gap-1">
-                  <span className="font-bold">{profileInfo.followedBy.length}</span>
-                  <span>{formatFollowerText(profileInfo.followedBy.length)}</span>
+                  <span className="font-bold dark:text-white">{profileInfo.followedBy.length}</span>
+                  <span className="dark:text-white">{formatFollowerText(profileInfo.followedBy.length)}</span>
                 </div>
               </div>
               <div className="view-btn-wrapper">

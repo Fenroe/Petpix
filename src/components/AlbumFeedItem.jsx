@@ -49,7 +49,7 @@ export const AlbumFeedItem = ({ id, albumCover, title, userId, username, profile
   }, [])
 
   return (
-    <div className="justify-between flex items-center gap-3 bg-white hover:brightness-95">
+    <div className="justify-between flex items-center gap-3 bg-white hover:brightness-95 dark:bg-black dark:text-white">
       <div className="flex items-center gap-3">
         <img src={albumCover || defaultAlbumCover} className="h-10 w-10 rounded-lg" />
         <div className="flex flex-col justify-start items-start">

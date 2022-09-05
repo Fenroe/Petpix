@@ -14,20 +14,20 @@
   }
 
   .three-dots {
-    @apply mr-5;
+    @apply mr-5 dark:text-white;
   }
   
   /*App styles */
   .app {
-    @apply flex justify-center min-h-full bg-white;
+    @apply flex justify-center min-h-full bg-gray-100 dark:bg-stone-900;
   }
   /*Sidebar styles */
   .sidebar-wrapper {
-    @apply sticky top-0 h-screen max-h-full w-fit overflow-y-auto bg-white;
+    @apply sticky top-0 h-screen max-h-full w-fit overflow-y-auto bg-white dark:bg-black;
   }
 
   .sidebar {
-    @apply items-end justify-between h-full w-full p-3;
+    @apply items-end justify-between h-full w-full p-3 bg-white dark:bg-black;
   }
 
   .sidebar-bot {
@@ -35,8 +35,9 @@
   }
 
   .sidebar-account-btn {
-    @apply bg-white flex justify-between items-center w-12 h-12 rounded-full
+    @apply bg-white dark:bg-black flex justify-between items-center w-12 h-12 rounded-full
             hover:brightness-95
+            dark:hover:bg-neutral-900
             lg:w-64
             lg:p-3;
   }
@@ -46,12 +47,12 @@
   }
 
   .sidebar-account-btn-left-span {
-    @apply hidden text-lg mx-3
+    @apply hidden text-lg mx-3 dark:text-white
            lg:flex;
   }
   /*Main styles*/
   .main {
-    @apply w-[417px] bg-white
+    @apply w-[417px] bg-white border brightness-100 border-gray-100 dark:border-white dark:bg-black border-t-0 border-b-0
            xl:w-[600px];
   }
 
@@ -60,7 +61,7 @@
   }
   /*Sort*/
   .sort-wrapper {
-    @apply flex justify-start w-full items-center p-3 gap-3;
+    @apply flex justify-start w-full items-center p-3 gap-3 dark:text-white;
   }
 
   .sort-label {
@@ -68,7 +69,7 @@
   }
 
   .sort-input {
-    @apply bg-white text-lg outline-none;
+    @apply bg-white dark:bg-black dark:text-white text-lg outline-none;
   }
   /*Profile styles*/
   .profile-cover-img {
@@ -112,7 +113,7 @@
   }
   /*View Button styles*/
   .view-btn-wrapper {
-    @apply w-full border-b-2 border-b-black;
+    @apply w-full border-b-2 border-b-black dark:border-b-white;
   }
 
   .view-btn {
@@ -122,7 +123,7 @@
   }
 
   .view-btn-text {
-    @apply text-xl font-bold;
+    @apply text-xl font-bold dark:text-white;
   }
   /*Menu underlay styles*/
   .menu-underlay {
@@ -130,7 +131,7 @@
   }
   /*Account Menu styles*/
   .account-menu-wrapper {
-    @apply fixed w-80 bottom-20 left-4 bg-white rounded-md drop-shadow-lg z-50
+    @apply fixed w-80 bottom-20 left-4 border bg-white dark:bg-black shadow-2xl z-50 border-black dark:border-white backdrop-brightness-200
            sm:left-12
            md:left-24
            lg:left-48
@@ -142,15 +143,15 @@
   }
 
   .account-menu-info-text {
-    @apply ml-3 text-lg text-left font-bold;
+    @apply ml-3 text-lg text-left font-bold dark:text-white;
   }
 
   .account-menu-item {
-    @apply w-full h-14 p-4;
+    @apply w-full h-14 p-4 bg-white hover:brightness-90 dark:bg-black dark:hover:bg-neutral-900;
   }
 
   .account-menu-item-text {
-    @apply text-lg;
+    @apply text-lg dark:text-white;
   }
   /*Feed styles*/
   .feed {
@@ -158,11 +159,11 @@
   }
   /*Other*/
   .icon-wrapper {
-    @apply flex justify-center items-center h-14 w-14 p-3 hover:cursor-pointer text-3xl;
+    @apply flex justify-center items-center h-14 w-14 p-3 hover:cursor-pointer text-3xl dark:text-white;
   }
 
   .story-box {
-    @apply flex p-3 w-full h-auto border-2 bg-white rounded-lg;
+    @apply flex p-3 w-full h-auto border bg-white rounded-lg dark:bg-black dark:text-white;
   }
 
   .sb-profile-picture-wrapper {
@@ -174,7 +175,7 @@
   }
 
   .sb-text-area {
-    @apply w-full outline-none text-xl resize-none;
+    @apply w-full outline-none text-xl resize-none dark:bg-black dark:text-white;
   }
 
   .sb-image-wrapper {
@@ -198,16 +199,16 @@
   }
 
   .page-heading-wrapper {
-    @apply w-full py-3
+    @apply w-full py-3;
   }
 
   .page-heading {
-    @apply font-bold text-3xl
+    @apply font-bold text-3xl text-center dark:text-white;
   }
 
   .follow-button {
-    @apply h-[32px] bg-white border-[1px] border-black rounded-full px-4 text-black text-sm font-bold whitespace-nowrap transition-transform
-    hover:bg-red-500 hover:border-white hover:text-white hover:scale-125;
+    @apply h-[32px] bg-white border-[1px] border-black rounded-full px-4 text-black text-sm font-bold whitespace-nowrap transition-transform dark:bg-black dark:border-white dark:text-white
+    hover:bg-red-500 hover:border-white hover:text-white hover:scale-125 dark:hover:bg-red-500;
   }
 
   .inactive-button {

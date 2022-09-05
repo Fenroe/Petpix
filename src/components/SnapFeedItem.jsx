@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { ProfilePicture } from './ProfilePicture'
 import TextareaAutosize from 'react-textarea-autosize'
 import { renderTimeDifference } from '../utils/renderTimeDifference'
-import { GrLike } from 'react-icons/gr'
+import { AiOutlineLike as GrLike } from 'react-icons/ai'
 import { BiPhotoAlbum } from 'react-icons/bi'
 import { BsThreeDots } from 'react-icons/bs'
 import { SnapOptions } from './SnapOptions'
@@ -95,22 +95,22 @@ const SnapFeedItem = ({ id, userId, username, profilePicture, posted, image, tex
             <div className="sb-image-wrapper">
               <img src={image} className="sb-image" />
             </div>
-            <div className="flex items-center justify-around">
+            <div className="flex items-center justify-around dark:bg-black">
               {liked
                 ? (
-                <button className="flex gap-3 text-[22px] items-center text-blue-500 font-bold bg-white transition-transform hover:scale-125 focus:scale-125" onClick={handleUnlike}>
-                  <GrLike />
+                <button className="flex gap-3 text-[22px] items-center text-blue-500 font-bold bg-white transition-transform hover:scale-125 focus:scale-125 dark:bg-black" onClick={handleUnlike}>
+                  <GrLike className="dark:text-white"/>
                   <span>{likedBy.length}</span>
                 </button>
                   )
                 : (
-                <button className="flex gap-3 text-[22px] items-center bg-white transition-transform hover:scale-125 focus:scale-125" onClick={handleLike}>
+                <button className="flex gap-3 text-[22px] items-center bg-white transition-transform hover:scale-125 focus:scale-125 dark:bg-black dark:text-white" onClick={handleLike}>
                   <GrLike />
                   <span>{likedBy.length}</span>
                 </button>
                   )}
 
-              <button className="text-[22px] bg-white transition-transform hover:scale-125 focus:scale-125" onClick={openAddToAlbum}>
+              <button className="text-[22px] bg-white transition-transform hover:scale-125 focus:scale-125 dark:bg-black dark:text-white" onClick={openAddToAlbum}>
                 <BiPhotoAlbum />
               </button>
             </div>

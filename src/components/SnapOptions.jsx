@@ -55,12 +55,12 @@ export const SnapOptions = ({ position, snapUserId, snapId, closeMenu }) => {
       <div style={{ left: position.x, top: position.y }} className="absolute w-48 h-16 z-50 bg-white drop-shadow-lg" ref={menuRef}>
         {user.userId === snapUserId
           ? (
-          <button className="flex items-center justify-center w-full h-16" onClick={handleDelete}>
+          <button className="flex items-center justify-center w-full h-16 bg-white hover:brightness-90 dark:bg-black dark:text-white dark:hover:bg-neutral-900" onClick={handleDelete}>
             <span>Delete this Snap</span>
           </button>
             )
           : (
-          <button className="flex items-center justify-center w-full h-16" onClick={handleHide}>
+          <button className="flex items-center justify-center w-full h-16 bg-white hover:brightness-90 dark:bg-black dark:text-white dark:hover:bg-neutral-900" onClick={handleHide}>
             <span>Hide this Snap</span>
           </button>
             )}

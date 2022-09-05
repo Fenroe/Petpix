@@ -1,4 +1,5 @@
 import React, { useState, useContext, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { AiOutlinePicture } from 'react-icons/ai'
 import { MdOutlineClose } from 'react-icons/md'
 import TextareaAutosize from 'react-textarea-autosize'
@@ -78,9 +79,9 @@ export const CreateSnap = () => {
   return (
     <div className="story-box">
       <div className="sb-profile-picture-wrapper">
-        <a href="" className="">
+        <Link to={`/profile/${user.userId}`} className="">
           <ProfilePicture url={user.profilePicture} size="small" />
-        </a>
+        </Link>
       </div>
       <div className="w-full">
         {uploadedImage.file === null

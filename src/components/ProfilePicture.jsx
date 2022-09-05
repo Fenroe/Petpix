@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { assignSize } from '../utils/assignSize'
-import profile from '../assets/defaults/profile.jpg'
+import profile from '../assets/defaults/profile.png'
 
 export const ProfilePicture = ({ url, size }) => {
   return (
-    <img src={url || profile} className={assignSize(size)} />
+    <img src={url || profile} className={`${assignSize(size)} bg-white dark:bg-black`} />
   )
 }
 

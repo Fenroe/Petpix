@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useContext } from 'react'
 import FocusTrap from 'focus-trap-react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import { ProfilePicture } from './ProfilePicture'
 import { appSignOut } from '../firebase'
+import { ThemeContext } from '../contexts/ThemeContext'
 
 export const AccountMenu = ({ image, username, setMenuIsVisible }) => {
   const menuRef = useRef(null)
@@ -11,6 +12,18 @@ export const AccountMenu = ({ image, username, setMenuIsVisible }) => {
   const handleSignOut = async () => {
     await appSignOut()
     setMenuIsVisible(false)
+  }
+
+  const { theme, setTheme } = useContext(ThemeContext)
+
+  const handleThemeChange = () => {
+    if (theme === 'light') {
+      localStorage.setItem('theme', 'dark')
+      setTheme('dark')
+    } else {
+      localStorage.setItem('theme', 'light')
+      setTheme('light')
+    }
   }
 
   useEffect(() => {
@@ -47,6 +60,9 @@ export const AccountMenu = ({ image, username, setMenuIsVisible }) => {
             <ProfilePicture url={image} size="small" />
             <span className="account-menu-info-text">{username}</span>
           </div>
+          <button onClick={handleThemeChange} className="account-menu-item">
+            <span className="account-menu-item-text">{theme === 'light' ? 'Dark mode' : 'Light mode'}</span>
+          </button>
           <button onClick={handleSignOut} className="account-menu-item">
             <span className="account-menu-item-text">Log out</span>
           </button>

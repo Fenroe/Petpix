@@ -20,7 +20,7 @@ export const Albums = ({ userAlbums, pinnedAlbums }) => {
   return (
     <section>
       <div className="page-heading-wrapper">
-        <h1 className="page-heading">Albums</h1>
+        <h1 className="page-heading text-center">Albums</h1>
       </div>
       <div className="view-btn-wrapper">
         <button className="view-btn" onClick={() => setViewing('my albums')}>

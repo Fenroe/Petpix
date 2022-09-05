@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-export const IconWrapper = ({ icon }) => {
+export const IconWrapper = ({ icon, url }) => {
   return (
     <div className="icon-wrapper">
       {icon}
@@ -10,5 +10,6 @@ export const IconWrapper = ({ icon }) => {
 }
 
 IconWrapper.propTypes = {
-  icon: PropTypes.element
+  icon: PropTypes.element,
+  url: PropTypes.string
 }
