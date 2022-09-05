@@ -53,7 +53,7 @@
   /*Main styles*/
   .main {
     @apply w-[417px] bg-white border brightness-100 border-gray-100 dark:border-white dark:bg-black border-t-0 border-b-0
-           xl:w-[600px];
+           xl:w-[700px];
   }
 
   .main-header {
