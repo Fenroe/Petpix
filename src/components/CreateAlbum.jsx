@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import ReactDOM from 'react-dom'
 import { MdOutlineClose } from 'react-icons/md'
 import PropTypes from 'prop-types'
@@ -14,6 +14,8 @@ export const CreateAlbum = ({ closeModal }) => {
   const [title, setTitle] = useState('')
 
   const inputRef = useRef(null)
+
+  const modalRef = useRef(null)
 
   const { user, userAlbums, setUserAlbums, loading, setLoading, setWriteError } = useContext(UserContext)
 
@@ -69,10 +71,35 @@ export const CreateAlbum = ({ closeModal }) => {
     }
   }
 
+  useEffect(() => {
+    const closeOnEscape = (evt) => {
+      if (evt.key === 'Escape') {
+        closeModal()
+      }
+    }
+    document.addEventListener('keydown', (evt) => closeOnEscape(evt))
+
+    return () => document.removeEventListener('keydown', (evt) => closeOnEscape(evt))
+  }, [])
+
+  useEffect(() => {
+    function detectOutsideClick (evt) {
+      if (!modalRef.current) return
+      if (modalRef.current.contains(evt.target)) return
+      closeModal()
+    }
+
+    document.addEventListener('mousedown', detectOutsideClick)
+
+    return () => {
+      document.removeEventListener('mousedown', detectOutsideClick)
+    }
+  }, [])
+
   return ReactDOM.createPortal(
     <>
       <div className="bg-black bg-opacity-50 fixed inset-0 z-40 dark:bg-gray-400 dark:bg-opacity-20"/>
-      <div className="flex flex-col bg-white fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 p-3 w-[480px] h-auto rounded-lg overflow-auto dark:bg-black dark:text-white">
+      <div ref={modalRef} className="flex flex-col bg-white fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 p-3 w-[480px] h-auto rounded-lg overflow-auto dark:bg-black dark:text-white">
         <div className="flex gap-12 text-2xl mb-3">
           <button onClick={closeModal}><MdOutlineClose /></button>
           <h1 className="font-bold text-lg">Make your album</h1>

@@ -193,6 +193,20 @@ export const UpdateProfile = ({ closeModal }) => {
     return () => document.removeEventListener('keydown', (evt) => closeOnEscape(evt))
   }, [])
 
+  useEffect(() => {
+    const detectOutsideClick = (evt) => {
+      if (!modalRef.current) return
+      if (modalRef.current.contains(evt.target)) return
+      closeModal()
+    }
+
+    document.addEventListener('mousedown', detectOutsideClick)
+
+    return () => {
+      document.removeEventListener('mousedown', detectOutsideClick)
+    }
+  }, [])
+
   return ReactDOM.createPortal(
     <>
       <div className="bg-black bg-opacity-50 fixed inset-0 z-40 dark:bg-gray-400 dark:bg-opacity-20"/>
