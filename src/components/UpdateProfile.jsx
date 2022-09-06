@@ -10,7 +10,7 @@ import { MdOutlineClose } from 'react-icons/md'
 import { CoverPicture } from './CoverPicture'
 import { useModalFocus } from '../hooks/useModalFocus'
 
-export const UpdateProfile = ({ closeModal }) => {
+export const UpdateProfile = ({ closeModal, setProfileInfo }) => {
   const { user, setUser, loading, setLoading } = useContext(UserContext)
 
   const [cover, setCover] = useState({
@@ -121,6 +121,13 @@ export const UpdateProfile = ({ closeModal }) => {
     const bio = bioRef.current.value
     const location = locationRef.current.value
     setUser((prevState) => ({
+      ...prevState,
+      profilePicture: profile.preview,
+      coverPicture: cover.preview,
+      bio,
+      location
+    }))
+    setProfileInfo((prevState) => ({
       ...prevState,
       profilePicture: profile.preview,
       coverPicture: cover.preview,

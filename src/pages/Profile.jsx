@@ -9,7 +9,6 @@ import { returnMonthAndYear } from '../utils/returnMonthandYear'
 import { ProfileSnaps } from '../components/ProfileSnaps'
 import { ProfileAlbums } from '../components/ProfileAlbums'
 import { UpdateProfile } from '../components/UpdateProfile'
-import { useUpdate } from '../hooks/useUpdate'
 import { getProfileData, followUser, unfollowUser, getProfileAlbums } from '../firebase'
 import { CoverPicture } from '../components/CoverPicture'
 
@@ -22,11 +21,9 @@ export const Profile = ({ snapFeedData, albumFeedData, sync }) => {
 
   const [profileAlbums, setProfileAlbums] = useState([])
 
-  const { user, setUser } = useContext(UserContext)
+  const { user } = useContext(UserContext)
 
   const { id } = useParams()
-
-  const update = useUpdate(setUser)
 
   const openEditProfile = () => {
     setViewEditProfile(true)
@@ -164,7 +161,7 @@ export const Profile = ({ snapFeedData, albumFeedData, sync }) => {
                 </button>
               </div>
               { viewing === 'snaps' ? <ProfileSnaps feedData={snapFeedData} userId={profileInfo.userId} username={profileInfo.username}/> : <ProfileAlbums feedData={profileAlbums} userId={profileInfo.userId} username={profileInfo.username}/>}
-              {viewEditProfile ? <UpdateProfile closeModal={closeEditProfile} setRecentlyUpdated={update} /> : null}
+              {viewEditProfile ? <UpdateProfile closeModal={closeEditProfile} setProfileInfo={setProfileInfo}/> : null}
             </div>
           )
         : (
