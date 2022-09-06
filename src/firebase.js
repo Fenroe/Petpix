@@ -159,6 +159,13 @@ export const postSnap = async (docRef, username, profilePicture, image, text) =>
   return docRef
 }
 
+export const getSnapPicture = async (snapId) => {
+  const snapRef = doc(db, 'snaps', snapId)
+  const snapData = await getDoc(snapRef)
+  const snapPicture = snapData.data().image
+  return snapPicture
+}
+
 export const deleteSnap = (snapId) => {
   deleteDoc(doc(db, 'snaps', snapId))
 }
@@ -269,23 +276,28 @@ export const unpinAlbum = async (albumId, userId) => {
   })
 }
 
-export const addPictureToAlbum = async (albumId, snapId) => {
-  const snapRef = doc(db, 'snaps', snapId)
-  const snapData = await getDoc(snapRef)
-  const snapPicture = snapData.data().image
+export const updateAlbumCover = async (albumId, newAlbumCover) => {
+  try {
+    const albumRef = doc(db, 'albums', albumId)
+    await updateDoc(albumRef, {
+      albumCover: newAlbumCover
+    })
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+export const addPictureToAlbum = async (albumId, picture) => {
   const albumRef = doc(db, 'albums', albumId)
   await updateDoc(albumRef, {
-    contents: arrayUnion(snapPicture)
+    contents: arrayUnion(picture)
   })
 }
 
-export const removePictureFromAlbum = async (albumId, snapId) => {
-  const snapRef = doc(db, 'snaps', snapId)
-  const snapData = await getDoc(snapRef)
-  const snapPicture = snapData.data().image
+export const removePictureFromAlbum = async (albumId, picture) => {
   const albumRef = doc(db, 'albums', albumId)
   await updateDoc(albumRef, {
-    contents: arrayRemove(snapPicture)
+    contents: arrayRemove(picture)
   })
 }
 

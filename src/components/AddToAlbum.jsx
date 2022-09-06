@@ -14,20 +14,20 @@ export const AddToAlbum = ({ close, snapPicture, snapId }) => {
 
   const [modalRef, firstFocusRef] = useModalFocus()
 
-  const handleAdd = (albumInfo, callback) => {
+  const handleAdd = async (albumInfo, callback) => {
     const filteredUserAlbums = userAlbums.filter((album) => album.id !== albumInfo.id ? album : null)
     albumInfo.contents.push(snapPicture)
     setUserAlbums([...filteredUserAlbums, albumInfo])
     callback()
-    addPictureToAlbum(albumInfo.id, snapId)
+    await addPictureToAlbum(albumInfo.id, snapPicture)
   }
 
-  const handleRemove = (albumInfo, callback) => {
+  const handleRemove = async (albumInfo, callback) => {
     const filteredUserAlbums = userAlbums.filter((album) => album.id !== albumInfo.id ? album : null)
     albumInfo.contents = albumInfo.contents.filter((picture) => picture !== snapPicture ? picture : null)
     setUserAlbums([...filteredUserAlbums, albumInfo])
     callback()
-    removePictureFromAlbum(albumInfo.id, snapId)
+    await removePictureFromAlbum(albumInfo.id, snapPicture)
   }
 
   useEffect(() => {
