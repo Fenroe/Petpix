@@ -7,25 +7,30 @@ import { Signup } from './pages/Signup'
 import { Private } from './pages/Private'
 import { AuthProvider } from './contexts/AuthContext'
 import { ThemeProvider } from './contexts/ThemeContext'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const App = () => {
+  const queryClient = new QueryClient()
+
   return (
     <div className="app">
-      <ThemeProvider>
-        <AuthProvider>
-          <HashRouter basename="/" >
-            <Routes>
-              <Route path="*" element={
-              <Private>
-                <Main />
-              </Private>
-              } />
-              <Route path="/login" element={<Login />}/>
-              <Route path="signup" element={<Signup />}/>
-            </Routes>
-          </HashRouter>
-        </AuthProvider>
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          <AuthProvider>
+            <HashRouter basename="/" >
+              <Routes>
+                <Route path="*" element={
+                <Private>
+                  <Main />
+                </Private>
+                } />
+                <Route path="/login" element={<Login />}/>
+                <Route path="signup" element={<Signup />}/>
+              </Routes>
+            </HashRouter>
+          </AuthProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
     </div>
   )
 }
