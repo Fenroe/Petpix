@@ -188,19 +188,8 @@ export const unlikeSnap = async (snapId, userId) => {
   })
 }
 
-export const getUserAlbums = async (callback) => {
-  const albumQuery = query(albumCollection, where('userId', '==', auth.currentUser.uid))
-  const albumSnapshot = await getDocs(albumQuery)
-  const albums = []
-  albumSnapshot.forEach((doc) => {
-    const album = {
-      ...doc.data(),
-      posted: doc.data().posted.toDate(),
-      updated: doc.data().updated.toDate()
-    }
-    albums.push(album)
-  })
-  callback(albums)
+export const getUserAlbumsRef = async (userId) => {
+  return query(albumCollection, where('userId', '==', userId))
 }
 
 export const getPinnedAlbums = async (callback) => {
@@ -353,4 +342,16 @@ export const getProfileAlbums = async (id) => {
     albums.push(album)
   })
   return albums
+}
+
+export const getLikedSnapsRef = async (userId) => {
+  return query(snapCollection, where('likedBy', 'array-contains', userId))
+}
+
+export const getUserSnapsRef = async (userId) => {
+  return query(snapCollection, where('userId', '==', userId))
+}
+
+export const getUserRef = async (userId) => {
+  return doc()
 }

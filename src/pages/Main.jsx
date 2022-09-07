@@ -6,7 +6,7 @@ import { Profile } from './Profile'
 import { Albums } from './Albums'
 import { Album } from './Album'
 import { onSnapshot } from 'firebase/firestore'
-import { getUserData, getUserAlbums, getPinnedAlbums, snapCollection } from '../firebase'
+import { getUserData, getPinnedAlbums, snapCollection } from '../firebase'
 import { Sidebar } from '../components/Sidebar'
 import { ProfileSetup } from '../components/ProfileSetup'
 import { UserContext } from '../contexts/UserContext'
@@ -59,10 +59,6 @@ export const Main = () => {
 
   useEffect(() => {
     getUserData(setUser)
-  }, [])
-
-  useEffect(() => {
-    getUserAlbums(setUserAlbums)
   }, [])
 
   useEffect(() => {

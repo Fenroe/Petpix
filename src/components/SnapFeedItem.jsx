@@ -12,7 +12,12 @@ import { UserContext } from '../contexts/UserContext'
 import { likeSnap, unlikeSnap } from '../firebase'
 import { AddToAlbum } from './AddToAlbum'
 
-const SnapFeedItem = ({ id, userId, username, profilePicture, posted, image, text, likedBy }) => {
+const SnapFeedItem = ({ data }) => {
+  const [snapData, setSnapData] = useState({
+    likedBy: [],
+    posted: new Date()
+  })
+
   const [menuOpen, setMenuOpen] = useState(false)
 
   const [addToAlbumOpen, setAddToAlbumOpen] = useState(false)
@@ -48,65 +53,72 @@ const SnapFeedItem = ({ id, userId, username, profilePicture, posted, image, tex
     setAddToAlbumOpen(false)
   }
 
-  const handleLike = () => {
+  const handleLike = async () => {
     if (loading) return
     setLoading(true)
-    likedBy.push(user.userId)
+    await likeSnap(snapData.id, user.userId)
     setLiked(true)
-    likeSnap(id, user.userId).then(() => setLoading(false))
+    setLoading(false)
   }
 
-  const handleUnlike = () => {
+  const handleUnlike = async () => {
     if (loading) return
     setLoading(true)
-    likedBy.pop()
+    await unlikeSnap(snapData.id, user.userId)
     setLiked(false)
-    unlikeSnap(id, user.userId).then(() => setLoading(false))
+    setLoading(false)
   }
 
   useEffect(() => {
-    if (likedBy.includes(user.userId)) {
+    if (snapData.likedBy.includes(user.userId)) {
       setLiked(true)
     }
   }, [])
 
+  useEffect(() => {
+    setSnapData({
+      ...data,
+      posted: data.posted.toDate()
+    })
+  }, [data])
+
   return (
     <>
-      {addToAlbumOpen ? <AddToAlbum close={closeAddToAlbum} snapPicture={image} snapId={id}/> : null}
+      {addToAlbumOpen ? <AddToAlbum close={closeAddToAlbum} snapPicture={snapData.image} snapId={snapData.id}/> : null}
       <div className="story-box">
         <div className="sb-profile-picture-wrapper">
-          <Link to={`/profile/${userId}`}>
-            <ProfilePicture url={profilePicture} size="small" />
+          <Link to={`/profile/${snapData.userId}`}>
+            <ProfilePicture url={snapData.profilePicture} size="small" />
           </Link>
         </div>
         <div className="w-full">
           <div className="sb-content-wrapper">
             <div className="text-xl flex items-center justify-between w-full relative">
               <div className="flex items-center gap-3">
-                <Link to={`/profile/${userId}`} className="font-bold hover:cursor-pointer hover:underline">{username}</Link>
-                <span> {renderTimeDifference(posted)}</span>
+                <Link to={`/profile/${snapData.userId}`} className="font-bold hover:cursor-pointer hover:underline">{snapData.username}</Link>
+                <span> {renderTimeDifference(snapData.posted)}</span>
               </div>
               <button onClick={openMenu} className="transition-transform hover:scale-150 focus:scale-150">
                 <BsThreeDots />
               </button>
-              {menuOpen ? <SnapOptions position={menuPosition} snapUserId={userId} snapId={id} closeMenu={closeMenu}/> : null}
+              {menuOpen ? <SnapOptions position={menuPosition} snapUserId={snapData.userId} snapId={snapData.id} closeMenu={closeMenu}/> : null}
             </div>
-            {text ? <TextareaAutosize readOnly className="sb-text-area" value={text}/> : null}
+            {snapData.text && <TextareaAutosize readOnly className="sb-text-area" value={snapData.text}/>}
             <div className="sb-image-wrapper">
-              <img src={image} className="sb-image" />
+              <img src={snapData.image} className="sb-image" />
             </div>
             <div className="flex items-center justify-around dark:bg-black">
               {liked
                 ? (
                 <button className="flex gap-3 text-[22px] items-center text-blue-500 font-bold bg-white transition-transform hover:scale-125 focus:scale-125 dark:bg-black" onClick={handleUnlike}>
                   <GrLike className="dark:text-white"/>
-                  <span>{likedBy.length}</span>
+                  <span>{snapData.likedBy?.length}</span>
                 </button>
                   )
                 : (
                 <button className="flex gap-3 text-[22px] items-center bg-white transition-transform hover:scale-125 focus:scale-125 dark:bg-black dark:text-white" onClick={handleLike}>
                   <GrLike />
-                  <span>{likedBy.length}</span>
+                  <span>{snapData.likedBy?.length}</span>
                 </button>
                   )}
 
@@ -122,14 +134,7 @@ const SnapFeedItem = ({ id, userId, username, profilePicture, posted, image, tex
 }
 
 SnapFeedItem.propTypes = {
-  id: PropTypes.string,
-  userId: PropTypes.string,
-  username: PropTypes.string,
-  profilePicture: PropTypes.string,
-  posted: PropTypes.object,
-  image: PropTypes.string,
-  text: PropTypes.string,
-  likedBy: PropTypes.array
+  data: PropTypes.object
 }
 
 export default memo(SnapFeedItem)

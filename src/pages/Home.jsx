@@ -1,29 +1,31 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { CreateSnap } from '../components/CreateSnap'
 import { SnapFeed } from '../components/SnapFeed'
+import { useFirestoreQuery } from '@react-query-firebase/firestore'
+import { snapCollection } from '../firebase'
 
-export const Home = ({ feedData, pendingData, sync }) => {
+export const Home = () => {
+  const query = useFirestoreQuery('snaps', snapCollection, {
+    subscribe: true
+  })
+
   const [sortBy, setSortBy] = useState('newest')
 
   const sortFeedData = (method) => {
     let sortedFeed = []
     switch (method) {
       case 'newest': {
-        sortedFeed = feedData.sort((a, b) => b.posted - a.posted)
+        sortedFeed = query.data.docs.sort((a, b) => b.data()?.posted - a.data()?.posted)
         break
       }
       case 'most liked': {
-        sortedFeed = feedData.sort((a, b) => b.likedBy.length - a.likedBy.length)
+        sortedFeed = query.data.docs.sort((a, b) => b.data()?.likedBy?.length - a.data()?.likedBy?.length)
         break
       }
     }
     return sortedFeed
   }
-
-  useEffect(() => {
-    sync()
-  }, [])
 
   return (
     <section className="page">
@@ -38,10 +40,7 @@ export const Home = ({ feedData, pendingData, sync }) => {
       <div className="page-heading-wrapper">
         <h1 className="page-heading">See what&apos;s new</h1>
       </div>
-      <div>
-        {pendingData.length > 0 ? <button onClick={sync} className="text-lg cursor-pointer hover:text-red-500">Update Feed</button> : null}
-      </div>
-      <SnapFeed feedName="home" feedData={sortFeedData(sortBy)} />
+      {!query.isLoading && <SnapFeed feedName="home" feedData={sortFeedData(sortBy)} />}
     </section>
   )
 }

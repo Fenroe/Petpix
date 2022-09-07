@@ -7,7 +7,7 @@ import { Signup } from './pages/Signup'
 import { Private } from './pages/Private'
 import { AuthProvider } from './contexts/AuthContext'
 import { ThemeProvider } from './contexts/ThemeContext'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
 const App = () => {
   const queryClient = new QueryClient()
