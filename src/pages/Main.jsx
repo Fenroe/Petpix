@@ -1,142 +1,41 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Home } from './Home'
 import { Likes } from './Likes'
 import { Profile } from './Profile'
 import { Albums } from './Albums'
 import { Album } from './Album'
-import { onSnapshot } from 'firebase/firestore'
-import { getUserData, getPinnedAlbums, snapCollection } from '../firebase'
 import { Sidebar } from '../components/Sidebar'
 import { ProfileSetup } from '../components/ProfileSetup'
-import { UserContext } from '../contexts/UserContext'
 import { LoadingModal } from '../components/LoadingModal'
 import { WriteErrorModal } from '../components/WriteErrorModal'
+import { useAuthUser } from '@react-query-firebase/auth'
+import { useFirestoreDocument } from '@react-query-firebase/firestore'
+import { auth, getUserDocRef } from '../firebase'
+import { UserContext } from '../contexts/UserContext'
 
 export const Main = () => {
-  const [user, setUser] = useState({
-    bio: '',
-    coverPicture: '',
-    followedBy: [],
-    hiddenSnaps: [],
-    joinedOn: new Date(),
-    location: '',
-    profilePicture: '',
-    setup: true,
-    userId: '',
-    username: ''
-  })
+  const user = useAuthUser('user', auth)
 
-  const [loading, setLoading] = useState(false)
+  const userQuery = useFirestoreDocument('userData', getUserDocRef(user.data?.uid))
 
-  const [writeError, setWriteError] = useState(false)
-
-  const dismissError = () => setWriteError(false)
-
-  const [snaps, setSnaps] = useState([])
-
-  const [snapsToLoad, setSnapsToLoad] = useState([])
-
-  const [snapsModified, setSnapsModified] = useState([])
-
-  const [snapsToRemove, setSnapsToRemove] = useState([])
-
-  const [localWrittenSnaps, setLocalWrittenSnaps] = useState([])
-
-  const [localDeletedSnaps, setLocalDeletedSnaps] = useState([])
-
-  const [userAlbums, setUserAlbums] = useState([])
-
-  const [pinnedAlbums, setPinnedAlbums] = useState([])
-
-  const updateSnaps = () => {
-    const filteredSnaps = snaps.filter((snap) => !snapsToRemove.includes(snap.id) ? snap : null)
-    setSnaps([...filteredSnaps, ...snapsToLoad, ...snapsModified])
-    setSnapsToLoad([])
-    setSnapsToRemove([])
-    setSnapsModified([])
-  }
-
-  useEffect(() => {
-    getUserData(setUser)
-  }, [])
-
-  useEffect(() => {
-    getPinnedAlbums(setPinnedAlbums)
-  }, [])
-
-  useEffect(() => {
-    let hasLoaded = false
-    const unsub = onSnapshot(snapCollection, (snapshot) => {
-      let newSnaps = []
-      let modifiedSnaps = snapsModified
-      const deletedSnapIds = []
-      snapshot.docChanges().forEach((change) => {
-        if (change.type === 'added') {
-          if (!change.doc.data().posted) return
-          const snap = {
-            ...change.doc.data(),
-            posted: change.doc.data().posted.toDate()
-          }
-          newSnaps.push(snap)
-        }
-        if (change.type === 'modified') {
-          const snap = {
-            ...change.doc.data(),
-            posted: change.doc.data().posted.toDate()
-          }
-          modifiedSnaps = modifiedSnaps.filter((modifiedSnap) => modifiedSnap.id !== snap.id ? modifiedSnap : null)
-          modifiedSnaps.push(snap)
-          deletedSnapIds.push(snap.id)
-        }
-        if (change.type === 'removed') {
-          deletedSnapIds.push(change.doc.data().id)
-        }
-      })
-      if (hasLoaded === false && newSnaps.length > 0) {
-        hasLoaded = true
-        setSnaps(newSnaps)
-        newSnaps = []
-      }
-      setSnapsToLoad([...snapsToLoad, ...newSnaps])
-      setSnapsModified(modifiedSnaps)
-      setSnapsToRemove([...snapsToRemove, ...deletedSnapIds])
-    })
-
-    return () => unsub()
-  }, [])
+  const userData = userQuery.data?.data()
 
   return (
-    <UserContext.Provider
-    value={{
-      loading,
-      setLoading,
-      writeError,
-      setWriteError,
-      user,
-      setUser,
-      localWrittenSnaps,
-      setLocalWrittenSnaps,
-      localDeletedSnaps,
-      setLocalDeletedSnaps,
-      userAlbums,
-      setUserAlbums,
-      pinnedAlbums,
-      setPinnedAlbums
-    }}>
-      {user.setup === false ? <ProfileSetup /> : null}
-      {loading === true ? <LoadingModal /> : null}
-      {writeError === true ? <WriteErrorModal close={dismissError} /> : null}
+    <UserContext.Provider value={{ userData }}>
+      {userQuery.data?.data()?.setup === false && <ProfileSetup />}
+      {userQuery.isLoading && <LoadingModal />}
+      {userQuery.isError && <WriteErrorModal />}
       <Sidebar />
       <main className="main">
-          <Routes>
-            <Route exact path="/" element={<Home feedData={snaps} pendingData={snapsToLoad} sync={updateSnaps}/>} />
-            <Route exact path="/likes" element={<Likes feedData={snaps} sync={updateSnaps}/>} />
-            <Route exact path="/profile/:id" element={<Profile snapFeedData={snaps} albumFeedData={userAlbums} sync={updateSnaps} />} />
-            <Route exact path="/albums/" element={<Albums userAlbums={userAlbums} pinnedAlbums={pinnedAlbums} />} />
-            <Route exact path="/album/:id" element={<Album />} />
-            <Route path="*" element={<Navigate replace to="/" />}/>
-          </Routes>
+        <Routes>
+          <Route exact path="/" element={<Home />}/>
+          <Route exact path="/likes" element={<Likes />} />
+          <Route exact path="/profile/:id" element={<Profile />} />
+          <Route exact path="/albums/" element={<Albums />} />
+          <Route exact path="/album/:id" element={<Album />} />
+          <Route path="*" element={<Navigate replace to="/" />}/>
+        </Routes>
       </main>
     </UserContext.Provider>
   )

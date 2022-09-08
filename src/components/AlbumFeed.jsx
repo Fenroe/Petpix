@@ -1,15 +1,15 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { returnFeedMessage } from '../utils/returnFeedMessage'
 import { returnFeedData } from '../utils/returnFeedData'
 import { EmptyFeed } from './EmptyFeed'
 import defaultAlbumCover from '../assets/defaults/album.jpg'
-import { UserContext } from '../contexts/UserContext'
-import { pinAlbum, unpinAlbum, deleteAlbum } from '../firebase'
+import { pinAlbum, unpinAlbum, deleteAlbum, auth } from '../firebase'
+import { useAuthUser } from '@react-query-firebase/auth'
 
 export const AlbumFeed = ({ feedName, feedData }) => {
-  const { user } = useContext(UserContext)
+  const user = useAuthUser('user', auth)
 
   const formatPinsText = (pins) => {
     if (pins === 1) return 'pin'
@@ -21,12 +21,14 @@ export const AlbumFeed = ({ feedName, feedData }) => {
   }
 
   const handlePin = (id) => {
-    pinAlbum(id, user.userId)
+    pinAlbum(id, user.data.uid)
   }
 
   const handleUnpin = (id) => {
-    unpinAlbum(id, user.userId)
+    unpinAlbum(id, user.data.uid)
   }
+
+  console.log(user.data.uid)
 
   return (
     <section className="feed">
@@ -45,21 +47,21 @@ export const AlbumFeed = ({ feedName, feedData }) => {
               </div>
             </div>
           </div>
-          {item.data()?.userId === user.userId
+          {item.data()?.userId === user.data.uid
             ? (
             <button className="follow-button" onClick={() => handleDelete(item.data().id)}>Delete</button>
               )
             : (
                 null
               )}
-          {item.data()?.userId !== user.userId && item.data()?.isPinned?.includes(user.userId)
+          {item.data()?.userId !== user.data.uid && item.data()?.isPinned?.includes(user.data.uid)
             ? (
             <button className="follow-button" onClick={() => handleUnpin(item.data()?.id)}>Unpin</button>
               )
             : (
                 null
               )}
-          {item.data()?.userId !== user.userId && !item.data()?.isPinned?.includes(user.userId)
+          {item.data()?.userId !== user.data.uid && !item.data()?.isPinned?.includes(user.data.uid)
             ? (
             <button className="follow-button" onClick={() => handlePin(item.data()?.id)}>Pin</button>
               )

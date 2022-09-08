@@ -13,7 +13,7 @@ import { BsThreeDots } from 'react-icons/bs'
 import { renderTimeDifference } from '../utils/renderTimeDifference'
 
 export const SnapFeed = ({ feedName, feedData }) => {
-  const { user } = useContext(UserContext)
+  const { userData } = useContext(UserContext)
 
   useFeedInterval()
 
@@ -43,7 +43,7 @@ export const SnapFeed = ({ feedName, feedData }) => {
                 <img src={item.data().image} className="sb-image" />
               </div>
               <div className="flex items-center justify-around dark:bg-black">
-                {item.data()?.likedBy?.includes(user.userId)
+                {item.data()?.likedBy?.includes(userData.userId)
                   ? (
                   <button className="flex gap-3 text-[22px] items-center text-blue-500 font-bold bg-white transition-transform hover:scale-125 focus:scale-125 dark:bg-black">
                     <GrLike className="dark:text-white"/>
@@ -70,6 +70,5 @@ export const SnapFeed = ({ feedName, feedData }) => {
 
 SnapFeed.propTypes = {
   feedData: PropTypes.array,
-  feedName: PropTypes.oneOf(['home', 'profile', 'likes', 'my profile', 'other profile']),
-  sync: PropTypes.func
+  feedName: PropTypes.oneOf(['home', 'profile', 'likes', 'my profile', 'other profile'])
 }

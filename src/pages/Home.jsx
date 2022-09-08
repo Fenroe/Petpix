@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import { CreateSnap } from '../components/CreateSnap'
 import { SnapFeed } from '../components/SnapFeed'
 import { useFirestoreQuery } from '@react-query-firebase/firestore'
@@ -43,10 +42,4 @@ export const Home = () => {
       {!query.isLoading && <SnapFeed feedName="home" feedData={sortFeedData(sortBy)} />}
     </section>
   )
-}
-
-Home.propTypes = {
-  feedData: PropTypes.array,
-  pendingData: PropTypes.array,
-  sync: PropTypes.func
 }

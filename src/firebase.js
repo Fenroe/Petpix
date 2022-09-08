@@ -188,10 +188,6 @@ export const unlikeSnap = async (snapId, userId) => {
   })
 }
 
-export const getUserAlbumsRef = async (userId) => {
-  return query(albumCollection, where('userId', '==', userId))
-}
-
 export const getPinnedAlbums = async (callback) => {
   const albumQuery = query(albumCollection, where('pinnedBy', 'array-contains', auth.currentUser.uid))
   const albumSnapshot = await getDocs(albumQuery)
@@ -302,16 +298,16 @@ export const getSnapDocRef = (id) => doc(db, 'snaps', id)
 
 export const getAlbumDocRef = (id) => doc(db, 'albums', id)
 
-export const followUser = (id) => {
+export const followUser = async (id) => {
   const userRef = getUserDocRef(id)
-  updateDoc(userRef, {
+  await updateDoc(userRef, {
     followedBy: arrayUnion(auth.currentUser.uid)
   })
 }
 
-export const unfollowUser = (id) => {
+export const unfollowUser = async (id) => {
   const userRef = getUserDocRef(id)
-  updateDoc(userRef, {
+  await updateDoc(userRef, {
     followedBy: arrayRemove(auth.currentUser.uid)
   })
 }
@@ -352,6 +348,10 @@ export const getUserSnapsRef = async (userId) => {
   return query(snapCollection, where('userId', '==', userId))
 }
 
-export const getUserRef = async (userId) => {
-  return doc()
+export const getUserAlbumsRef = async (userId) => {
+  return query(albumCollection, where('userId', '==', userId))
+}
+
+export const getPinnedAlbumsRef = async (userId) => {
+  return query(albumCollection, where('pinnedBy', 'array-contains', userId))
 }

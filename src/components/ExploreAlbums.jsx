@@ -1,23 +1,27 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { AlbumFeed } from './AlbumFeed'
+import { useFirestoreQuery } from '@react-query-firebase/firestore'
+import { albumCollection } from '../firebase'
 
-export const ExploreAlbums = ({ feedData }) => {
+export const ExploreAlbums = () => {
+  const exploreAlbumsQuery = useFirestoreQuery('exploreAlbums', albumCollection)
+
   const [sortBy, setSortBy] = useState('new')
 
   const sortFeedData = (method) => {
     let sortedFeed = []
     switch (method) {
       case 'new': {
-        sortedFeed = feedData.sort((a, b) => b.posted - a.posted)
+        sortedFeed = exploreAlbumsQuery.data?.docs?.sort((a, b) => b.data()?.posted - a.data()?.posted)
         break
       }
       case 'most pinned': {
-        sortedFeed = feedData.sort((a, b) => b.pinnedBy.length - a.pinnedBy.length)
+        sortedFeed = exploreAlbumsQuery.data?.docs?.sort((a, b) => b.data()?.pinnedBy?.length - a.data()?.pinnedBy?.length)
         break
       }
       case 'recently updated': {
-        sortedFeed = feedData.sort((a, b) => b.updated - a.updated)
+        sortedFeed = exploreAlbumsQuery.data?.docs?.sort((a, b) => b.data()?.updated - a.data()?.updated)
       }
     }
     return sortedFeed

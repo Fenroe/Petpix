@@ -1,14 +1,14 @@
-import React, { useState, useContext, useRef } from 'react'
+import React, { useState, useRef } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { AiOutlinePicture } from 'react-icons/ai'
 import { MdOutlineClose } from 'react-icons/md'
 import TextareaAutosize from 'react-textarea-autosize'
 import { ProfilePicture } from './ProfilePicture'
-import { UserContext } from '../contexts/UserContext'
 import { db, postSnap, uploadSnapPicture, getURL, deleteSnap } from '../firebase'
 import { addDoc, collection } from 'firebase/firestore'
 
-export const CreateSnap = () => {
+export const CreateSnap = ({ userData }) => {
   const [uploadedImage, setUploadedImage] = useState({
     preview: '',
     file: null
@@ -17,8 +17,6 @@ export const CreateSnap = () => {
   const [error, setError] = useState('')
 
   const textareaRef = useRef(null)
-
-  const { user, localWrittenSnaps, setLocalWrittenSnaps, loading, setLoading, setWriteError } = useContext(UserContext)
 
   const handleImageUpload = (evt) => {
     setError('')
@@ -42,45 +40,29 @@ export const CreateSnap = () => {
 
   const handleSubmit = async (evt) => {
     evt.preventDefault()
-    if (loading) return
-    setLoading(true)
     if (uploadedImage.file === null) return handleErrors('Upload an image to share')
     if (textareaRef.current.value.length > 150) return
     const docRef = await addDoc(collection(db, 'snaps'), {})
     try {
       const file = uploadedImage.file
       const snapText = textareaRef.current.value
-      setLocalWrittenSnaps([{
-        id: docRef.id,
-        image: uploadedImage.preview,
-        likedBy: [],
-        posted: new Date(),
-        profilePicture: user.profilePicture,
-        text: snapText,
-        userId: user.userId,
-        username: user.username
-      }, ...localWrittenSnaps])
+      const imageRef = await uploadSnapPicture(file)
+      const imageURL = await getURL(imageRef)
+      await postSnap(docRef, userData?.username, userData?.profilePicture, imageURL, snapText)
       setUploadedImage({
         preview: '',
         file: null
       })
-      const imageRef = await uploadSnapPicture(file)
-      const imageURL = await getURL(imageRef)
-      await postSnap(docRef, user.username, user.profilePicture, imageURL, snapText)
-      setLoading(false)
     } catch (error) {
       deleteSnap(docRef.id)
-      setLocalWrittenSnaps(localWrittenSnaps.filter((snap) => snap.id !== docRef.id ? snap : null))
-      setLoading(false)
-      setWriteError(true)
     }
   }
 
   return (
     <div className="story-box">
       <div className="sb-profile-picture-wrapper">
-        <Link to={`/profile/${user.userId}`} className="">
-          <ProfilePicture url={user.profilePicture} size="small" />
+        <Link to={`/profile/${userData?.userId}`} className="">
+          <ProfilePicture url={userData?.profilePicture} size="small" />
         </Link>
       </div>
       <div className="w-full">
@@ -113,4 +95,8 @@ export const CreateSnap = () => {
       </div>
     </div>
   )
+}
+
+CreateSnap.propTypes = {
+  userData: PropTypes.object
 }

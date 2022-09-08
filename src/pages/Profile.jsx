@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { ImLocation2 } from 'react-icons/im'
@@ -16,7 +16,11 @@ import { useFirestoreDocument } from '@react-query-firebase/firestore'
 export const Profile = () => {
   const [viewing, setViewing] = useState('snaps')
 
+  // const [profileQueryKey, setProfileQueryKey] = useState(Date.now())
+
   const [viewEditProfile, setViewEditProfile] = useState(false)
+
+  const [followed, setFollowed] = useState(false)
 
   const { user } = useContext(UserContext)
 
@@ -37,12 +41,14 @@ export const Profile = () => {
     return 'Followers'
   }
 
-  const handleFollow = () => {
-    followUser(id)
+  const handleFollow = async () => {
+    await followUser(id)
+    setFollowed(true)
   }
 
-  const handleUnfollow = () => {
-    unfollowUser(id)
+  const handleUnfollow = async () => {
+    await unfollowUser(id)
+    setFollowed(false)
   }
 
   const viewSnaps = () => {
@@ -52,6 +58,10 @@ export const Profile = () => {
   const viewAlbums = () => {
     setViewing('albums')
   }
+
+  useEffect(() => {
+    setFollowed(profileQuery.data?.data()?.followedBy?.includes(user.userId))
+  }, [])
 
   return (
     <section className="page">
@@ -75,7 +85,7 @@ export const Profile = () => {
                     : (
                         null
                       )}
-                  {profileQuery.data?.data()?.userId !== user.userId && profileQuery.data?.data()?.followedBy?.includes(user.userId)
+                  {profileQuery.data?.data()?.userId !== user.userId && followed
                     ? (
                     <div className="p-3">
                       <button onClick={handleUnfollow} className="follow-button">Unfollow</button>
@@ -84,7 +94,7 @@ export const Profile = () => {
                     : (
                         null
                       )}
-                  {profileQuery.data?.data()?.userId !== user.userId && !profileQuery.data?.data()?.followedBy.includes(user.userId)
+                  {profileQuery.data?.data()?.userId !== user.userId && !followed
                     ? (
                     <div className="p-3">
                       <button onClick={handleFollow} className="follow-button">Follow</button>

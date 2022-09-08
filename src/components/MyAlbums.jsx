@@ -1,13 +1,22 @@
-import React, { useState /* useContext */ } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState } from 'react'
 import { AlbumFeed } from './AlbumFeed'
-// import { UserContext } from '../data/UserContext'
 import { CreateAlbum } from './CreateAlbum'
+import { useFirestoreQuery } from '@react-query-firebase/firestore'
+import { getUserAlbumsRef, getPinnedAlbumsRef, auth } from '../firebase'
+import { useAuthUser } from '@react-query-firebase/auth'
 
-export const MyAlbums = ({ myAlbums, pinnedAlbums }) => {
+export const MyAlbums = () => {
+  const user = useAuthUser('user', auth)
+
   const [viewModal, setViewModal] = useState(false)
 
-  // const { user } = useContext(UserContext)
+  const userAlbumsQuery = useFirestoreQuery('myAlbums', getUserAlbumsRef(user.data.uid), {
+    subscribe: true
+  })
+
+  const pinnedAlbumsQuery = useFirestoreQuery('pinnedAlbums', getPinnedAlbumsRef(user.data.uid), {
+    subscribe: true
+  })
 
   const openModal = () => {
     setViewModal(true)
@@ -19,13 +28,13 @@ export const MyAlbums = ({ myAlbums, pinnedAlbums }) => {
 
   return (
     <>
-      {viewModal ? <CreateAlbum closeModal={closeModal}/> : null}
+      {viewModal && <CreateAlbum closeModal={closeModal}/>}
       <div className="flex items-center justify-between pr-3">
         <div className="page-heading-wrapper">
           <h1 className="page-heading text-center">Your albums</h1>
         </div>
       </div>
-      <AlbumFeed feedName='my albums' feedData={myAlbums} />
+      {userAlbumsQuery.isSuccess && <AlbumFeed feedName='my albums' feedData={userAlbumsQuery.data?.docs} />}
       <div className="flex justify-center items-center w-full">
         <button className="follow-button text-xl" onClick={openModal}>New Album</button>
       </div>
@@ -34,12 +43,7 @@ export const MyAlbums = ({ myAlbums, pinnedAlbums }) => {
           <h1 className="page-heading text-center">Pinned Albums</h1>
         </div>
       </div>
-      <AlbumFeed feedName="pinned albums" feedData={pinnedAlbums} />
+      {pinnedAlbumsQuery.isSuccess && <AlbumFeed feedName="pinned albums" feedData={pinnedAlbumsQuery.data?.docs} />}
     </>
   )
-}
-
-MyAlbums.propTypes = {
-  myAlbums: PropTypes.array,
-  pinnedAlbums: PropTypes.array
 }

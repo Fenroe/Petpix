@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { GiTurtleShell } from 'react-icons/gi'
 import { RiHome7Fill } from 'react-icons/ri'
@@ -11,13 +12,15 @@ import { HeaderLink } from './HeaderLink'
 import { HeaderSnapButton } from './HeaderSnapButton'
 import { BsThreeDots } from 'react-icons/bs'
 import { ProfilePicture } from './ProfilePicture'
-import { UserContext } from '../contexts/UserContext'
 import { SidebarSnapModal } from './SidebarSnapModal'
+import { UserContext } from '../contexts/UserContext'
 
 export const Sidebar = () => {
   const [accountMenuVisible, setAccountMenuVisible] = useState(false)
 
   const [snapModalVisible, setSnapModalVisible] = useState(false)
+
+  const { userData } = useContext(UserContext)
 
   const openSnapModal = () => {
     setSnapModalVisible(true)
@@ -26,8 +29,6 @@ export const Sidebar = () => {
   const closeSnapModal = () => {
     setSnapModalVisible(false)
   }
-
-  const { user } = useContext(UserContext)
 
   return (
     <header className="sidebar-wrapper">
@@ -40,16 +41,16 @@ export const Sidebar = () => {
             <HeaderLink icon={<RiHome7Fill />} url ="/" text="Home" />
             <HeaderLink icon={<GrLike />} url="/likes" text="Likes" />
             <HeaderLink icon={<BiPhotoAlbum />} url="/albums" text="Albums" />
-            <HeaderLink icon={<FiUser />} url={`/profile/${user.userId}`} text="Profile" />
+            <HeaderLink icon={<FiUser />} url={`/profile/${userData?.userId}`} text="Profile" />
           </nav>
           <HeaderSnapButton icon={<AiOutlinePlus />} openModal={openSnapModal} />
         </div>
         <div className="sidebar-bot">
-          {accountMenuVisible ? <AccountMenu image={user.profilePicture} username={user.username} setMenuIsVisible={setAccountMenuVisible}/> : null}
+          {accountMenuVisible ? <AccountMenu image={userData?.profilePicture} username={userData?.username} setMenuIsVisible={setAccountMenuVisible}/> : null}
           <button className="sidebar-account-btn" onClick={() => setAccountMenuVisible(true)}>
             <div className="flex items-center">
-              <ProfilePicture url={user.profilePicture} size="small" />
-              <span className="sidebar-account-btn-left-span">{user.username}</span>
+              <ProfilePicture url={userData?.profilePicture} size="small" />
+              <span className="sidebar-account-btn-left-span">{userData?.username}</span>
             </div>
             <div className="three-dots-wrapper">
               <BsThreeDots className="three-dots"/>
@@ -60,4 +61,8 @@ export const Sidebar = () => {
       {snapModalVisible ? <SidebarSnapModal closeModal={closeSnapModal}/> : null}
     </header>
   )
+}
+
+Sidebar.propTypes = {
+  userData: PropTypes.object
 }

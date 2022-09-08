@@ -1,18 +1,16 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { SnapFeed } from '../components/SnapFeed'
-import { UserContext } from '../contexts/UserContext'
 import { useFirestoreQuery } from '@react-query-firebase/firestore'
-import { getLikedSnapsRef } from '../firebase'
+import { getLikedSnapsRef, auth } from '../firebase'
+import { useAuthUser } from '@react-query-firebase/auth'
 
 export const Likes = () => {
-  const { user } = useContext(UserContext)
+  const user = useAuthUser('user', auth)
 
-  const query = useFirestoreQuery('likedSnaps', getLikedSnapsRef(user.userId), {
+  const query = useFirestoreQuery('likedSnaps', getLikedSnapsRef(user.data.uid), {
     subscribe: true
   })
-
-  getLikedSnapsRef()
 
   return (
     <section className="page">
@@ -25,6 +23,5 @@ export const Likes = () => {
 }
 
 Likes.propTypes = {
-  feedData: PropTypes.array,
-  sync: PropTypes.func
+  feedData: PropTypes.array
 }
