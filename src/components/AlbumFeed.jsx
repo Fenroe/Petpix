@@ -28,11 +28,9 @@ export const AlbumFeed = ({ feedName, feedData }) => {
     unpinAlbum(id, user.data.uid)
   }
 
-  console.log(user.data.uid)
-
   return (
     <section className="feed">
-      {returnFeedData(feedData).length === 0 ? <EmptyFeed message={returnFeedMessage(feedName)} /> : null}
+      {returnFeedData(feedData).length === 0 && <EmptyFeed message={returnFeedMessage(feedName)} />}
       {returnFeedData(feedData).map((item) =>
           <div key={item.data().id} className="justify-between flex items-center gap-3 bg-white hover:brightness-95 dark:bg-black dark:text-white">
           <div className="flex items-center gap-3">
@@ -47,27 +45,12 @@ export const AlbumFeed = ({ feedName, feedData }) => {
               </div>
             </div>
           </div>
-          {item.data()?.userId === user.data.uid
-            ? (
-            <button className="follow-button" onClick={() => handleDelete(item.data().id)}>Delete</button>
-              )
-            : (
-                null
-              )}
-          {item.data()?.userId !== user.data.uid && item.data()?.isPinned?.includes(user.data.uid)
-            ? (
-            <button className="follow-button" onClick={() => handleUnpin(item.data()?.id)}>Unpin</button>
-              )
-            : (
-                null
-              )}
-          {item.data()?.userId !== user.data.uid && !item.data()?.isPinned?.includes(user.data.uid)
-            ? (
-            <button className="follow-button" onClick={() => handlePin(item.data()?.id)}>Pin</button>
-              )
-            : (
-                null
-              )}
+          {item.data()?.userId === user.data.uid &&
+            <button className="follow-button" onClick={() => handleDelete(item.data()?.id)}>Delete</button>}
+          {item.data()?.userId !== user.data.uid && item.data()?.pinnedBy?.includes(user?.data?.uid) &&
+            <button className="follow-button" onClick={() => handleUnpin(item.data()?.id)}>Unpin</button>}
+          {item.data()?.userId !== user.data.uid && !item.data()?.pinnedBy?.includes(user?.data?.uid) &&
+            <button className="follow-button" onClick={() => handlePin(item.data()?.id)}>Pin</button>}
         </div>)}
     </section>
   )

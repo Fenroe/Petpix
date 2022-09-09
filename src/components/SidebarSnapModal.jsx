@@ -6,8 +6,8 @@ import { AiOutlinePicture } from 'react-icons/ai'
 import TextareaAutosize from 'react-textarea-autosize'
 import { ProfilePicture } from './ProfilePicture'
 import { UserContext } from '../contexts/UserContext'
-import { db, postSnap, uploadSnapPicture, getURL, deleteSnap } from '../firebase'
-import { addDoc, collection } from 'firebase/firestore'
+import { uploadSnapPicture, getURL, snapCollection } from '../firebase'
+import { useFirestoreCollectionMutation } from '@react-query-firebase/firestore'
 
 export const SidebarSnapModal = ({ closeModal }) => {
   const [uploadedImage, setUploadedImage] = useState({
@@ -19,7 +19,9 @@ export const SidebarSnapModal = ({ closeModal }) => {
 
   const textareaRef = useRef(null)
 
-  const { user, localWrittenSnaps, setLocalWrittenSnaps, loading, setLoading, setWriteError } = useContext(UserContext)
+  const snapCollectionMutation = useFirestoreCollectionMutation(snapCollection)
+
+  const { userData } = useContext(UserContext)
 
   const handleImageUpload = (evt) => {
     setError('')
@@ -42,34 +44,29 @@ export const SidebarSnapModal = ({ closeModal }) => {
   }
 
   const handleSubmit = async (evt) => {
-    if (loading) return
     evt.preventDefault()
     if (uploadedImage.file === null) return handleErrors('Upload an image to share')
     if (textareaRef.current.value.length > 150) return
-    const docRef = await addDoc(collection(db, 'snaps'), {})
     try {
       const file = uploadedImage.file
       const snapText = textareaRef.current.value
-      setLocalWrittenSnaps([...localWrittenSnaps, {
-        id: docRef.id,
-        image: uploadedImage.preview,
-        likedBy: [],
-        posted: new Date(),
-        profilePicture: user.profilePicture,
-        text: snapText,
-        userId: user.userId,
-        username: user.username
-      }])
-      closeModal()
-      setLoading(true)
       const imageRef = await uploadSnapPicture(file)
       const imageURL = await getURL(imageRef)
-      await postSnap(docRef, user.username, user.profilePicture, imageURL, snapText).then(() => setLoading(false))
+      snapCollectionMutation.mutate({
+        userId: userData.userId,
+        username: userData.username,
+        profilePicture: userData.profilePicture,
+        posted: new Date(),
+        image: imageURL,
+        text: snapText,
+        likedBy: []
+      })
+      setUploadedImage({
+        preview: '',
+        file: null
+      })
     } catch (error) {
-      deleteSnap(docRef.id)
-      setLocalWrittenSnaps(localWrittenSnaps.filter((snap) => snap.id !== docRef.id ? snap : null))
-      setLoading(false)
-      setWriteError(true)
+      console.log(error)
     }
   }
 
@@ -105,7 +102,7 @@ export const SidebarSnapModal = ({ closeModal }) => {
         <div className="story-box">
       <div className="sb-profile-picture-wrapper">
         <div>
-          <ProfilePicture url={user.profilePicture} size="small" />
+          <ProfilePicture url={userData.profilePicture} size="small" />
         </div>
       </div>
       <div className="w-full">
@@ -128,7 +125,7 @@ export const SidebarSnapModal = ({ closeModal }) => {
             </div>
             )}
             <div className="w-full flex justify-end">
-              <button className="min-h-[36px] border-2 bg-red-500 rounded-full px-4 text-white text-lg font-bold" onClick={(e) => handleSubmit(e)}>
+              <button disabled={snapCollectionMutation.isLoading} className="min-h-[36px] border-2 bg-red-500 rounded-full px-4 text-white text-lg font-bold" onClick={(e) => handleSubmit(e)}>
                 Snap
               </button>
             </div>

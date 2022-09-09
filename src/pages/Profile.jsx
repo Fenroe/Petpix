@@ -1,28 +1,26 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { ImLocation2 } from 'react-icons/im'
 import { BsCalendar3 } from 'react-icons/bs'
 import { ProfilePicture } from '../components/ProfilePicture'
-import { UserContext } from '../contexts/UserContext'
 import { returnMonthAndYear } from '../utils/returnMonthandYear'
 import { ProfileSnaps } from '../components/ProfileSnaps'
 import { ProfileAlbums } from '../components/ProfileAlbums'
 import { UpdateProfile } from '../components/UpdateProfile'
-import { getUserDocRef, followUser, unfollowUser } from '../firebase'
+import { getUserDocRef, followUser, unfollowUser, auth } from '../firebase'
 import { CoverPicture } from '../components/CoverPicture'
 import { useFirestoreDocument } from '@react-query-firebase/firestore'
+import { useAuthUser } from '@react-query-firebase/auth'
 
 export const Profile = () => {
   const [viewing, setViewing] = useState('snaps')
-
-  // const [profileQueryKey, setProfileQueryKey] = useState(Date.now())
 
   const [viewEditProfile, setViewEditProfile] = useState(false)
 
   const [followed, setFollowed] = useState(false)
 
-  const { user } = useContext(UserContext)
+  const user = useAuthUser('user', auth)
 
   const { id } = useParams()
 
@@ -60,7 +58,7 @@ export const Profile = () => {
   }
 
   useEffect(() => {
-    setFollowed(profileQuery.data?.data()?.followedBy?.includes(user.userId))
+    setFollowed(profileQuery.data?.data()?.followedBy?.includes(user.data.uid))
   }, [])
 
   return (
@@ -76,33 +74,18 @@ export const Profile = () => {
                   <div className="absolute left-3 bottom-0">
                     <ProfilePicture url={profileQuery.data?.data()?.profilePicture} size="large" />
                   </div>
-                  {profileQuery.data?.data().userId === user.userId
-                    ? (
+                  {profileQuery.data?.data().userId === user.data.uid &&
                     <div className="p-3">
                       <button onClick={openEditProfile} className="follow-button">Edit profile</button>
-                    </div>
-                      )
-                    : (
-                        null
-                      )}
-                  {profileQuery.data?.data()?.userId !== user.userId && followed
-                    ? (
+                    </div>}
+                  {profileQuery.data?.data()?.userId !== user.data.uid && followed &&
                     <div className="p-3">
                       <button onClick={handleUnfollow} className="follow-button">Unfollow</button>
-                    </div>
-                      )
-                    : (
-                        null
-                      )}
-                  {profileQuery.data?.data()?.userId !== user.userId && !followed
-                    ? (
+                    </div>}
+                  {profileQuery.data?.data()?.userId !== user.data.uid && !followed &&
                     <div className="p-3">
                       <button onClick={handleFollow} className="follow-button">Follow</button>
-                    </div>
-                      )
-                    : (
-                        null
-                      )}
+                    </div>}
                 </div>
                 <div className="h-16 flex items-center p-3">
                   <h1 className="text-2xl font-bold dark:text-white">{profileQuery.data?.data()?.username}</h1>
@@ -136,7 +119,7 @@ export const Profile = () => {
                 </button>
               </div>
               { viewing === 'snaps' ? <ProfileSnaps userId={profileQuery.data?.data()?.userId} username={profileQuery.data?.data()?.username}/> : <ProfileAlbums userId={profileQuery.data?.data()?.userId} username={profileQuery.data?.data()?.username}/>}
-              {viewEditProfile ? <UpdateProfile closeModal={closeEditProfile} /> : null}
+              {viewEditProfile && <UpdateProfile closeModal={closeEditProfile} />}
             </div>
           )
         : (

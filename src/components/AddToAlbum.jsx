@@ -1,33 +1,28 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
-import { UserContext } from '../contexts/UserContext'
 import { MdOutlineClose } from 'react-icons/md'
 import { AddToAlbumItem } from './AddToAlbumItem'
-import { addPictureToAlbum, removePictureFromAlbum } from '../firebase'
+import { addPictureToAlbum, removePictureFromAlbum, auth, getUserAlbumsRef } from '../firebase'
 import { useModalFocus } from '../hooks/useModalFocus'
+import { useFirestoreQuery } from '@react-query-firebase/firestore'
+import { useAuthUser } from '@react-query-firebase/auth'
 
-export const AddToAlbum = ({ close, snapPicture, snapId }) => {
-  const { userAlbums, setUserAlbums } = useContext(UserContext)
+export const AddToAlbum = ({ close, snapPicture }) => {
+  const user = useAuthUser('user', auth)
 
-  const [sortedUserAlbums, setSortedUserAlbums] = useState([])
+  const userAlbums = useFirestoreQuery('userAlbums', getUserAlbumsRef(user.data.uid), {
+    subscribe: true
+  })
 
   const [modalRef, firstFocusRef] = useModalFocus()
 
-  const handleAdd = async (albumInfo, callback) => {
-    const filteredUserAlbums = userAlbums.filter((album) => album.id !== albumInfo.id ? album : null)
-    albumInfo.contents.push(snapPicture)
-    setUserAlbums([...filteredUserAlbums, albumInfo])
-    callback()
-    await addPictureToAlbum(albumInfo.id, snapPicture)
+  const handleAdd = async (albumId) => {
+    await addPictureToAlbum(albumId, snapPicture)
   }
 
-  const handleRemove = async (albumInfo, callback) => {
-    const filteredUserAlbums = userAlbums.filter((album) => album.id !== albumInfo.id ? album : null)
-    albumInfo.contents = albumInfo.contents.filter((picture) => picture !== snapPicture ? picture : null)
-    setUserAlbums([...filteredUserAlbums, albumInfo])
-    callback()
-    await removePictureFromAlbum(albumInfo.id, snapPicture)
+  const handleRemove = async (albumId) => {
+    await removePictureFromAlbum(albumId, snapPicture)
   }
 
   useEffect(() => {
@@ -38,10 +33,6 @@ export const AddToAlbum = ({ close, snapPicture, snapId }) => {
     }
 
     return () => unsetOverflow()
-  }, [])
-
-  useEffect(() => {
-    setSortedUserAlbums(userAlbums.sort((a, b) => b.posted - a.posted))
   }, [])
 
   useEffect(() => {
@@ -82,18 +73,18 @@ export const AddToAlbum = ({ close, snapPicture, snapId }) => {
           <h1 className="text-lg">You don&apos;t have any albums yet</h1>
         </div>
           : null}
-          {sortedUserAlbums.map((album) =>
+          {userAlbums.data?.docs?.map((album) =>
           <AddToAlbumItem
           key={album.id}
-          albumCover={album.albumCover}
-          contents={album.contents}
+          albumCover={album.data().albumCover}
+          contents={album.data().contents}
           id={album.id}
-          pinnedBy={album.pinnedBy}
-          profilePicture={album.profilePicture}
-          title={album.title}
-          updated={album.updated}
-          userId={album.userId}
-          username={album.username}
+          pinnedBy={album.data().pinnedBy}
+          profilePicture={album.data().profilePicture}
+          title={album.data().title}
+          updated={album.data().updated}
+          userId={album.data().userId}
+          username={album.data().username}
           snapPicture={snapPicture}
           handleAdd={handleAdd}
           handleRemove={handleRemove}
@@ -105,6 +96,5 @@ export const AddToAlbum = ({ close, snapPicture, snapId }) => {
 
 AddToAlbum.propTypes = {
   close: PropTypes.func,
-  snapPicture: PropTypes.string,
-  snapId: PropTypes.string
+  snapPicture: PropTypes.string
 }

@@ -1,26 +1,18 @@
-import React, { useEffect, useRef, useContext } from 'react'
-import ReactDOM from 'react-dom'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { UserContext } from '../contexts/UserContext'
-import { deleteSnap, hideSnap } from '../firebase'
+import { deleteSnap, hideSnap, auth } from '../firebase'
+import { useAuthUser } from '@react-query-firebase/auth'
 
-export const SnapOptions = ({ position, snapUserId, snapId, closeMenu }) => {
-  const { user, setUser, localDeletedSnaps, setLocalDeletedSnaps } = useContext(UserContext)
+export const SnapOptions = ({ snapUserId, snapId, closeMenu }) => {
+  const user = useAuthUser('user', auth)
 
   const menuRef = useRef(null)
 
   const handleHide = () => {
-    closeMenu()
-    setUser((prevState) => ({
-      ...prevState,
-      hiddenSnaps: [...user.hiddenSnaps, snapId]
-    }))
     hideSnap(snapId)
   }
 
   const handleDelete = () => {
-    closeMenu()
-    setLocalDeletedSnaps([...localDeletedSnaps, snapId])
     deleteSnap(snapId)
   }
 
@@ -49,23 +41,20 @@ export const SnapOptions = ({ position, snapUserId, snapId, closeMenu }) => {
     return () => document.removeEventListener('keydown', (evt) => closeOnEscape(evt))
   }, [])
 
-  return ReactDOM.createPortal(
-    <>
-      <div className="menu-underlay" />
-      <div style={{ left: position.x, top: position.y }} className="absolute w-48 h-16 z-50 bg-white drop-shadow-lg" ref={menuRef}>
-        {user.userId === snapUserId
-          ? (
-          <button className="flex items-center justify-center w-full h-16 bg-white hover:brightness-90 dark:bg-black dark:text-white dark:hover:bg-neutral-900" onClick={handleDelete}>
-            <span>Delete this Snap</span>
-          </button>
-            )
-          : (
-          <button className="flex items-center justify-center w-full h-16 bg-white hover:brightness-90 dark:bg-black dark:text-white dark:hover:bg-neutral-900" onClick={handleHide}>
-            <span>Hide this Snap</span>
-          </button>
-            )}
-      </div>
-    </>, document.getElementById('menu')
+  return (
+    <div className="absolute top-0 -right-52 w-48 h-16 z-50 bg-white drop-shadow-lg" ref={menuRef}>
+      {user.data.uid === snapUserId
+        ? (
+        <button className="flex items-center justify-center w-full h-16 bg-white hover:brightness-90 dark:bg-black dark:text-white dark:hover:bg-neutral-900" onClick={handleDelete}>
+          <span>Delete this Snap</span>
+        </button>
+          )
+        : (
+        <button className="flex items-center justify-center w-full h-16 bg-white hover:brightness-90 dark:bg-black dark:text-white dark:hover:bg-neutral-900" onClick={handleHide}>
+          <span>Hide this Snap</span>
+        </button>
+          )}
+    </div>
   )
 }
 

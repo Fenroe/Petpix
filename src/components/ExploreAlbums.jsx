@@ -5,7 +5,9 @@ import { useFirestoreQuery } from '@react-query-firebase/firestore'
 import { albumCollection } from '../firebase'
 
 export const ExploreAlbums = () => {
-  const exploreAlbumsQuery = useFirestoreQuery('exploreAlbums', albumCollection)
+  const exploreAlbumsQuery = useFirestoreQuery('exploreAlbums', albumCollection, {
+    subscribe: true
+  })
 
   const [sortBy, setSortBy] = useState('new')
 

@@ -1,14 +1,19 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useContext } from 'react'
+import { UserContext } from '../contexts/UserContext'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { AiOutlinePicture } from 'react-icons/ai'
 import { MdOutlineClose } from 'react-icons/md'
 import TextareaAutosize from 'react-textarea-autosize'
 import { ProfilePicture } from './ProfilePicture'
-import { db, postSnap, uploadSnapPicture, getURL, deleteSnap } from '../firebase'
-import { addDoc, collection } from 'firebase/firestore'
+import { uploadSnapPicture, getURL, snapCollection } from '../firebase'
+import { useFirestoreCollectionMutation } from '@react-query-firebase/firestore'
 
-export const CreateSnap = ({ userData }) => {
+export const CreateSnap = () => {
+  const snapCollectionMutation = useFirestoreCollectionMutation(snapCollection)
+
+  const { userData } = useContext(UserContext)
+
   const [uploadedImage, setUploadedImage] = useState({
     preview: '',
     file: null
@@ -42,19 +47,26 @@ export const CreateSnap = ({ userData }) => {
     evt.preventDefault()
     if (uploadedImage.file === null) return handleErrors('Upload an image to share')
     if (textareaRef.current.value.length > 150) return
-    const docRef = await addDoc(collection(db, 'snaps'), {})
     try {
       const file = uploadedImage.file
       const snapText = textareaRef.current.value
       const imageRef = await uploadSnapPicture(file)
       const imageURL = await getURL(imageRef)
-      await postSnap(docRef, userData?.username, userData?.profilePicture, imageURL, snapText)
+      snapCollectionMutation.mutate({
+        userId: userData.userId,
+        username: userData.username,
+        profilePicture: userData.profilePicture,
+        posted: new Date(),
+        image: imageURL,
+        text: snapText,
+        likedBy: []
+      })
       setUploadedImage({
         preview: '',
         file: null
       })
     } catch (error) {
-      deleteSnap(docRef.id)
+      console.log(error)
     }
   }
 
@@ -85,7 +97,7 @@ export const CreateSnap = ({ userData }) => {
             </div>
             )}
             <div className="w-full flex justify-end">
-              <button className="min-h-[36px] border-2 bg-red-500 rounded-full px-4 text-white text-lg font-bold transition-transform hover:scale-125 hover:brightness-125" onClick={(e) => handleSubmit(e)}>
+              <button disabled={snapCollectionMutation.isLoading} className="min-h-[36px] border-2 bg-red-500 rounded-full px-4 text-white text-lg font-bold transition-transform hover:scale-125 hover:brightness-125" onClick={(e) => handleSubmit(e)}>
                 Snap
               </button>
             </div>

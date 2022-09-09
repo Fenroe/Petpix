@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react'
 import ReactDOM from 'react-dom'
 import { MdOutlineClose } from 'react-icons/md'
 import PropTypes from 'prop-types'
-import { addAlbum, createAlbum, deleteAlbum, getURL, uploadAlbumCover } from '../firebase'
+import { addAlbum, createAlbum, getURL, uploadAlbumCover } from '../firebase'
 import { UserContext } from '../contexts/UserContext'
 
 export const CreateAlbum = ({ closeModal }) => {
@@ -17,7 +17,7 @@ export const CreateAlbum = ({ closeModal }) => {
 
   const modalRef = useRef(null)
 
-  const { user, userAlbums, setUserAlbums, loading, setLoading, setWriteError } = useContext(UserContext)
+  const { userData } = useContext(UserContext)
 
   const updateTitle = () => {
     setTitle(inputRef.current.value)
@@ -36,38 +36,18 @@ export const CreateAlbum = ({ closeModal }) => {
   }
 
   const handleSubmit = async () => {
-    if (loading) return
     if (inputRef.current.value === '') return
     const docRef = await addAlbum()
     const title = inputRef.current.value
     const file = coverImage.file
     try {
-      setUserAlbums([{
-        id: docRef.id,
-        title,
-        userId: user.userId,
-        username: user.username,
-        profilePicture: user.profilePicture,
-        albumCover: coverImage.preview,
-        posted: new Date(),
-        updated: new Date(),
-        pinnedBy: [],
-        contents: []
-      }, ...userAlbums])
-      let imageURL = ''
-      closeModal()
-      setLoading(true)
       if (file !== null) {
         const imageRef = await uploadAlbumCover(file)
-        imageURL = await getURL(imageRef)
+        const imageURL = await getURL(imageRef)
+        await createAlbum(title, imageURL, userData.userId, userData.username, userData.profilePicture, docRef)
       }
-      await createAlbum(title, imageURL, user.userId, user.username, user.profilePicture, docRef)
-      setLoading(false)
     } catch (error) {
-      deleteAlbum(docRef.id)
-      setUserAlbums(userAlbums.filter((album) => album.id !== docRef.id ? album : null))
-      setLoading(false)
-      setWriteError(true)
+      console.log(error)
     }
   }
 
