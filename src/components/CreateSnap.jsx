@@ -1,14 +1,19 @@
-import React, { useState, useContext, useRef } from 'react'
+import React, { useState, useRef, useContext } from 'react'
+import { UserContext } from '../contexts/UserContext'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { AiOutlinePicture } from 'react-icons/ai'
 import { MdOutlineClose } from 'react-icons/md'
 import TextareaAutosize from 'react-textarea-autosize'
 import { ProfilePicture } from './ProfilePicture'
-import { UserContext } from '../contexts/UserContext'
-import { db, postSnap, uploadSnapPicture, getURL, deleteSnap } from '../firebase'
-import { addDoc, collection } from 'firebase/firestore'
+import { uploadSnapPicture, getURL, snapCollection } from '../firebase'
+import { useFirestoreCollectionMutation } from '@react-query-firebase/firestore'
 
 export const CreateSnap = () => {
+  const snapCollectionMutation = useFirestoreCollectionMutation(snapCollection)
+
+  const { userData } = useContext(UserContext)
+
   const [uploadedImage, setUploadedImage] = useState({
     preview: '',
     file: null
@@ -17,8 +22,6 @@ export const CreateSnap = () => {
   const [error, setError] = useState('')
 
   const textareaRef = useRef(null)
-
-  const { user, localWrittenSnaps, setLocalWrittenSnaps, loading, setLoading, setWriteError } = useContext(UserContext)
 
   const handleImageUpload = (evt) => {
     setError('')
@@ -42,45 +45,36 @@ export const CreateSnap = () => {
 
   const handleSubmit = async (evt) => {
     evt.preventDefault()
-    if (loading) return
-    setLoading(true)
     if (uploadedImage.file === null) return handleErrors('Upload an image to share')
     if (textareaRef.current.value.length > 150) return
-    const docRef = await addDoc(collection(db, 'snaps'), {})
     try {
       const file = uploadedImage.file
       const snapText = textareaRef.current.value
-      setLocalWrittenSnaps([{
-        id: docRef.id,
-        image: uploadedImage.preview,
-        likedBy: [],
+      const imageRef = await uploadSnapPicture(file)
+      const imageURL = await getURL(imageRef)
+      snapCollectionMutation.mutate({
+        userId: userData.userId,
+        username: userData.username,
+        profilePicture: userData.profilePicture,
         posted: new Date(),
-        profilePicture: user.profilePicture,
+        image: imageURL,
         text: snapText,
-        userId: user.userId,
-        username: user.username
-      }, ...localWrittenSnaps])
+        likedBy: []
+      })
       setUploadedImage({
         preview: '',
         file: null
       })
-      const imageRef = await uploadSnapPicture(file)
-      const imageURL = await getURL(imageRef)
-      await postSnap(docRef, user.username, user.profilePicture, imageURL, snapText)
-      setLoading(false)
     } catch (error) {
-      deleteSnap(docRef.id)
-      setLocalWrittenSnaps(localWrittenSnaps.filter((snap) => snap.id !== docRef.id ? snap : null))
-      setLoading(false)
-      setWriteError(true)
+      console.log(error)
     }
   }
 
   return (
     <div className="story-box">
       <div className="sb-profile-picture-wrapper">
-        <Link to={`/profile/${user.userId}`} className="">
-          <ProfilePicture url={user.profilePicture} size="small" />
+        <Link to={`/profile/${userData?.userId}`} className="">
+          <ProfilePicture url={userData?.profilePicture} size="small" />
         </Link>
       </div>
       <div className="w-full">
@@ -103,7 +97,7 @@ export const CreateSnap = () => {
             </div>
             )}
             <div className="w-full flex justify-end">
-              <button className="min-h-[36px] border-2 bg-red-500 rounded-full px-4 text-white text-lg font-bold transition-transform hover:scale-125 hover:brightness-125" onClick={(e) => handleSubmit(e)}>
+              <button disabled={snapCollectionMutation.isLoading} className="min-h-[36px] border-2 bg-red-500 rounded-full px-4 text-white text-lg font-bold transition-transform hover:scale-125 hover:brightness-125" onClick={(e) => handleSubmit(e)}>
                 Snap
               </button>
             </div>
@@ -113,4 +107,8 @@ export const CreateSnap = () => {
       </div>
     </div>
   )
+}
+
+CreateSnap.propTypes = {
+  userData: PropTypes.object
 }

@@ -1,29 +1,30 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import { ImLocation2 } from 'react-icons/im'
 import { BsCalendar3 } from 'react-icons/bs'
 import { ProfilePicture } from '../components/ProfilePicture'
-import { UserContext } from '../contexts/UserContext'
 import { returnMonthAndYear } from '../utils/returnMonthandYear'
 import { ProfileSnaps } from '../components/ProfileSnaps'
 import { ProfileAlbums } from '../components/ProfileAlbums'
 import { UpdateProfile } from '../components/UpdateProfile'
-import { getProfileData, followUser, unfollowUser, getProfileAlbums } from '../firebase'
+import { getUserDocRef, followUser, unfollowUser, auth } from '../firebase'
 import { CoverPicture } from '../components/CoverPicture'
+import { useFirestoreDocument } from '@react-query-firebase/firestore'
+import { useAuthUser } from '@react-query-firebase/auth'
 
-export const Profile = ({ snapFeedData, albumFeedData, sync }) => {
+export const Profile = () => {
   const [viewing, setViewing] = useState('snaps')
 
   const [viewEditProfile, setViewEditProfile] = useState(false)
 
-  const [profileInfo, setProfileInfo] = useState(null)
+  const [followed, setFollowed] = useState(false)
 
-  const [profileAlbums, setProfileAlbums] = useState([])
-
-  const { user } = useContext(UserContext)
+  const user = useAuthUser('user', auth)
 
   const { id } = useParams()
+
+  const profileQuery = useFirestoreDocument(`user${id}`, getUserDocRef(id))
 
   const openEditProfile = () => {
     setViewEditProfile(true)
@@ -38,22 +39,14 @@ export const Profile = ({ snapFeedData, albumFeedData, sync }) => {
     return 'Followers'
   }
 
-  const handleFollow = () => {
-    const pushedFollowedBy = [...profileInfo.followedBy, user.userId]
-    setProfileInfo((prevState) => ({
-      ...prevState,
-      followedBy: pushedFollowedBy
-    }))
-    followUser(profileInfo.userId)
+  const handleFollow = async () => {
+    await followUser(id)
+    setFollowed(true)
   }
 
-  const handleUnfollow = () => {
-    const filteredFollowedBy = profileInfo.followedBy.filter((userId) => userId !== user.userId ? userId : null)
-    setProfileInfo((prevState) => ({
-      ...prevState,
-      followedBy: filteredFollowedBy
-    }))
-    unfollowUser(profileInfo.userId)
+  const handleUnfollow = async () => {
+    await unfollowUser(id)
+    setFollowed(false)
   }
 
   const viewSnaps = () => {
@@ -65,91 +58,56 @@ export const Profile = ({ snapFeedData, albumFeedData, sync }) => {
   }
 
   useEffect(() => {
-    sync()
+    setFollowed(profileQuery.data?.data()?.followedBy?.includes(user.data.uid))
   }, [])
 
-  useEffect(() => {
-    if (id === user.userId) {
-      setProfileInfo(user)
-    } else {
-      getProfileData(id).then((result) => setProfileInfo(result))
-    }
-  }, [])
-
-  useEffect(() => {
-    if (id === user.userId) {
-      setProfileAlbums(albumFeedData)
-    } else {
-      getProfileAlbums(id).then((result) => setProfileAlbums(result))
-    }
-  })
-
-  // if there is no profileInfo set the page loads
-  // if this is the user's profile they see an edit profile button
-  // if this profile is followed by the user they see an unfollow button
-  // if this profile isn't followed by the user they see a follow button
   return (
     <section className="page">
-      {profileInfo
+      {profileQuery.isSuccess
         ? (
               <div className="w-full">
               <div className="w-full mb-3">
                 <div className="w-full h-80 bg-slate-500">
-                <CoverPicture url={profileInfo.coverPicture} />
+                <CoverPicture url={profileQuery.data?.data()?.coverPicture} />
                 </div>
                 <div className="flex h-16 justify-end items-start relative w-full">
                   <div className="absolute left-3 bottom-0">
-                    <ProfilePicture url={profileInfo.profilePicture} size="large" />
+                    <ProfilePicture url={profileQuery.data?.data()?.profilePicture} size="large" />
                   </div>
-                  {profileInfo.userId === user.userId
-                    ? (
+                  {profileQuery.data?.data().userId === user.data.uid &&
                     <div className="p-3">
                       <button onClick={openEditProfile} className="follow-button">Edit profile</button>
-                    </div>
-                      )
-                    : (
-                        null
-                      )}
-                  {profileInfo.userId !== user.userId && profileInfo.followedBy.includes(user.userId)
-                    ? (
+                    </div>}
+                  {profileQuery.data?.data()?.userId !== user.data.uid && followed &&
                     <div className="p-3">
                       <button onClick={handleUnfollow} className="follow-button">Unfollow</button>
-                    </div>
-                      )
-                    : (
-                        null
-                      )}
-                  {profileInfo.userId !== user.userId && !profileInfo.followedBy.includes(user.userId)
-                    ? (
+                    </div>}
+                  {profileQuery.data?.data()?.userId !== user.data.uid && !followed &&
                     <div className="p-3">
                       <button onClick={handleFollow} className="follow-button">Follow</button>
-                    </div>
-                      )
-                    : (
-                        null
-                      )}
+                    </div>}
                 </div>
                 <div className="h-16 flex items-center p-3">
-                  <h1 className="text-2xl font-bold dark:text-white">{profileInfo.username}</h1>
+                  <h1 className="text-2xl font-bold dark:text-white">{profileQuery.data?.data()?.username}</h1>
                 </div>
                 <div className="h-16 p-3">
-                  <p className="dark:text-white">{profileInfo.bio}</p>
+                  <p className="dark:text-white">{profileQuery.data?.data()?.bio}</p>
                 </div>
                 <div className="h-10 p-3 flex gap-3">
-                  {profileInfo.location !== ''
+                  {profileQuery.data?.data()?.location !== ''
                     ? <div className="flex gap-1 dark:text-white">
                     <ImLocation2 />
-                    <span className="dark:text-white">{profileInfo.location}</span>
+                    <span className="dark:text-white">{profileQuery.data?.data()?.location}</span>
                   </div>
                     : null }
                   <div className="flex gap-1 dark:text-white">
                     <BsCalendar3 />
-                    <span className="dark:text-white">Joined {returnMonthAndYear(profileInfo.joinedOn.toDate())}</span>
+                    <span className="dark:text-white">Joined {returnMonthAndYear(profileQuery.data?.data()?.joinedOn?.toDate())}</span>
                   </div>
                 </div>
                 <div className="h-8 p-3 flex gap-1">
-                  <span className="font-bold dark:text-white">{profileInfo.followedBy.length}</span>
-                  <span className="dark:text-white">{formatFollowerText(profileInfo.followedBy.length)}</span>
+                  <span className="font-bold dark:text-white">{profileQuery.data?.data()?.followedBy.length}</span>
+                  <span className="dark:text-white">{formatFollowerText(profileQuery.data?.data()?.followedBy.length)}</span>
                 </div>
               </div>
               <div className="view-btn-wrapper">
@@ -160,8 +118,8 @@ export const Profile = ({ snapFeedData, albumFeedData, sync }) => {
                   <h2 className="view-btn-text">Albums</h2>
                 </button>
               </div>
-              { viewing === 'snaps' ? <ProfileSnaps feedData={snapFeedData} userId={profileInfo.userId} username={profileInfo.username}/> : <ProfileAlbums feedData={profileAlbums} userId={profileInfo.userId} username={profileInfo.username}/>}
-              {viewEditProfile ? <UpdateProfile closeModal={closeEditProfile} setProfileInfo={setProfileInfo}/> : null}
+              { viewing === 'snaps' ? <ProfileSnaps userId={profileQuery.data?.data()?.userId} username={profileQuery.data?.data()?.username}/> : <ProfileAlbums userId={profileQuery.data?.data()?.userId} username={profileQuery.data?.data()?.username}/>}
+              {viewEditProfile && <UpdateProfile closeModal={closeEditProfile} />}
             </div>
           )
         : (

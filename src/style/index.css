@@ -163,7 +163,7 @@
   }
 
   .story-box {
-    @apply flex p-3 w-full h-auto border bg-white rounded-lg dark:bg-black dark:text-white;
+    @apply relative flex p-3 w-full h-auto border bg-white rounded-lg dark:bg-black dark:text-white;
   }
 
   .sb-profile-picture-wrapper {

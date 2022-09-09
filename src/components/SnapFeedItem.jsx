@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, memo } from 'react'
+import React, { useState, memo } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { ProfilePicture } from './ProfilePicture'
@@ -8,109 +8,91 @@ import { AiOutlineLike as GrLike } from 'react-icons/ai'
 import { BiPhotoAlbum } from 'react-icons/bi'
 import { BsThreeDots } from 'react-icons/bs'
 import { SnapOptions } from './SnapOptions'
-import { UserContext } from '../contexts/UserContext'
-import { likeSnap, unlikeSnap } from '../firebase'
 import { AddToAlbum } from './AddToAlbum'
+import { snapCollection, auth } from '../firebase'
+import { useFirestoreDocumentMutation /* useFirestoreDocumentDeletion */ } from '@react-query-firebase/firestore'
+import { useAuthUser } from '@react-query-firebase/auth'
+import { doc } from 'firebase/firestore'
 
-const SnapFeedItem = ({ id, userId, username, profilePicture, posted, image, text, likedBy }) => {
-  const [menuOpen, setMenuOpen] = useState(false)
-
+const SnapFeedItem = ({ data, snapId }) => {
   const [addToAlbumOpen, setAddToAlbumOpen] = useState(false)
 
-  const [menuPosition, setMenuPosition] = useState({
-    x: null,
-    y: null
-  })
+  const [optionsMenuOpen, setOptionsMenuOpen] = useState(false)
 
-  const [liked, setLiked] = useState(false)
+  const user = useAuthUser('user', auth)
 
-  const [loading, setLoading] = useState(false)
+  const snap = doc(snapCollection, snapId)
 
-  const { user } = useContext(UserContext)
+  const snapMutation = useFirestoreDocumentMutation(snap)
 
-  const closeMenu = () => {
-    setMenuOpen(false)
-  }
+  // const snapDeletion = useFirestoreDocumentDeletion(snap)
 
-  const openMenu = (evt) => {
-    setMenuPosition({
-      x: evt.pageX,
-      y: evt.pageY
+  const likeSnap = () => {
+    const newLikedBy = data.likedBy
+    newLikedBy.push(user.data.uid)
+    snapMutation.mutate({
+      ...data,
+      likedBy: newLikedBy
     })
-    setMenuOpen(true)
   }
 
-  const openAddToAlbum = () => {
-    setAddToAlbumOpen(true)
+  const unlikeSnap = () => {
+    snapMutation.mutate({
+      ...data,
+      likedBy: data.likedBy.filter((userId) => userId !== user.data.uid && userId)
+    })
   }
 
-  const closeAddToAlbum = () => {
-    setAddToAlbumOpen(false)
+  /* const updateSnap = (snapText) => {
+    snapMutation.mutate({
+      text: snapText
+    })
   }
 
-  const handleLike = () => {
-    if (loading) return
-    setLoading(true)
-    likedBy.push(user.userId)
-    setLiked(true)
-    likeSnap(id, user.userId).then(() => setLoading(false))
-  }
-
-  const handleUnlike = () => {
-    if (loading) return
-    setLoading(true)
-    likedBy.pop()
-    setLiked(false)
-    unlikeSnap(id, user.userId).then(() => setLoading(false))
-  }
-
-  useEffect(() => {
-    if (likedBy.includes(user.userId)) {
-      setLiked(true)
-    }
-  }, [])
+  const deleteSnap = () => {
+    snapDeletion.mutate()
+  } */
 
   return (
     <>
-      {addToAlbumOpen ? <AddToAlbum close={closeAddToAlbum} snapPicture={image} snapId={id}/> : null}
+      {addToAlbumOpen && <AddToAlbum close={() => setAddToAlbumOpen(false)} snapPicture={data.image} snapId={data.id}/>}
       <div className="story-box">
+        {optionsMenuOpen && <SnapOptions snapUserId={data.userId} snapId={snapId} closeMenu={() => setOptionsMenuOpen(false)}/>}
         <div className="sb-profile-picture-wrapper">
-          <Link to={`/profile/${userId}`}>
-            <ProfilePicture url={profilePicture} size="small" />
+          <Link to={`/profile/${data?.userId}`}>
+            <ProfilePicture url={data?.profilePicture} size="small" />
           </Link>
         </div>
         <div className="w-full">
           <div className="sb-content-wrapper">
             <div className="text-xl flex items-center justify-between w-full relative">
               <div className="flex items-center gap-3">
-                <Link to={`/profile/${userId}`} className="font-bold hover:cursor-pointer hover:underline">{username}</Link>
-                <span> {renderTimeDifference(posted)}</span>
+                <Link to={`/profile/${data?.userId}`} className="font-bold hover:cursor-pointer hover:underline">{data.username}</Link>
+                <span> {data?.posted && renderTimeDifference(data?.posted?.toDate())}</span>
               </div>
-              <button onClick={openMenu} className="transition-transform hover:scale-150 focus:scale-150">
+              <button onClick={() => setOptionsMenuOpen(true)} className="transition-transform hover:scale-150 focus:scale-150">
                 <BsThreeDots />
               </button>
-              {menuOpen ? <SnapOptions position={menuPosition} snapUserId={userId} snapId={id} closeMenu={closeMenu}/> : null}
             </div>
-            {text ? <TextareaAutosize readOnly className="sb-text-area" value={text}/> : null}
+            {data.text && <TextareaAutosize readOnly className="sb-text-area" value={data.text}/>}
             <div className="sb-image-wrapper">
-              <img src={image} className="sb-image" />
+              <img src={data?.image} className="sb-image" />
             </div>
             <div className="flex items-center justify-around dark:bg-black">
-              {liked
+              {data?.likedBy?.includes(user.data.uid)
                 ? (
-                <button className="flex gap-3 text-[22px] items-center text-blue-500 font-bold bg-white transition-transform hover:scale-125 focus:scale-125 dark:bg-black" onClick={handleUnlike}>
+                <button className="flex gap-3 text-[22px] items-center text-blue-500 font-bold bg-white transition-transform hover:scale-125 focus:scale-125 dark:bg-black" onClick={unlikeSnap}>
                   <GrLike className="dark:text-white"/>
-                  <span>{likedBy.length}</span>
+                  <span>{data.likedBy?.length}</span>
                 </button>
                   )
                 : (
-                <button className="flex gap-3 text-[22px] items-center bg-white transition-transform hover:scale-125 focus:scale-125 dark:bg-black dark:text-white" onClick={handleLike}>
+                <button className="flex gap-3 text-[22px] items-center bg-white transition-transform hover:scale-125 focus:scale-125 dark:bg-black dark:text-white" onClick={likeSnap}>
                   <GrLike />
-                  <span>{likedBy.length}</span>
+                  <span>{data.likedBy?.length}</span>
                 </button>
                   )}
-
-              <button className="text-[22px] bg-white transition-transform hover:scale-125 focus:scale-125 dark:bg-black dark:text-white" onClick={openAddToAlbum}>
+              <button className="text-[22px] bg-white transition-transform hover:scale-125 focus:scale-125 dark:bg-black dark:text-white" onClick={() => setAddToAlbumOpen(true)}>
                 <BiPhotoAlbum />
               </button>
             </div>
@@ -122,14 +104,8 @@ const SnapFeedItem = ({ id, userId, username, profilePicture, posted, image, tex
 }
 
 SnapFeedItem.propTypes = {
-  id: PropTypes.string,
-  userId: PropTypes.string,
-  username: PropTypes.string,
-  profilePicture: PropTypes.string,
-  posted: PropTypes.object,
-  image: PropTypes.string,
-  text: PropTypes.string,
-  likedBy: PropTypes.array
+  data: PropTypes.object,
+  snapId: PropTypes.string
 }
 
 export default memo(SnapFeedItem)

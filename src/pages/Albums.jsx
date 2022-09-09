@@ -1,21 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { MyAlbums } from '../components/MyAlbums'
 import { ExploreAlbums } from '../components/ExploreAlbums'
-import { fetchAlbums } from '../firebase'
+import { auth } from '../firebase'
+import { useAuthUser } from '@react-query-firebase/auth'
 
-export const Albums = ({ userAlbums, pinnedAlbums }) => {
+export const Albums = () => {
   const [viewing, setViewing] = useState('my albums')
 
-  const [exploreAlbumsData, setExploreAlbumsData] = useState([])
-
-  useEffect(() => {
-    fetchAlbums(setExploreAlbumsData)
-  }, [])
-
-  useEffect(() => {
-    fetchAlbums(setExploreAlbumsData)
-  }, [userAlbums])
+  const user = useAuthUser('user', auth)
 
   return (
     <section>
@@ -30,8 +23,8 @@ export const Albums = ({ userAlbums, pinnedAlbums }) => {
           <h2 className="view-btn-text">Explore Albums</h2>
         </button>
       </div>
-      { viewing === 'my albums' ? <MyAlbums myAlbums={userAlbums} pinnedAlbums={pinnedAlbums} /> : null}
-      { viewing === 'explore' ? <ExploreAlbums feedData={exploreAlbumsData} /> : null}
+      { viewing === 'my albums' && <MyAlbums userId={user.data.uid} />}
+      { viewing === 'explore' && <ExploreAlbums />}
     </section>
   )
 }

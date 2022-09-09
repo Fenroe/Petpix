@@ -1,17 +1,21 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { SnapFeed } from './SnapFeed'
-import { UserContext } from '../contexts/UserContext'
+import { getUserSnapsRef, auth } from '../firebase'
+import { useFirestoreQuery } from '@react-query-firebase/firestore'
+import { useAuthUser } from '@react-query-firebase/auth'
 
-export const ProfileSnaps = ({ feedData, userId, username }) => {
-  const { user } = useContext(UserContext)
+export const ProfileSnaps = ({ userId, username }) => {
+  const user = useAuthUser('user', auth)
+
+  const snapQuery = useFirestoreQuery(`userSnaps${userId}`, getUserSnapsRef(userId))
 
   return (
     <>
       <div className="page-heading-wrapper">
-        {userId === user.userId ? <h1 className="page-heading">Your Snaps</h1> : <h1 className="page-heading">{username}&apos;s Snaps</h1>}
+        {userId === user.data.uid ? <h1 className="page-heading">Your Snaps</h1> : <h1 className="page-heading">{username}&apos;s Snaps</h1>}
       </div>
-      <SnapFeed feedName={userId === user.userId ? 'my profile' : 'other profile'} feedData={feedData.filter((snap) => snap.userId === userId ? snap : null)}/>
+      {snapQuery.isSuccess && <SnapFeed feedName={userId === user.data.uid ? 'my profile' : 'other profile'} feedData={snapQuery.data.docs}/>}
     </>
   )
 }
