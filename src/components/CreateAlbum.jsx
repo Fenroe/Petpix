@@ -40,12 +40,14 @@ export const CreateAlbum = ({ closeModal }) => {
     const docRef = await addAlbum()
     const title = inputRef.current.value
     const file = coverImage.file
+    let albumCover = ''
     try {
-      if (file !== null) {
+      if (coverImage.file !== null) {
         const imageRef = await uploadAlbumCover(file)
-        const imageURL = await getURL(imageRef)
-        await createAlbum(title, imageURL, userData.userId, userData.username, userData.profilePicture, docRef)
+        albumCover = await getURL(imageRef)
       }
+      await createAlbum(title, albumCover, userData.userId, userData.username, userData.profilePicture, docRef)
+      closeModal()
     } catch (error) {
       console.log(error)
     }

@@ -20,11 +20,13 @@ export const Profile = () => {
 
   const [followed, setFollowed] = useState(false)
 
+  const [queryKey, setQueryKey] = useState(Date.now())
+
   const user = useAuthUser('user', auth)
 
   const { id } = useParams()
 
-  const profileQuery = useFirestoreDocument(`user${id}`, getUserDocRef(id))
+  const profileQuery = useFirestoreDocument(`user${id}${queryKey}`, getUserDocRef(id))
 
   const openEditProfile = () => {
     setViewEditProfile(true)
@@ -119,7 +121,7 @@ export const Profile = () => {
                 </button>
               </div>
               { viewing === 'snaps' ? <ProfileSnaps userId={profileQuery.data?.data()?.userId} username={profileQuery.data?.data()?.username}/> : <ProfileAlbums userId={profileQuery.data?.data()?.userId} username={profileQuery.data?.data()?.username}/>}
-              {viewEditProfile && <UpdateProfile closeModal={closeEditProfile} />}
+              {viewEditProfile && <UpdateProfile closeModal={closeEditProfile} updateKey={() => setQueryKey(Date.now())}/>}
             </div>
           )
         : (

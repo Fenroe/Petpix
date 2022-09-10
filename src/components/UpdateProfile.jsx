@@ -4,24 +4,27 @@ import { ProfilePicture } from './ProfilePicture'
 import TextareaAutosize from 'react-textarea-autosize'
 import { AiOutlinePicture } from 'react-icons/ai'
 import { UserContext } from '../contexts/UserContext'
-import { db, uploadProfilePicture, uploadCoverPicture, getURL } from '../firebase'
-import { doc, setDoc } from 'firebase/firestore'
+import { auth, uploadProfilePicture, uploadCoverPicture, getURL, getUserDocRef } from '../firebase'
 import { MdOutlineClose } from 'react-icons/md'
 import { CoverPicture } from './CoverPicture'
 import { useModalFocus } from '../hooks/useModalFocus'
+import { useFirestoreDocumentMutation } from '@react-query-firebase/firestore'
+import { useAuthUser } from '@react-query-firebase/auth'
 
-export const UpdateProfile = ({ closeModal, setProfileInfo }) => {
-  const { user, setUser, loading, setLoading } = useContext(UserContext)
+export const UpdateProfile = ({ closeModal, updateKey }) => {
+  const user = useAuthUser('user', auth)
+
+  const { userData } = useContext(UserContext)
+
+  const userQueryMutation = useFirestoreDocumentMutation(getUserDocRef(user.data.uid))
 
   const [cover, setCover] = useState({
-    reference: null,
-    preview: null,
+    preview: '',
     file: null
   })
 
   const [profile, setProfile] = useState({
-    reference: null,
-    preview: null,
+    preview: '',
     file: null
   })
 
@@ -116,52 +119,29 @@ export const UpdateProfile = ({ closeModal, setProfileInfo }) => {
   }
 
   const handleSave = async () => {
-    if (loading) return
     if (!validateAll()) return
+    let coverPicture = cover.preview
+    let profilePicture = profile.preview
     const bio = bioRef.current.value
     const location = locationRef.current.value
-    setUser((prevState) => ({
-      ...prevState,
-      profilePicture: profile.preview,
-      coverPicture: cover.preview,
-      bio,
-      location
-    }))
-    setProfileInfo((prevState) => ({
-      ...prevState,
-      profilePicture: profile.preview,
-      coverPicture: cover.preview,
-      bio,
-      location
-    }))
-    closeModal()
-    setLoading(true)
-    const userRef = doc(db, 'users', user.userId)
-    if (cover.preview !== cover.reference) {
+    if (cover.file !== null) {
       const ref = await uploadCoverPicture(cover.file)
-      const coverURL = await getURL(ref)
-      await setDoc(userRef, {
-        coverPicture: coverURL
-      }, {
-        merge: true
-      })
+      coverPicture = await getURL(ref)
     }
-    if (profile.preview !== profile.reference) {
+    if (profile.file !== null) {
       const ref = await uploadProfilePicture(profile.file)
-      const profileURL = await getURL(ref)
-      await setDoc(userRef, {
-        profilePicture: profileURL
-      }, {
-        merge: true
-      })
+      profilePicture = await getURL(ref)
     }
-    await setDoc(userRef, {
+    userQueryMutation.mutate({
+      ...userData,
+      coverPicture,
+      profilePicture,
       bio,
       location
-    }, {
-      merge: true
+
     })
-    setLoading(false)
+    updateKey()
+    closeModal()
   }
 
   useEffect(() => {
@@ -176,17 +156,15 @@ export const UpdateProfile = ({ closeModal, setProfileInfo }) => {
 
   useEffect(() => {
     setCover({
-      reference: user.coverPicture,
-      preview: user.coverPicture,
+      preview: user.coverPicture || '',
       file: null
     })
     setProfile({
-      reference: user.profilePicture,
-      preview: user.profilePicture,
+      preview: user.profilePicture || '',
       file: null
     })
-    setBio(user.bio)
-    setLocation(user.location)
+    setBio(userData.bio)
+    setLocation(userData.location)
   }, [])
 
   useEffect(() => {

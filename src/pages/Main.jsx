@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Home } from './Home'
 import { Likes } from './Likes'
@@ -15,15 +15,15 @@ import { auth, getUserDocRef } from '../firebase'
 import { UserContext } from '../contexts/UserContext'
 
 export const Main = () => {
+  const [userQueryKey, setUserQueryKey] = useState(Date.now())
+
   const user = useAuthUser('user', auth)
 
-  const userQuery = useFirestoreDocument('userData', getUserDocRef(user.data?.uid))
-
-  const userData = userQuery.data?.data()
+  const userQuery = useFirestoreDocument(`userData${user.data.uid}${userQueryKey}`, getUserDocRef(user.data?.uid))
 
   return (
-    <UserContext.Provider value={{ userData }}>
-      {userQuery.data?.data()?.setup === false && <ProfileSetup />}
+    <UserContext.Provider value={{ userData: userQuery.data?.data(), updateKey: () => setUserQueryKey(Date.now()) }}>
+      {userQuery.data?.data()?.setup === false && <ProfileSetup updateKey={() => setUserQueryKey(Date.now())}/>}
       {userQuery.isLoading && <LoadingModal />}
       {userQuery.isError && <WriteErrorModal />}
       <Sidebar />

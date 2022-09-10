@@ -1,28 +1,28 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { MdOutlineClose } from 'react-icons/md'
 import { AiOutlinePicture } from 'react-icons/ai'
-import { fetchAlbum, pinAlbum, unpinAlbum, uploadAlbumCover, updateAlbumCover, deleteAlbum, getURL, removePictureFromAlbum } from '../firebase'
+import { auth, pinAlbum, unpinAlbum, uploadAlbumCover, deleteAlbum, getURL, removePictureFromAlbum, getAlbumDocRef } from '../firebase'
 import { AlbumCover } from '../components/AlbumCover'
-import { UserContext } from '../contexts/UserContext'
+import { useAuthUser } from '@react-query-firebase/auth'
+import { useFirestoreDocument, useFirestoreDocumentMutation } from '@react-query-firebase/firestore'
 
 export const Album = () => {
-  const [loading, setLoading] = useState(true)
+  const [queryKey, setQueryKey] = useState(Date.now())
 
-  const [albumInfo, setAlbumInfo] = useState({
-    contents: [],
-    pinnedBy: []
-  })
+  const user = useAuthUser('user', auth)
+
+  const { id } = useParams()
+
+  const albumQuery = useFirestoreDocument(`album${id}${queryKey}`, getAlbumDocRef(id))
+
+  const albumQueryMutation = useFirestoreDocumentMutation(getAlbumDocRef(id))
 
   const [editing, setEditing] = useState(false)
 
   const [isPinned, setIsPinned] = useState(false)
 
-  const { user, userAlbums, setUserAlbums, pinnedAlbums, setPinnedAlbums } = useContext(UserContext)
-
   const navigate = useNavigate()
-
-  const { id } = useParams()
 
   const handleEdit = () => {
     if (editing === true) return
@@ -39,83 +39,55 @@ export const Album = () => {
       if (!picture) return
       const imageRef = await uploadAlbumCover(picture)
       const newAlbumCover = await getURL(imageRef)
-      await updateAlbumCover(id, newAlbumCover)
-      const updatedAlbumInfo = {
-        ...albumInfo,
+      albumQueryMutation.mutate({
+        ...albumQuery.data.data(),
         albumCover: newAlbumCover
-      }
-      setAlbumInfo(updatedAlbumInfo)
-      const filteredUserAlbums = userAlbums.filter((album) => album.id !== id && album)
-      filteredUserAlbums.push(updatedAlbumInfo)
-      setUserAlbums([...filteredUserAlbums])
+      })
+      setQueryKey(Date.now())
     } catch (err) {
       console.log(err)
     }
   }
 
   const handlePin = () => {
-    setPinnedAlbums([...pinnedAlbums, {
-      id: albumInfo.id,
-      albumCover: albumInfo.albumCover,
-      title: albumInfo.title,
-      userId: albumInfo.userId,
-      username: albumInfo.username,
-      profilePicture: albumInfo.profilePicture,
-      updated: albumInfo.updated,
-      posted: albumInfo.posted,
-      pinnedBy: albumInfo.pinnedBy
-    }])
     setIsPinned(true)
     pinAlbum(id, user.userId)
   }
 
   const handleUnpin = () => {
-    setPinnedAlbums(pinnedAlbums.filter((album) => album.id !== id ? album : null))
     setIsPinned(false)
     unpinAlbum(id, user.userId)
   }
 
-  const handleDelete = () => {
-    setUserAlbums(userAlbums.filter((album) => album.id !== id ? album : null))
+  const handleDelete = async () => {
     deleteAlbum(id)
     navigate('/albums')
   }
 
   const handleDeletePicture = async (pictureIndex) => {
     try {
-      await removePictureFromAlbum(id, albumInfo.contents[pictureIndex])
-      const updatedAlbumInfo = {
-        ...albumInfo,
-        contents: albumInfo.contents.filter((picture) => albumInfo.contents.indexOf(picture) !== pictureIndex && picture)
-      }
-      setAlbumInfo(updatedAlbumInfo)
-      const updatedUserAlbums = userAlbums.filter((album) => album.id !== id && album)
-      updatedUserAlbums.push(updatedAlbumInfo)
-      setUserAlbums(updatedUserAlbums)
+      await removePictureFromAlbum(id, albumQuery.data.data().contents[pictureIndex])
+      setQueryKey(Date.now())
     } catch (err) {
       console.log(err)
     }
   }
 
   useEffect(() => {
-    fetchAlbum(id, setAlbumInfo).then(() => setLoading(false))
-  }, [])
-
-  useEffect(() => {
-    if (albumInfo.pinnedBy.includes(user.userId)) {
+    if (albumQuery?.data?.data()?.pinnedBy?.includes(user.data.uid)) {
       setIsPinned(true)
     }
-  }, [albumInfo])
+  }, [])
 
   return (
     <div>
-      {loading
+      {albumQuery.isLoading
         ? <div>Loading</div>
         : <div className="p-3">
         <div className="flex flex-col drop-shadow-lg xl:flex-row xl:justify-between">
           <div className="p-3 w-full flex gap-6">
             <div className="relative">
-              <AlbumCover url={albumInfo.albumCover} />
+              <AlbumCover url={albumQuery.data?.data()?.albumCover} />
               {editing === true &&
               <>
                 <label tabIndex="0" htmlFor="album-cover" className="upload-image-label"><AiOutlinePicture /></label>
@@ -124,49 +96,39 @@ export const Album = () => {
             </div>
             <div className="flex flex-col">
               <div className="flex flex-col gap-6 dark:text-white">
-                <h1 className="text-2xl font-bold">{albumInfo.title}</h1>
-                <Link to={`/profile/${albumInfo.userId}`} className="text-lg hover:text-red-500">Created by {albumInfo.username}</Link>
+                <h1 className="text-2xl font-bold">{albumQuery.data.data().title}</h1>
+                <Link to={`/profile/${albumQuery.data.data().userId}`} className="text-lg hover:text-red-500">Created by {albumQuery.data.data().username}</Link>
               </div>
             </div>
           </div>
           <div className="p-3">
-          {albumInfo.userId === user.userId && !editing &&
+          {albumQuery.data.data().userId === user.data.uid && !editing &&
           <button className="follow-button" onClick={handleEdit}>Edit</button>}
-          {albumInfo.userId === user.userId && editing &&
+          {albumQuery.data.data().userId === user.data.uid && editing &&
           <button className="follow-button" onClick={handleFinishEditing}>Finish editing</button>}
-          {albumInfo.userId === user.userId
+          {albumQuery.data.data().userId === user.data.uid
             ? (
         <button className="follow-button" onClick={handleDelete}>Delete</button>
               )
             : (
                 null
               )}
-      {albumInfo.userId !== user.userId && isPinned
-        ? (
-        <button className="follow-button" onClick={handleUnpin}>Unpin</button>
-          )
-        : (
-            null
-          )}
-      {albumInfo.userId !== user.userId && !isPinned
-        ? (
-        <button className="follow-button" onClick={handlePin}>Pin</button>
-          )
-        : (
-            null
-          )}
+      {albumQuery.data.data().userId !== user.data.uid && isPinned &&
+        <button className="follow-button" onClick={handleUnpin}>Unpin</button>}
+      {albumQuery.data.data().userId !== user.data.uid && !isPinned &&
+        <button className="follow-button" onClick={handlePin}>Pin</button>}
           </div>
         </div>
-        {albumInfo.contents.length === 0
+        {albumQuery.data.data().contents.length === 0
           ? <div className="mt-6 w-full flex items-center justify-center">
           <h1 className="text-xl dark:text-white">There aren&apos;t any pictures in this album</h1>
         </div>
           : null}
         <div className="w-full justify-items-center p-3 grid grid-cols-1 gap-3 xl:grid-cols-2">
-          {albumInfo.contents.map((image) =>
-          <div className="relative" key={albumInfo.contents.indexOf(image)}>
+          {albumQuery.data.data().contents.map((image) =>
+          <div className="relative" key={albumQuery.data.data().contents.indexOf(image)}>
             {editing === true &&
-            <button className="absolute top-3 left-3 rounded-full hover:cursor-pointer text-white bg-black text-3xl" onClick={() => handleDeletePicture(albumInfo.contents.indexOf(image))}>
+            <button className="absolute top-3 left-3 rounded-full hover:cursor-pointer text-white bg-black text-3xl" onClick={() => handleDeletePicture(albumQuery.data.data().contents.indexOf(image))}>
               <MdOutlineClose />
             </button>}
             <img className="w-72 aspect-[4/5] object-cover rounded-sm" src={image} />
