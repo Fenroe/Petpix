@@ -118,7 +118,7 @@ export const Signup = () => {
             <h1 className="text-5xl font-bold font-serif text-center">Join Snapshot today</h1>
           </div>
           <form className="flex flex-col items-center" noValidate action="">
-            <div className="w-80">
+            <div className="w-full">
               <button onClick={handleGoogleAuth} className="transition-transform mt-4 h-14 border-2 border-neutral-900 rounded-full w-full text-xl bg-neutral-100 hover:scale-110 hover:bg-neutral-200 focus:scale-110">Continue with Google</button>
             </div>
             <div className="mt-4">
