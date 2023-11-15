@@ -74,7 +74,7 @@ const SnapFeedItem = ({ data, snapId }) => {
                 <BsThreeDots />
               </button>
             </div>
-            {data.text && <TextareaAutosize readOnly className="sb-text-area" value={data.text}/>}
+            {data.text && <TextareaAutosize readOnly className="sb-text-area bg-neutral-100" value={data.text}/>}
             <div className="sb-image-wrapper">
               <img src={data?.image} className="sb-image" />
             </div>

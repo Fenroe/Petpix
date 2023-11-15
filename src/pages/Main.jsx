@@ -23,7 +23,7 @@ export const Main = () => {
 
   return (
     <UserContext.Provider value={{ userData: userQuery.data?.data(), updateKey: () => setUserQueryKey(Date.now()) }}>
-      {userQuery.data?.data()?.setup === false && <ProfileSetup updateKey={() => setUserQueryKey(Date.now())}/>}
+      {userQuery.data && userQuery.data.data().setup === false && <ProfileSetup updateKey={() => setUserQueryKey(Date.now())}/>}
       {userQuery.isLoading && <LoadingModal />}
       {userQuery.isError && <WriteErrorModal />}
       <Sidebar />
