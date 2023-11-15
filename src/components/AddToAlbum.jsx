@@ -62,10 +62,10 @@ export const AddToAlbum = ({ close, snapPicture }) => {
 
   return ReactDOM.createPortal(
     <>
-      <div className="bg-black bg-opacity-50 fixed inset-0 z-40 overflow-y-hidden dark:bg-gray-500 dark:bg-opacity-20"/>
-      <div ref={modalRef} className="fixed w-96 h-96 p-3 bg-white left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 overflow-auto dark:bg-black dark:text-white">
+      <div className="bg-neutral-900 bg-opacity-50 fixed inset-0 z-40 overflow-y-hidden dark:bg-gray-500 dark:bg-opacity-20"/>
+      <div ref={modalRef} className="fixed w-96 h-96 p-3 bg-neutral-100 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 overflow-auto dark:bg-neutral-900 dark:text-neutral-100">
         <div className="flex gap-12 text-2xl mb-3">
-          <button ref={firstFocusRef} className="transition-transform hover:scale-125 focus:scale-125" onClick={close}><MdOutlineClose /></button>
+          <button ref={firstFocusRef} className="transition-transform hover:scale-110 focus:scale-110" onClick={close}><MdOutlineClose /></button>
           <h1 className="font-bold text-lg">Add to album</h1>
         </div>
         {userAlbums.length === 0

@@ -78,21 +78,21 @@ const SnapFeedItem = ({ data, snapId }) => {
             <div className="sb-image-wrapper">
               <img src={data?.image} className="sb-image" />
             </div>
-            <div className="flex items-center justify-around dark:bg-black">
+            <div className="flex items-center justify-around dark:bg-neutral-900">
               {data?.likedBy?.includes(user.data.uid)
                 ? (
-                <button className="flex gap-3 text-[22px] items-center text-blue-500 font-bold bg-white transition-transform hover:scale-125 focus:scale-125 dark:bg-black" onClick={unlikeSnap}>
-                  <GrLike className="dark:text-white"/>
+                <button className="flex gap-3 text-[22px] items-center text-blue-500 font-bold bg-neutral-100 transition-transform hover:scale-110 focus:scale-110 dark:bg-neutral-900" onClick={unlikeSnap}>
+                  <GrLike className="dark:text-neutral-100"/>
                   <span>{data.likedBy?.length}</span>
                 </button>
                   )
                 : (
-                <button className="flex gap-3 text-[22px] items-center bg-white transition-transform hover:scale-125 focus:scale-125 dark:bg-black dark:text-white" onClick={likeSnap}>
+                <button className="flex gap-3 text-[22px] items-center bg-neutral-100 transition-transform hover:scale-110 focus:scale-110 dark:bg-neutral-900 dark:text-neutral-100" onClick={likeSnap}>
                   <GrLike />
                   <span>{data.likedBy?.length}</span>
                 </button>
                   )}
-              <button className="text-[22px] bg-white transition-transform hover:scale-125 focus:scale-125 dark:bg-black dark:text-white" onClick={() => setAddToAlbumOpen(true)}>
+              <button className="text-[22px] bg-neutral-100 transition-transform hover:scale-110 focus:scale-110 dark:bg-neutral-900 dark:text-neutral-100" onClick={() => setAddToAlbumOpen(true)}>
                 <BiPhotoAlbum />
               </button>
             </div>

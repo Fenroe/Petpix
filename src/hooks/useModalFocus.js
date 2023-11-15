@@ -8,7 +8,6 @@ export const useModalFocus = () => {
   const handleKeydown = (e) => {
     if (e.key !== 'Tab') return
     const focusableElements = modalRef.current.querySelectorAll('a, input, button, textarea, .upload-image-label')
-    console.log(focusableElements)
     const firstElement = focusableElements[0]
     const lastElement = focusableElements[focusableElements.length - 1]
 

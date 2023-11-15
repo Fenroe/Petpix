@@ -81,7 +81,7 @@ export const CreateSnap = () => {
         {uploadedImage.file === null
           ? (
           <div className="w-full h-28 flex items-center justify-center">
-            <label tabIndex="0" htmlFor="post-image-input" className="border-2 bg-red-500 rounded-full p-3 text-white font-bold hover:cursor-pointer transition-transform hover:scale-125 hover:brightness-125 focus:scale-125 focus:brightness-125"><AiOutlinePicture className="text-2xl"/></label>
+            <label tabIndex="0" htmlFor="post-image-input" className="border-2 bg-red-500 rounded-full p-3 text-neutral-100 font-bold hover:cursor-pointer transition-transform hover:scale-110 hover:brightness-125 focus:scale-110 focus:brightness-125"><AiOutlinePicture className="text-2xl"/></label>
             <input className="hidden" type="file" name="image-upload" id="post-image-input" accept="image/*" onChange={(e) => handleImageUpload(e)}/>
           </div>
             )
@@ -89,7 +89,7 @@ export const CreateSnap = () => {
             <div className="sb-content-wrapper>">
               <TextareaAutosize onChange={validateText} ref={textareaRef} className="sb-text-area" placeholder="Text goes here" />
               <div className="relative text-3xl rounded">
-                <button className="absolute top-3 left-3 rounded-full hover:cursor-pointer text-white bg-black" onClick={() => setUploadedImage({ preview: '', file: null })}>
+                <button className="absolute top-3 left-3 rounded-full hover:cursor-pointer text-neutral-100 bg-neutral-900" onClick={() => setUploadedImage({ preview: '', file: null })}>
                   <MdOutlineClose />
                 </button>
                 <img src={uploadedImage.preview} className="sb-image" />
@@ -97,7 +97,7 @@ export const CreateSnap = () => {
             </div>
             )}
             <div className="w-full flex justify-end">
-              <button disabled={snapCollectionMutation.isLoading} className="min-h-[36px] border-2 bg-red-500 rounded-full px-4 text-white text-lg font-bold transition-transform hover:scale-125 hover:brightness-125" onClick={(e) => handleSubmit(e)}>
+              <button disabled={snapCollectionMutation.isLoading} className="min-h-[36px] border-2 bg-red-500 rounded-full px-4 text-neutral-100 text-lg font-bold transition-transform hover:scale-110 hover:brightness-125" onClick={(e) => handleSubmit(e)}>
                 Snap
               </button>
             </div>

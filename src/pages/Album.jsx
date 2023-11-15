@@ -95,7 +95,7 @@ export const Album = () => {
               </>}
             </div>
             <div className="flex flex-col">
-              <div className="flex flex-col gap-6 dark:text-white">
+              <div className="flex flex-col gap-6 dark:text-neutral-100">
                 <h1 className="text-2xl font-bold">{albumQuery.data.data().title}</h1>
                 <Link to={`/profile/${albumQuery.data.data().userId}`} className="text-lg hover:text-red-500">Created by {albumQuery.data.data().username}</Link>
               </div>
@@ -121,14 +121,14 @@ export const Album = () => {
         </div>
         {albumQuery.data.data().contents.length === 0
           ? <div className="mt-6 w-full flex items-center justify-center">
-          <h1 className="text-xl dark:text-white">There aren&apos;t any pictures in this album</h1>
+          <h1 className="text-xl dark:text-neutral-100">There aren&apos;t any pictures in this album</h1>
         </div>
           : null}
         <div className="w-full justify-items-center p-3 grid grid-cols-1 gap-3 xl:grid-cols-2">
           {albumQuery.data.data().contents.map((image) =>
           <div className="relative" key={albumQuery.data.data().contents.indexOf(image)}>
             {editing === true &&
-            <button className="absolute top-3 left-3 rounded-full hover:cursor-pointer text-white bg-black text-3xl" onClick={() => handleDeletePicture(albumQuery.data.data().contents.indexOf(image))}>
+            <button className="absolute top-3 left-3 rounded-full hover:cursor-pointer text-neutral-100 bg-black text-3xl" onClick={() => handleDeletePicture(albumQuery.data.data().contents.indexOf(image))}>
               <MdOutlineClose />
             </button>}
             <img className="w-72 aspect-[4/5] object-cover rounded-sm" src={image} />

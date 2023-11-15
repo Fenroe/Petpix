@@ -32,7 +32,7 @@ export const AlbumFeed = ({ feedName, feedData }) => {
     <section className="feed">
       {returnFeedData(feedData).length === 0 && <EmptyFeed message={returnFeedMessage(feedName)} />}
       {returnFeedData(feedData).map((item) =>
-          <div key={item.data().id} className="justify-between flex items-center gap-3 bg-white hover:brightness-95 dark:bg-black dark:text-white">
+          <div key={item.data().id} className="justify-between flex items-center gap-3 bg-neutral-100 hover:brightness-95 dark:bg-neutral-900 dark:text-neutral-100">
           <div className="flex items-center gap-3">
             <img src={item.data()?.albumCover || defaultAlbumCover} className="h-10 w-10 rounded-lg" />
             <div className="flex flex-col justify-start items-start">

@@ -5,7 +5,7 @@ import profile from '../assets/defaults/profile.png'
 
 export const ProfilePicture = ({ url, size }) => {
   return (
-    <img src={url || profile} className={`${assignSize(size)} bg-white dark:bg-black`} />
+    <img src={url || profile} className={`${assignSize(size)} bg-neutral-100 dark:bg-neutral-900`} />
   )
 }
 

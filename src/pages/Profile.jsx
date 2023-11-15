@@ -90,26 +90,26 @@ export const Profile = () => {
                     </div>}
                 </div>
                 <div className="h-16 flex items-center p-3">
-                  <h1 className="text-2xl font-bold dark:text-white">{profileQuery.data?.data()?.username}</h1>
+                  <h1 className="text-2xl font-bold dark:text-neutral-100">{profileQuery.data?.data()?.username}</h1>
                 </div>
                 <div className="h-16 p-3">
-                  <p className="dark:text-white">{profileQuery.data?.data()?.bio}</p>
+                  <p className="dark:text-neutral-100">{profileQuery.data?.data()?.bio}</p>
                 </div>
                 <div className="h-10 p-3 flex gap-3">
                   {profileQuery.data?.data()?.location !== ''
-                    ? <div className="flex gap-1 dark:text-white">
+                    ? <div className="flex gap-1 dark:text-neutral-100">
                     <ImLocation2 />
-                    <span className="dark:text-white">{profileQuery.data?.data()?.location}</span>
+                    <span className="dark:text-neutral-100">{profileQuery.data?.data()?.location}</span>
                   </div>
                     : null }
-                  <div className="flex gap-1 dark:text-white">
+                  <div className="flex gap-1 dark:text-neutral-100">
                     <BsCalendar3 />
-                    <span className="dark:text-white">Joined {returnMonthAndYear(profileQuery.data?.data()?.joinedOn?.toDate())}</span>
+                    <span className="dark:text-neutral-100">Joined {returnMonthAndYear(profileQuery.data?.data()?.joinedOn?.toDate())}</span>
                   </div>
                 </div>
                 <div className="h-8 p-3 flex gap-1">
-                  <span className="font-bold dark:text-white">{profileQuery.data?.data()?.followedBy.length}</span>
-                  <span className="dark:text-white">{formatFollowerText(profileQuery.data?.data()?.followedBy.length)}</span>
+                  <span className="font-bold dark:text-neutral-100">{profileQuery.data?.data()?.followedBy.length}</span>
+                  <span className="dark:text-neutral-100">{formatFollowerText(profileQuery.data?.data()?.followedBy.length)}</span>
                 </div>
               </div>
               <div className="view-btn-wrapper">

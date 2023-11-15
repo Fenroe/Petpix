@@ -110,10 +110,10 @@ export const Login = () => {
 
   return (
     <div className="flex flex-col-reverse overflow-x-hidden md:flex-row">
-      <div className="">
-        <img className="w-[500px] md:h-full md:w-full object-cover" src={backgroundImage} />
+      <div className="flex-1 hidden md:flex">
+        <img className="md:h-full md:w-full object-cover" src={backgroundImage} />
       </div>
-      <main className="min-w-[500px] max-w-[500px] h-screen min-h-screen bg-white flex flex-col justify-center">
+      <main className="flex-1 h-screen min-h-screen bg-neutral-100 flex flex-col justify-center">
         <div className="flex flex-col gap-3 items-center w-[90%] mx-auto max-h-[700px]">
           <div className="flex flex-col justify-start items-center w-full gap-3">
             <GiTurtleShell className="text-5xl"/>
@@ -121,7 +121,7 @@ export const Login = () => {
           </div>
           <form className="flex flex-col items-center" noValidate>
             <div className="w-80">
-              <button onClick={handleGoogleAuth} className="transition-transform mt-4 h-14 border-2 border-black rounded-full w-full text-xl bg-white hover:scale-110 hover:brightness-95 focus:scale-110 focus:brightness-95">Continue with Google</button>
+              <button onClick={handleGoogleAuth} className="transition-transform mt-4 h-14 border-2 border-black rounded-full w-full text-xl bg-neutral-100 hover:scale-110 hover:brightness-95 focus:scale-110 focus:brightness-95">Continue with Google</button>
             </div>
             <div className="mt-4">
               <span>OR</span>
@@ -134,13 +134,13 @@ export const Login = () => {
               <input ref={passwordRef} onBlur={validatePassword} required formNoValidate type="password" className="w-full px-3 pt-5 min-h-[64px] text-lg outline-none bg-none peer" />
               <label htmlFor="" className="ml-2 text-slate-400 absolute top-1/2 left-1 -translate-y-1/2 text-lg pointer-events-none duration-300 peer-valid:top-4 peer-valid:text-sm peer-focus:top-4 peer-focus:text-sm">Password</label>
             </div>
-            <button onClick={(e) => handleSubmit(e)} className="transition-transform mt-3 h-10 w-48 px-3 rounded-full border-2 border-white text-xl font-bold text-white bg-red-500 hover:brightness-125 hover:scale-110 focus:brightness-125 focus:scale-110">Log in</button>
-            <button onClick={(e) => handleTestAccountLogin(e)} className="transition-transform mt-3 h-10 w-48 px-3 rounded-full border-2 border-white text-xl font-bold text-white bg-red-500 hover:brightness-125 hover:scale-110 focus:brightness-125 focus:scale-110">Use test account</button>
-            <div className="text-red-400 p-2 max-w-full h-6">
+            <button onClick={(e) => handleSubmit(e)} className="transition-transform mt-3 h-10 w-48 px-3 rounded-full border-2 border-neutral-100 text-xl font-bold text-neutral-100 bg-red-500 hover:brightness-125 hover:scale-110 focus:brightness-125 focus:scale-110">Log in</button>
+            <button onClick={(e) => handleTestAccountLogin(e)} className="transition-transform mt-3 h-10 w-48 px-3 rounded-full border-2 border-neutral-100 text-xl font-bold text-neutral-100 bg-red-500 hover:brightness-125 hover:scale-110 focus:brightness-125 focus:scale-110">Use test account</button>
+            <div className="text-red-500 font-bold p-2 max-w-full h-6">
               <span>{errorMessage}</span>
             </div>
           </form>
-          <span className="text-lg">Don&apos;t have an account? <Link to={'/signup'}><span className="text-red-500 cursor-pointer">Sign up</span></Link></span>
+          <span className="text-lg">Don&apos;t have an account? <Link to={'/signup'}><span className="text-red-500 cursor-pointer font-bold">Sign up</span></Link></span>
         </div>
       </main>
     </div>

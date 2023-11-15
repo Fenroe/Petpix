@@ -14,7 +14,7 @@
   }
 
   .three-dots {
-    @apply mr-5 dark:text-white;
+    @apply mr-5 dark:text-neutral-100;
   }
   
   /*App styles */
@@ -23,11 +23,11 @@
   }
   /*Sidebar styles */
   .sidebar-wrapper {
-    @apply sticky top-0 h-screen max-h-full w-fit overflow-y-auto bg-white dark:bg-black;
+    @apply sticky top-0 h-screen max-h-full w-fit overflow-y-auto bg-neutral-100 dark:bg-neutral-900;
   }
 
   .sidebar {
-    @apply items-end justify-between h-full w-full p-3 bg-white dark:bg-black;
+    @apply items-end justify-between h-full w-full p-3 bg-neutral-100 dark:bg-neutral-900;
   }
 
   .sidebar-bot {
@@ -35,7 +35,7 @@
   }
 
   .sidebar-account-btn {
-    @apply bg-white dark:bg-black flex justify-between items-center w-12 h-12 rounded-full
+    @apply bg-neutral-100 dark:bg-neutral-900 flex justify-between items-center w-12 h-12 rounded-full
             hover:brightness-95
             dark:hover:bg-neutral-900
             lg:w-64
@@ -47,12 +47,12 @@
   }
 
   .sidebar-account-btn-left-span {
-    @apply hidden text-lg mx-3 dark:text-white
+    @apply hidden text-lg mx-3 dark:text-neutral-100
            lg:flex;
   }
   /*Main styles*/
   .main {
-    @apply w-[417px] bg-white border brightness-100 border-gray-100 dark:border-white dark:bg-black border-t-0 border-b-0
+    @apply w-[417px] bg-neutral-100 border brightness-100 border-gray-100 dark:border-neutral-100 dark:bg-neutral-900 border-t-0 border-b-0
            xl:w-[700px];
   }
 
@@ -61,7 +61,7 @@
   }
   /*Sort*/
   .sort-wrapper {
-    @apply flex justify-start w-full items-center p-3 gap-3 dark:text-white;
+    @apply flex justify-start w-full items-center p-3 gap-3 dark:text-neutral-100;
   }
 
   .sort-label {
@@ -69,7 +69,7 @@
   }
 
   .sort-input {
-    @apply bg-white dark:bg-black dark:text-white text-lg outline-none;
+    @apply bg-neutral-100 dark:bg-neutral-900 dark:text-neutral-100 text-lg outline-none;
   }
   /*Profile styles*/
   .profile-cover-img {
@@ -113,17 +113,17 @@
   }
   /*View Button styles*/
   .view-btn-wrapper {
-    @apply w-full border-b-2 border-b-black dark:border-b-white;
+    @apply w-full border-b-2 border-b-neutral-900 dark:border-b-neutral-100;
   }
 
   .view-btn {
     @apply w-1/2 p-3
           hover:bg-red-500
-          hover:text-white;
+          hover:text-neutral-100;
   }
 
   .view-btn-text {
-    @apply text-xl font-bold dark:text-white;
+    @apply text-xl font-bold dark:text-neutral-100;
   }
   /*Menu underlay styles*/
   .menu-underlay {
@@ -131,7 +131,7 @@
   }
   /*Account Menu styles*/
   .account-menu-wrapper {
-    @apply fixed w-80 bottom-20 left-4 border bg-white dark:bg-black shadow-2xl z-50 border-black dark:border-white backdrop-brightness-200
+    @apply fixed w-80 bottom-20 left-4 border bg-neutral-100 dark:bg-neutral-900 shadow-2xl z-50 border-neutral-900 dark:border-neutral-100 backdrop-brightness-200
            sm:left-12
            md:left-24
            lg:left-48
@@ -143,15 +143,15 @@
   }
 
   .account-menu-info-text {
-    @apply ml-3 text-lg text-left font-bold dark:text-white;
+    @apply ml-3 text-lg text-left font-bold dark:text-neutral-100;
   }
 
   .account-menu-item {
-    @apply w-full h-14 p-4 bg-white hover:brightness-90 dark:bg-black dark:hover:bg-neutral-900;
+    @apply w-full h-14 p-4 bg-neutral-100 hover:brightness-90 dark:bg-neutral-900 dark:hover:bg-neutral-900;
   }
 
   .account-menu-item-text {
-    @apply text-lg dark:text-white;
+    @apply text-lg dark:text-neutral-100;
   }
   /*Feed styles*/
   .feed {
@@ -159,11 +159,11 @@
   }
   /*Other*/
   .icon-wrapper {
-    @apply flex justify-center items-center h-14 w-14 p-3 hover:cursor-pointer text-3xl dark:text-white;
+    @apply flex justify-center items-center h-14 w-14 p-3 hover:cursor-pointer text-3xl dark:text-neutral-100;
   }
 
   .story-box {
-    @apply relative flex p-3 w-full h-auto border bg-white rounded-lg dark:bg-black dark:text-white;
+    @apply relative flex p-3 w-full h-auto border bg-neutral-100 rounded-lg dark:bg-neutral-900 dark:text-neutral-100;
   }
 
   .sb-profile-picture-wrapper {
@@ -175,7 +175,7 @@
   }
 
   .sb-text-area {
-    @apply w-full outline-none text-xl resize-none dark:bg-black dark:text-white;
+    @apply w-full outline-none text-xl resize-none dark:bg-neutral-900 dark:text-neutral-100;
   }
 
   .sb-image-wrapper {
@@ -203,19 +203,19 @@
   }
 
   .page-heading {
-    @apply font-bold text-3xl text-center dark:text-white;
+    @apply font-bold text-3xl text-center dark:text-neutral-100;
   }
 
   .follow-button {
-    @apply h-[32px] bg-white border-[1px] border-black rounded-full px-4 text-black text-sm font-bold whitespace-nowrap transition-transform dark:bg-black dark:border-white dark:text-white
-    hover:bg-red-500 hover:border-white hover:text-white hover:scale-125 dark:hover:bg-red-500;
+    @apply h-[32px] bg-neutral-100 border-[1px] border-neutral-900 rounded-full px-4 text-neutral-900 text-sm font-bold whitespace-nowrap transition-transform dark:bg-neutral-900 dark:border-neutral-100 dark:text-neutral-100
+    hover:bg-red-500 hover:border-neutral-100 hover:text-neutral-100 hover:scale-110 dark:hover:bg-red-500;
   }
 
   .inactive-button {
-    @apply h-[32px] bg-gray-500 border-2 border-black rounded-full px-4 text-slate-400 text-sm font-bold whitespace-nowrap pointer-events-none;
+    @apply h-[32px] bg-gray-500 border-2 border-neutral-900 rounded-full px-4 text-slate-400 text-sm font-bold whitespace-nowrap pointer-events-none;
   }
 
   .upload-image-label {
-    @apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute border-2 bg-red-500 rounded-full p-3 text-white font-bold hover:cursor-pointer opacity-50 hover:opacity-100 focus:opacity-100;
+    @apply top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute border-2 bg-red-500 rounded-full p-3 text-neutral-100 font-bold hover:cursor-pointer opacity-50 hover:opacity-100 focus:opacity-100;
   }
 }

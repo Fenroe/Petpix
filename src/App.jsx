@@ -1,6 +1,6 @@
 import './style/index.css'
 import React from 'react'
-import { HashRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Main } from './pages/Main'
 import { Login } from './pages/Login'
 import { Signup } from './pages/Signup'
@@ -12,7 +12,7 @@ const App = () => {
   return (
     <div className="app">
       <ThemeProvider>
-        <HashRouter basename="/" >
+        <BrowserRouter >
           <Routes>
             <Route path="*" element={
             <Auth>
@@ -30,7 +30,7 @@ const App = () => {
             </Unauth>
             }/>
           </Routes>
-        </HashRouter>
+        </BrowserRouter>
       </ThemeProvider>
     </div>
   )
