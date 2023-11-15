@@ -18,10 +18,10 @@ export const WriteErrorModal = ({ close }) => {
 
   return ReactDOM.createPortal(
     <>
-      <div className="bg-black bg-opacity-50 fixed inset-0 z-40"/>
+      <div className="bg-neutral-900 bg-opacity-50 fixed inset-0 z-40"/>
       <div ref={modalRef} className="rounded-lg w-96 h-36 bg-neutral-100 fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 p-3">
         <div className="w-full h-3 flex justify-end">
-          <button ref={firstFocusRef} className="text-xl cursor-pointer transition-transform focus:scale-125 hover:scale-125"onClick={close}>
+          <button ref={firstFocusRef} className="text-xl cursor-pointer transition-transform focus:scale-110 hover:scale-110"onClick={close}>
             <MdOutlineClose />
           </button>
         </div>

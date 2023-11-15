@@ -93,7 +93,7 @@ export const SidebarSnapModal = ({ closeModal }) => {
 
   return ReactDOM.createPortal(
     <>
-      <div className="bg-black bg-opacity-50 fixed inset-0 z-40"/>
+      <div className="bg-neutral-900 bg-opacity-50 fixed inset-0 z-40"/>
       <div className="flex flex-col bg-neutral-100 fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 p-3 w-[480px] h-auto rounded-lg overflow-auto dark:bg-neutral-900 dark:text-neutral-100">
         <div className="flex gap-12 text-2xl mb-3">
           <button onClick={closeModal}><MdOutlineClose /></button>
@@ -117,7 +117,7 @@ export const SidebarSnapModal = ({ closeModal }) => {
             <div className="sb-content-wrapper>">
               <TextareaAutosize onChange={validateText} ref={textareaRef} className="sb-text-area" placeholder="Text goes here" />
               <div className="relative text-3xl rounded">
-                <button className="absolute top-3 left-3 rounded-full hover:cursor-pointer text-neutral-100 bg-black" onClick={() => setUploadedImage({ preview: '', file: null })}>
+                <button className="absolute top-3 left-3 rounded-full hover:cursor-pointer text-neutral-100 bg-neutral-900" onClick={() => setUploadedImage({ preview: '', file: null })}>
                   <MdOutlineClose />
                 </button>
                 <img src={uploadedImage.preview} className="rounded-xl" />

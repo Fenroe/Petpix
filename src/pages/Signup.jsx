@@ -119,7 +119,7 @@ export const Signup = () => {
           </div>
           <form className="flex flex-col items-center" noValidate action="">
             <div className="w-80">
-              <button onClick={handleGoogleAuth} className="transition-transform mt-4 h-14 border-2 border-neutral-900 rounded-full w-full text-xl bg-neutral-100 hover:scale-110 hover:brightness-95 focus:scale-110 focus:brightness-95">Continue with Google</button>
+              <button onClick={handleGoogleAuth} className="transition-transform mt-4 h-14 border-2 border-neutral-900 rounded-full w-full text-xl bg-neutral-100 hover:scale-110 hover:bg-neutral-200 focus:scale-110">Continue with Google</button>
             </div>
             <div className="mt-4">
               <span>OR</span>
@@ -133,11 +133,11 @@ export const Signup = () => {
               <label htmlFor="" className="ml-2 text-slate-400 absolute top-1/2 left-1 -translate-y-1/2 text-lg pointer-events-none duration-100 peer-valid:top-4 peer-valid:text-sm peer-focus:top-4 peer-focus:text-sm">Password</label>
             </div>
             <div className="relative border-2 border-slate-400 focus-within:border-blue-500 mb-3 focus-within:scale-110">
-              <input ref={confirmPasswordRef} onBlur={validateConfirmPassword} required formNoValidate type="password" className="w-full px-3 pt-5 min-h-[64px] text-lg outline-blue-500        ``          `    bg-none peer" />
+              <input ref={confirmPasswordRef} onBlur={validateConfirmPassword} required formNoValidate type="password" className="w-full px-3 pt-5 min-h-[64px] text-lg outline-blue-500 bg-none peer" />
               <label htmlFor="" className="ml-2 text-slate-400 absolute top-1/2 left-1 -translate-y-1/2 text-lg pointer-events-none duration-100 peer-valid:top-4 peer-valid:text-sm peer-focus:top-4 peer-focus:text-sm">Confirm Password</label>
             </div>
-            <button onClick={(e) => handleSubmit(e)} className="transition-transform mt-3 h-10 w-48 px-3 rounded-full border-2 border-neutral-100 text-xl font-bold text-neutral-100 bg-red-500 hover:brightness-125 hover:scale-110 focus:brightness-125 focus:scale-110">Sign up</button>
-            <button onClick={(e) => handleTestAccountLogin(e)} className="transition-transform mt-3 h-10 w-48 px-3 rounded-full border-2 border-neutral-100 text-xl font-bold text-neutral-100 bg-red-500 hover:brightness-125 hover:scale-110 focus:brightness-125 focus:scale-110">Use test account</button>
+            <button onClick={(e) => handleSubmit(e)} className="transition-transform mt-3 h-10 w-48 px-3 rounded-full border-2 border-neutral-100 text-xl font-bold text-neutral-100 bg-red-500 hover:bg-red-600 hover:scale-110 focus:scale-110">Sign up</button>
+            <button onClick={(e) => handleTestAccountLogin(e)} className="transition-transform mt-3 h-10 w-48 px-3 rounded-full border-2 border-neutral-100 text-xl font-bold text-neutral-100 bg-red-500 hover:bg-red-600 hover:scale-110 focus:scale-110">Use test account</button>
             <div className="text-red-500 font-bold p-2 max-w-full h-">
               <span>{errorMessage}</span>
             </div>

@@ -194,7 +194,7 @@ export const UpdateProfile = ({ closeModal, updateKey }) => {
 
   return ReactDOM.createPortal(
     <>
-      <div className="bg-black bg-opacity-50 fixed inset-0 z-40 dark:bg-gray-400 dark:bg-opacity-20"/>
+      <div className="bg-neutral-900 bg-opacity-50 fixed inset-0 z-40 dark:bg-gray-400 dark:bg-opacity-20"/>
       <div ref={modalRef} className="h-[650px] flex flex-col bg-neutral-100 dark:bg-neutral-900 fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 p-3 w-[480px] rounded-lg overflow-auto pb-10 dark:">
         <div className="flex gap-12 text-2xl mb-3">
           <div className="flex justify-between items-center w-full">

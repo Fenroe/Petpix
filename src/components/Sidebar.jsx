@@ -48,9 +48,9 @@ export const Sidebar = () => {
         <div className="sidebar-bot">
           {accountMenuVisible ? <AccountMenu image={userData?.profilePicture} username={userData?.username} setMenuIsVisible={setAccountMenuVisible}/> : null}
           <button className="sidebar-account-btn" onClick={() => setAccountMenuVisible(true)}>
-            <div className="flex items-center">
+            <div className="flex items-center w-40">
               <ProfilePicture url={userData?.profilePicture} size="small" />
-              <span className="sidebar-account-btn-left-span">{userData?.username}</span>
+              <span className="sidebar-account-btn-left-span line-clamp-1 text-ellipsis">{userData?.username}</span>
             </div>
             <div className="three-dots-wrapper">
               <BsThreeDots className="three-dots"/>

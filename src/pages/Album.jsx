@@ -128,7 +128,7 @@ export const Album = () => {
           {albumQuery.data.data().contents.map((image) =>
           <div className="relative" key={albumQuery.data.data().contents.indexOf(image)}>
             {editing === true &&
-            <button className="absolute top-3 left-3 rounded-full hover:cursor-pointer text-neutral-100 bg-black text-3xl" onClick={() => handleDeletePicture(albumQuery.data.data().contents.indexOf(image))}>
+            <button className="absolute top-3 left-3 rounded-full hover:cursor-pointer text-neutral-100 bg-neutral-900 text-3xl" onClick={() => handleDeletePicture(albumQuery.data.data().contents.indexOf(image))}>
               <MdOutlineClose />
             </button>}
             <img className="w-72 aspect-[4/5] object-cover rounded-sm" src={image} />

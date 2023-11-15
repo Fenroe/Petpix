@@ -79,17 +79,20 @@ export const ProfileSetup = ({ updateKey }) => {
   }
 
   const validateUsername = async () => {
-    if (usernameRef.current.value.length > 20) return handleErrors('username', 'Username must be between 4 and 20 characters')
-    if (usernameRef.current.value.length < 4) return handleErrors('username', 'Username must be between 4 and 20 characters')
+    let error = ''
+    if (usernameRef.current.value.length > 20) error = 'Username must be between 4 and 20 characters'
+    if (usernameRef.current.value.length < 4) error = 'Username must be between 4 and 20 characters'
     const usernameIsUnavailable = await checkUsernameAvailability(usernameRef.current.value)
-    if (usernameIsUnavailable) return handleErrors('username', 'That username is already taken')
+    if (usernameIsUnavailable) error = 'That username is already taken'
+    handleErrors('username', error)
+    if (error !== '') return false
     return true
   }
 
-  const validateAll = () => {
+  const validateAll = async () => {
     if (!validateBio()) return false
     if (!validateLocation()) return false
-    if (!validateUsername()) return false
+    if (await validateUsername() !== true) return false
     return true
   }
 
@@ -176,7 +179,7 @@ export const ProfileSetup = ({ updateKey }) => {
 
   return ReactDOM.createPortal(
     <>
-      <div className="bg-black bg-opacity-50 fixed inset-0 z-40 dark:bg-gray-400 dark:bg-opacity-20"/>
+      <div className="bg-neutral-900 bg-opacity-50 fixed inset-0 z-40 dark:bg-gray-400 dark:bg-opacity-20"/>
       <div ref={modalRef} className="h-[650px] flex flex-col bg-neutral-100 fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-50 p-3 w-[480px] rounded-lg overflow-auto pb-10 dark:bg-neutral-900 dark:text-neutral-100">
         <div className="flex gap-12 text-2xl mb-3">
           <div className="flex justify-between items-center w-full top-0">
